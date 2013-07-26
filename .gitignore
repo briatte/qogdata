@@ -1,0 +1,14 @@
+.DS_Store
+
+.Rproj.user
+.Rhistory
+.RData
+*.Rproj
+
+*.gz
+*.tsv
+*.Rda
+
+docs
+
+# done
