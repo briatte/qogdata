@@ -7,6 +7,7 @@
 
 *.gz
 *.tsv
+*.txt
 *.Rda
 
 docs
