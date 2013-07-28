@@ -51,6 +51,16 @@ index$title = str_trim(index$title)
 if(!file.exists(data))
   write.table(index, data, row.names = FALSE, quote = FALSE, sep = "\t")
 
+ext = ".tsv.gz"
+
+for(x in index$code) {
+  file = paste0("data/", x, ext)
+  if(!file.exists(file)) {
+    message("downloading: ", file)
+    download(paste0("http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownlo adListing?sort=1&file=data%2F", x, ext), file, mode = "wb", quiet = TRUE)
+  }
+}
+
 message(nrow(index), " Eurostat datasets in index.")
 print(index[, -1])
 

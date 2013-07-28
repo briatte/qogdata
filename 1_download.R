@@ -30,7 +30,7 @@ for(x in index$code) {
   year = grepl("^X", names(data))
   names(data)[year] = gsub("X", "", names(data)[year])
   names(data)[year] = gsub("_", "-", names(data)[year])
-  data = melt(data, id.vars = names(data)[!year], variable = "year")
+#   data = melt(data, id.vars = names(data)[!year], variable = "year")
 
   # flags
   data$flag = str_extract(data$value, " (.*)")

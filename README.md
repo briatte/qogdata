@@ -7,6 +7,13 @@ Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a co
 
 Next move: find a way to safely collate the columns (which are _not_ the same in each segment of the data).
 
+Other Eurostat scripts:
+
+* [datamarket/rdatamarket](https://github.com/DataMarket/rdatamarket) (R, many more sources)
+* [toprach/eurostat_r](https://github.com/toprach/eurostat_r/blob/master/eurostat_r.r) (R, data table function)
+* [gka/eurostat](https://github.com/gka/eurostat) (Python, bulk download scraper)
+
+
 # NOTES
 
 Missing values are properly encoded as `NA`, but many values in the data have [flags](http://epp.eurostat.ec.europa.eu/NavTree_prod/htdocs/explanation/explanation_en_auth.html) of the following form:
@@ -38,7 +45,7 @@ Here's what the index looks like for causes of death (the first column are title
     6 hlth_cd_ycdrf dataset 07.06.2013 26.06.2013 1994_1996 2008_2010
     7 hlth_cd_ysdr1 dataset 07.06.2013 26.06.2013 1994_1996 2008_2010
 
-The data are coded by [NUTS-2](http://epp.eurostat.ec.europa.eu/portal/page/portal/nuts_nomenclature/introduction) regions and [ICD-10 codes](http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownloadListing?sort=1&file=dic%2Fen%2Ficd10.dic), like these:
+The data are coded by [NUTS-2](http://epp.eurostat.ec.europa.eu/portal/page/portal/nuts_nomenclature/introduction) regions, [age groups](http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownloadListing?sort=1&file=dic%2Fen%2Fage.dic) and [ICD-10 codes](http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownloadListing?sort=1&file=dic%2Fen%2Ficd10.dic), like these:
 
     A-R_V-Y   All causes of death (A00-Y89) excluding S00-T98
     A-T_Z     All causes of diseases (A00-Z99) excluding V00-Y98
