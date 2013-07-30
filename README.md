@@ -2,16 +2,23 @@ Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a co
 
 # OUTLINE
 
-* `qoguse`
-* `qogmerge`
-* `qogmap`
+Basic functions:
+
+* `qoguse` and `qogmerge`, to clone the [Stata commands](http://www.qog.pol.gu.se/data/dataextras/forstatausers/) (add `qogbook`)
+* `qogmap`, to plot the data like shown in the _QOG Codebook_
+
+Data functions:
+
 * `read.eurostat` and `merge.eurostat`: add Eurostat variables based on the codes shown in their [table of contents](http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf)
+  * Other Eurostat scripts: [toprach/eurostat_r](https://github.com/toprach/eurostat_r/blob/master/eurostat_r.r) (R, data table function) and [gka/eurostat](https://github.com/gka/eurostat) (Python, bulk download scraper)
+* integrate to [datamarket/rdatamarket](https://github.com/DataMarket/rdatamarket), `WDI`, `Quandl` and other sources
+  * `FAOSTAT`
+  * `OECD`
+  * etc.
 
-Other Eurostat scripts:
+Model functions:
 
-* [datamarket/rdatamarket](https://github.com/DataMarket/rdatamarket) (R, many more sources)
-* [toprach/eurostat_r](https://github.com/toprach/eurostat_r/blob/master/eurostat_r.r) (R, data table function)
-* [gka/eurostat](https://github.com/gka/eurostat) (Python, bulk download scraper)
+* regional/national multilevel models
 
 # EXAMPLES
 
