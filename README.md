@@ -1,11 +1,11 @@
-Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a collection of scripts to cram large quantities of data from Eurostat into a nice R data frame.
+Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a collection of scripts to manipulate [Quality of Government](http://www.qog.pol.gu.se/) data. __Just started working on it__. I hope to turn it into a [helper package](http://www.qog.pol.gu.se/data/dataextras/forstatausers/) for QOG users.
 
-# HOWTO
+# OUTLINE
 
-* Run `0_init.R` to extract an index of Eurostat datasets from the [table of contents](http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf). The `code` object defines the keyword pattern to look for in dataset names.
-* Run `1_download.R` to download and extract the raw data from all zipped datasets. This is excruciatingly slow on large datasets (my test set has 3 million rows).
-
-Next move: find a way to safely collate the columns (which are _not_ the same in each segment of the data).
+* `qoguse`
+* `qogmerge`
+* `qogmap`
+* `read.eurostat` and `merge.eurostat`: add Eurostat variables based on the codes shown in their [table of contents](http://epp.eurostat.ec.europa.eu/NavTree_prod/everybody/BulkDownloadListing?sort=1&file=table_of_contents_en.pdf)
 
 Other Eurostat scripts:
 
@@ -13,10 +13,9 @@ Other Eurostat scripts:
 * [toprach/eurostat_r](https://github.com/toprach/eurostat_r/blob/master/eurostat_r.r) (R, data table function)
 * [gka/eurostat](https://github.com/gka/eurostat) (Python, bulk download scraper)
 
+# EXAMPLES
 
-# NOTES
-
-Missing values are properly encoded as `NA`, but many values in the data have [flags](http://epp.eurostat.ec.europa.eu/NavTree_prod/htdocs/explanation/explanation_en_auth.html) of the following form:
+I'm working on the Eurostat merge function. Missing values are properly encoded as `NA`. Some values have [flags](http://epp.eurostat.ec.europa.eu/NavTree_prod/htdocs/explanation/explanation_en_auth.html) of the following form:
 
     b = break in time series 
     c = confidential 
@@ -30,8 +29,6 @@ Missing values are properly encoded as `NA`, but many values in the data have [f
     s = Eurostat estimate (phased out) 
     u = low reliability 
     z = not applicable 
-
-# DEMO
 
 Here's what the index looks like for causes of death (the first column are titles):
 
