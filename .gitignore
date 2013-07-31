@@ -5,11 +5,13 @@
 .RData
 *.Rproj
 
+*.csv
 *.gz
 *.tsv
 *.txt
 *.Rda
 
 draft
+data
 
 # done
