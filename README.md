@@ -2,7 +2,9 @@ The __qogdata__ package is a collection of functions to manipulate [Quality of G
 
 # EXAMPLES
 
-__qogdata__ simply points to a QOG server and downloads any available version of the QOG dataset. By default, it simply returns the path to the QOG Standard cross-section:
+## `qogdata`
+
+`qogdata` simply points to a [QOG server](http://www.qogdata.pol.gu.se/) to download available versions of the QOG datasets. By default, it simply returns the path to the QOG Standard cross-section dataset:
 
     > qogdata()
     [1] "http://www.qogdata.pol.gu.se/data/QoG_std_cs_15May13.csv"
@@ -21,9 +23,11 @@ Set `codebook` to `TRUE` or to a specific filename to also download the codebook
     Downloading codebook to Codebook_QoG_Std15May13.pdf...
     Codebook: Codebook_QoG_Std15May13.pdf
 
-The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format.
+The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format and are downloaded by the __`qogbook`__ function.
 
-__qogfind__ uses the two indexes bundled with the package to make finding variables a bit quicker for the end-user:
+## `qogfind`
+
+`qogfind` uses the two indexes bundled with the package to make finding variables a bit quicker for the end-user:
 
     > qogfind("public|administration")
     QOG Standard results:
@@ -38,7 +42,9 @@ __qogfind__ uses the two indexes bundled with the package to make finding variab
 
 The function searches through variable names and labels, as the `lookfor` command would in Stata. The `ts` columns provides years of measurement for the time-series dataset, the `cs` columns for the cross-sectional dataset. The information matches the figures reported in the _QOG Standard Codebook_ and _QOG Social Policy Codebook_.
 
-__qogmap__ calls the `countrycode`, `maps` and `ggplot2` packages to draw choropleth maps of QOG cross-sectional data:
+## `qogmap`
+
+`qogmap` calls the `countrycode`, `maps` and `ggplot2` packages to draw choropleth maps of QOG cross-sectional data:
 
     QOG = qogdata(tempfile(), warn.missing.labels = FALSE, convert.factors = TRUE,
                   version = "bas", variables = c("ccodealp", "undp_hdi", "ihme_nm"))
