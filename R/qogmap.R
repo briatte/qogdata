@@ -4,7 +4,7 @@
 #' Function to plot maps of Quality of Government (QOG) data. Requires the \code{ggplot2} and \code{maps} packages.
 #'
 #' @export
-#' @param data the QOG data frame. The function requires the \code{ccodealp} variable.
+#' @param data the QOG data frame. The function requires the \code{ccodealp} variable from the QOG \code{std} and \code{soc} datasets.
 #' @param variable the QOG variable name to colour the map with, in quotes.
 #' @param continents a vector of continent names to subset the map to.
 #' @param regions a vector of region names to subset the map to.
@@ -31,6 +31,7 @@
 
 qogmap <- function(data, variable, continents = NULL, regions = NULL, name = "",
                    title = NULL, quantize = FALSE, text.size = 12, ...) {
+  stopifnot("ccodealp" %in% names(data))
   stopifnot(variable %in% names(data))
   if (require("maps") & require(ggplot2)) {
     #

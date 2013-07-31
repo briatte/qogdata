@@ -8,7 +8,8 @@
 }
 \arguments{
   \item{data}{the QOG data frame. The function requires the
-  \code{ccodealp} variable.}
+  \code{ccodealp} variable from the QOG \code{std} and
+  \code{soc} datasets.}
 
   \item{variable}{the QOG variable name to colour the map
   with, in quotes.}
