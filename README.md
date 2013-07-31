@@ -1,8 +1,9 @@
-Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a collection of scripts to manipulate [Quality of Government](http://www.qog.pol.gu.se/) data. I hope to turn it into a [helper package](http://www.qog.pol.gu.se/data/dataextras/forstatausers/) for QOG users.
+The __qogdata__ package is a collection of scripts to manipulate [Quality of Government](http://www.qog.pol.gu.se/) datasets and codebooks from R. It takes inspiration from the equivalent [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. It also provides additional services to merge QOG datasets with other country-level data sources, like Eurostat or the World Bank.
 
-Currently working:
+Currently working in version 0.1:
 
-* `qoguse`
+* `qogdata`
+* `qogbook`
 
 # OUTLINE
 
@@ -65,3 +66,7 @@ The data are coded by [NUTS-2](http://epp.eurostat.ec.europa.eu/portal/page/port
     I         Diseases of the circulatory system (I00-I99)
     J         Diseases of the respiratory system (J00-J99)
     V01-Y89   External causes of morbidity and mortality (V01-Y89)
+
+# CREDITS
+
+Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/) repository of survey analysis scripts for R.

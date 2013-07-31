@@ -1,3 +1,5 @@
 export(qogbook)
 export(qogdata)
+export(qogfind)
+export(qogmap)
 export(qoguse)

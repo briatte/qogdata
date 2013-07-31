@@ -41,6 +41,10 @@
   \code{codebook} is treated as the filename for the
   codebook. Defaults to \code{FALSE}.}
 
+  \item{variables}{a selection of variables to import.
+  \code{ccodealp} ISO-3C country codes and \code{year}
+  identifiers will be forced into the output if relevant.}
+
   \item{...}{other arguments supplied to the import method,
   which is `read.csv` by default, or
   \code{foreign::read.dta} if \code{file} is a Stata

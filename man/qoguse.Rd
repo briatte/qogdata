@@ -10,7 +10,7 @@
 }
 \description{
   Alias for the \code{qogdata} function, for maximum
-  resemblance to Christoph Thewes' \code{QOG} package for
+  resemblance with Christoph Thewes' \code{QOG} package for
   Stata.
 }
 \author{

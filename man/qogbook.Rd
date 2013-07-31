@@ -2,7 +2,8 @@
 \alias{qogbook}
 \title{qogbook - Download Quality of Government codebooks}
 \usage{
-  qogbook(codebook = FALSE, version = "std")
+  qogbook(file = FALSE, version = "std", path = "",
+    replace = FALSE)
 }
 \arguments{
   \item{file}{a filename to save the codebook at. If set to
