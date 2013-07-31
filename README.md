@@ -1,6 +1,13 @@
 The __qogdata__ package is a collection of functions to manipulate [Quality of Government](http://www.qog.pol.gu.se/) datasets and codebooks in R. It provides a few additional services to map QOG variables and to merge QOG datasets with other country-level data sources.
 
-# EXAMPLES
+Version 0.1 of the `qogdata` package is installable with the `devtools` package:
+
+    library(devtools)
+    devtools::install_github("qogdata", "briatte", dependencies = TRUE)
+
+Please post comments, issues and suggestions in the [Issues](https://github.com/briatte/qogdata/issues) section. The package might be submitted to CRAN if I manage to add as many functionalities as I would like to.
+
+The rest of this document describes currently available functions.
 
 ## `qogdata`
 
@@ -33,7 +40,7 @@ The examples use `tempfile()` to save temporary copies of a QOG dataset before p
 
 ![](example1.png)
 
-The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format and are downloaded by the __`qogbook`__ function.
+The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format and are downloaded by the `qogbook` function.
 
 ## `qogfind`
 
@@ -84,4 +91,4 @@ The function matches QOG countries to geographic information from the `world` ma
 
 # CREDITS
 
-`qogdata` takes inspiration from two [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. All credits due to the authors of the QOG datasets (see the package documentation for references).
+`qogdata` takes inspiration from two [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references).
