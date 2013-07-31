@@ -1,1 +1,3 @@
-exportPattern("^[[:alpha:]]+")
+export(qogbook)
+export(qogdata)
+export(qoguse)

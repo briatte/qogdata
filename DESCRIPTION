@@ -1,9 +1,17 @@
 Package: qogdata
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Helper functions to manipulate Quality of Government data
+Version: 0.1
 Date: 2013-07-30
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: François Briatte <f.briatte@ed.ac.uk>
+Maintainer: François Briatte <f.briatte@ed.ac.uk>
+Description: Helper functions to download Quality of Government datasets
+    and codebooks. Additional methods are provided to merge data from
+    other sources.
+Suggests:
+    foreign,
+    Hmisc
+License: GPL-3
+Collate:
+    'qogdata.R'
+    'qoguse.R'

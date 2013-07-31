@@ -1,4 +1,8 @@
-Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a collection of scripts to manipulate [Quality of Government](http://www.qog.pol.gu.se/) data. __Just started working on it__. I hope to turn it into a [helper package](http://www.qog.pol.gu.se/data/dataextras/forstatausers/) for QOG users.
+Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/), here's a collection of scripts to manipulate [Quality of Government](http://www.qog.pol.gu.se/) data. I hope to turn it into a [helper package](http://www.qog.pol.gu.se/data/dataextras/forstatausers/) for QOG users.
+
+Currently working:
+
+* `qoguse`
 
 # OUTLINE
 
