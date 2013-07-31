@@ -40,7 +40,16 @@ The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) avai
     710  wvs_f115 Justifiable: avoiding a fare on    1981   2008  157   28   NA     NA     NA
     716   wvs_pet           Public self-expression   1981   2008  161   28   NA     NA     NA
 
-The function searches through variable names and labels, as the `lookfor` command would in Stata. The `ts` columns provides years of measurement for the time-series dataset, the `cs` columns for the cross-sectional dataset. The information matches the figures reported in the _QOG Standard Codebook_ and _QOG Social Policy Codebook_.
+The function searches through variable names and labels, as the `lookfor` command would in Stata. The `ts` columns provides years of measurement for the time-series dataset, the `cs` columns for the cross-sectional dataset. The information matches the figures reported in the _QOG Standard Codebook_ and _QOG Social Policy Codebook_. It can be easily plotted:
+
+    qplot(data = qogfind("ihme_|undp_"), 
+          y = label, yend = label, x = ts.min, xend = ts.max, 
+          geom = "segment", size = I(6), alpha = ts.T) +
+      scale_alpha("Range") +
+      theme_minimal(16) +
+      labs(y = NULL, x = NULL, title = "Data availability")
+
+![](example1.png)
 
 ## `qogmap`
 
@@ -51,7 +60,7 @@ The function searches through variable names and labels, as the `lookfor` comman
     qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
       ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
 
-![](example1.png)
+![](example2.png)
 
 The function works with `ggplot2` to detect the scale of the map (continuous or discrete). The `quantize` option can also create quantiles of a variable on the fly:
 
@@ -59,7 +68,7 @@ The function works with `ggplot2` to detect the scale of the map (continuous or 
       scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
       ggtitle("Human Development Index (UNDP, 2009-2010)")
 
-![](example2.png)
+![](example3.png)
 
 The function matches QOG countries to geographic information from the `world` map provided in the `maps` package. It also adds continents and regions with the `countrycode` package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.
 
