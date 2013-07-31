@@ -23,6 +23,16 @@ Set `codebook` to `TRUE` or to a specific filename to also download the codebook
     Downloading codebook to Codebook_QoG_Std15May13.pdf...
     Codebook: Codebook_QoG_Std15May13.pdf
 
+The examples use `tempfile()` to save temporary copies of a QOG dataset before plotting:
+
+    qplot(data = qogdata(tempfile(), version = "bas"), 
+          x = bl_asyt25, y = wdi_fr, size = mad_pop / 10^3) + 
+      scale_size_area("Population (mill.)", max_size = 12) +
+      labs(y = "Fertility rate", x = "Average years of schooling, pop. aged 25+") +
+      theme_grey(16)
+
+![](example1.png)
+
 The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format and are downloaded by the __`qogbook`__ function.
 
 ## `qogfind`
@@ -49,7 +59,7 @@ The function searches through variable names and labels, as the `lookfor` comman
       theme_minimal(16) +
       labs(y = NULL, x = NULL, title = "Data availability")
 
-![](example1.png)
+![](example2.png)
 
 ## `qogmap`
 
@@ -60,7 +70,7 @@ The function searches through variable names and labels, as the `lookfor` comman
     qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
       ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
 
-![](example2.png)
+![](example3.png)
 
 The function works with `ggplot2` to detect the scale of the map (continuous or discrete). The `quantize` option can also create quantiles of a variable on the fly:
 
@@ -68,7 +78,7 @@ The function works with `ggplot2` to detect the scale of the map (continuous or 
       scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
       ggtitle("Human Development Index (UNDP, 2009-2010)")
 
-![](example3.png)
+![](example4.png)
 
 The function matches QOG countries to geographic information from the `world` map provided in the `maps` package. It also adds continents and regions with the `countrycode` package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.
 
