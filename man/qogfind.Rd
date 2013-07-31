@@ -1,6 +1,6 @@
 \name{qogfind}
 \alias{qogfind}
-\title{qogfind - find Quality of Government variables}
+\title{qogfind -- find Quality of Government variables}
 \usage{
   qogfind(..., version = "std", shorter.labels = TRUE,
     show = "all")

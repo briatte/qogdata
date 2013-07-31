@@ -209,13 +209,9 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
     }
     message("Codebook: ", file)
   }
-  if(save.labels) {
-    
-    message("Variable labels: ", file)
-  }
 }
 
-#' qogfind - find Quality of Government variables
+#' qogfind -- find Quality of Government variables
 #'
 #' Function to perform a \code{regex} search on QOG variable names and labels. 
 #' A few labels are missing for strictly cross-sectional variables.
