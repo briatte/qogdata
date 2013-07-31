@@ -1,20 +1,19 @@
-The __qogdata__ package is a collection of scripts to manipulate [Quality of Government](http://www.qog.pol.gu.se/) datasets and codebooks from R. It takes inspiration from the equivalent [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. It will also provide additional services to merge QOG datasets with other country-level data sources, like Eurostat or the World Bank.
+The __qogdata__ package is a collection of functions to manipulate [Quality of Government](http://www.qog.pol.gu.se/) datasets and codebooks in R. It provides a few additional services to map QOG variables and to merge QOG datasets with other country-level data sources.
 
-# FUNCTIONS
-
-* `qogdata` (download datasets)
-* `qogbook` (download codebooks)
-* `qogfind` (search variables)
-* `qogmap` (plot choropleth maps)
-
-# VIGNETTE
+# EXAMPLES
 
 __qogdata__ simply points to a QOG server and downloads any available version of the QOG dataset. By default, it simply returns the path to the QOG Standard cross-section:
 
     > qogdata()
     [1] "http://www.qogdata.pol.gu.se/data/QoG_std_cs_15May13.csv"
 
-Set `file` to `TRUE` or to a specific filename to download the dataset. Set `codebook` to `TRUE` or to a specific filename to also download the codebook with the `qogbook` function:
+Set `file` to `TRUE` or to a specific filename to download the dataset:
+
+    > QOG = qogdata(file = TRUE, format = "ts", codebook = TRUE)
+    Downloading http://www.qogdata.pol.gu.se/data/QoG_std_ts_15May13.csv...
+    Loaded qog_std_ts_15May13.csv (N = 14137, 1946-2012, T = 67).
+
+Set `codebook` to `TRUE` or to a specific filename to also download the codebook with the `qogbook` function:
 
     > QOG = qogdata(file = TRUE, format = "ts", codebook = TRUE)
     Downloading http://www.qogdata.pol.gu.se/data/QoG_std_ts_15May13.csv...
@@ -22,9 +21,9 @@ Set `file` to `TRUE` or to a specific filename to download the dataset. Set `cod
     Downloading codebook to Codebook_QoG_Std15May13.pdf...
     Codebook: Codebook_QoG_Std15May13.pdf
 
-The QOG Standard dataset is currently available in CSV, SPSS and Stata formats, while other versions of the dataset are available only for Stata; `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format.
+The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format.
 
-__qogfind__ makes use of the two indexes of variable names and labels that are bundled with the package for search purposes. This makes finding variables a bit quicker for the end-user:
+__qogfind__ uses the two indexes bundled with the package to make finding variables a bit quicker for the end-user:
 
     > qogfind("public|administration")
     QOG Standard results:
@@ -37,21 +36,27 @@ __qogfind__ makes use of the two indexes of variable names and labels that are b
     710  wvs_f115 Justifiable: avoiding a fare on    1981   2008  157   28   NA     NA     NA
     716   wvs_pet           Public self-expression   1981   2008  161   28   NA     NA     NA
 
-__qogmap__ calls `maps` and `ggplot2` to draw choropleth maps of QOG cross-sectional data.
+The function searches through variable names and labels, as the `lookfor` command would in Stata. The `ts` columns provides years of measurement for the time-series dataset, the `cs` columns for the cross-sectional dataset. The information matches the figures reported in the _QOG Standard Codebook_ and _QOG Social Policy Codebook_.
 
-    qogmap(subset(qogdata(tempfile(fileext = ".dta"), variables = "chga_hinst", convert.factors = TRUE), 
-                  ccodealp != "RUS"), 
-           "chga_hinst", continent = "Asia", text.size = 16)
+__qogmap__ calls the `countrycode`, `maps` and `ggplot2` packages to draw choropleth maps of QOG cross-sectional data:
+
+    QOG = qogdata(tempfile(), warn.missing.labels = FALSE, convert.factors = TRUE,
+                  version = "bas", variables = c("ccodealp", "undp_hdi", "ihme_nm"))
+    qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
+      ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
 
 ![](example1.png)
 
-    qogmap(qogdata(tempfile(), variables = "bl_asy25mf"),
-           variable = "bl_asy25mf", quantize = 3, 
-           continent = "Africa") +
-        scale_fill_brewer("", palette = "Blues")
+The function works with `ggplot2` to detect the scale of the map (continuous or discrete). The `quantize` option can also create quantiles of a variable on the fly:
+
+    qogmap(QOG, "undp_hdi", quantize = 3, continents = c("Africa", "Asia")) +
+      scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
+      ggtitle("Human Development Index (UNDP, 2009-2010)")
 
 ![](example2.png)
 
+The function matches QOG countries to geographic information from the `world` map provided in the `maps` package. It also adds continents and regions with the `countrycode` package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.
+
 # CREDITS
 
-Inspired by @ajdamico's [usgsd](https://github.com/ajdamico/usgsd/) repository of survey analysis scripts for R.
+`qogdata` takes inspiration from two [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. All credits due to the authors of the QOG datasets (see the package documentation for references).

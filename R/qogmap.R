@@ -4,7 +4,7 @@
 #' Function to plot maps of Quality of Government (QOG) data. Requires the \code{ggplot2} and \code{maps} packages.
 #'
 #' @export
-#' @param data the QOG data frame. The function requires the \code{ccodealp} variable from the QOG \code{std} and \code{soc} datasets.
+#' @param data the QOG data frame. The function requires the \code{ccodealp} variable from the QOG \code{std} and \code{soc} datasets, as well as the \code{countrycode}, \code{ggplot2} and \code{maps} packages.
 #' @param variable the QOG variable name to colour the map with, in quotes.
 #' @param continents a vector of continent names to subset the map to.
 #' @param regions a vector of region names to subset the map to.
@@ -18,14 +18,15 @@
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
 #' # Fertility rates in Africa.
-#' qogmap(qogdata(tempfile(), variables = "wdi_fr"),
-#'        variable = "wdi_fr", continent = "Africa")
+#' # Temporary dataset.
+#' QOG = qogdata(tempfile(fileext = ".dta"), warn.missing.labels = FALSE,
+#'               variables = c("wdi_fr", "chga_hinst", "bl_asy25mf"))
+#' # Fertility rates in Africa.
+#' qogmap(QOG, "wdi_fr", continent = "Africa")
 #' # Political regimes in Asia.
-#' qogmap(subset(QOG.cs, cname != "Russia"), 
-#'        "chga_hinst", continent = "Asia")
+#' qogmap(subset(QOG, ccodealp != "RUS"), "chga_hinst", continent = "Asia")
 #' # Education levels in Central America.
-#' qogmap(qogdata(tempfile(), variables = "bl_asy25mf"),
-#'        variable = "bl_asy25mf", quantize = 3, 
+#' qogmap(QOG, "bl_asy25mf", quantize = 3, 
 #'        region = c("Central America", "South America")) +
 #'        scale_fill_brewer("", palette = "Blues")
 
@@ -33,7 +34,7 @@ qogmap <- function(data, variable, continents = NULL, regions = NULL, name = "",
                    title = NULL, quantize = FALSE, text.size = 12, ...) {
   stopifnot("ccodealp" %in% names(data))
   stopifnot(variable %in% names(data))
-  if (require("maps") & require(ggplot2)) {
+  if (require(maps) & require(ggplot2) & require(countrycode)) {
     #
     # map data
     #

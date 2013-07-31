@@ -25,8 +25,8 @@
 \description{
   Function to download Quality of Government (QOG)
   codebooks. Please visit the QOG Institute website at
-  \link{http://www.qog.pol.gu.se/} for a presentation of
-  QOG research.
+  \url{http://www.qog.pol.gu.se/} for a presentation of QOG
+  research.
 }
 \examples{
 # Show the URL to the QOG Standard dataset codebook.

@@ -15,6 +15,10 @@
   \item{shorter.labels}{whether to abbreviate the labels to
   32 characters. Defaults to \code{TRUE} for better console
   output.}
+
+  \item{show}{which variables to show for years of
+  measurement: \code{cs} (cross-sectional), \code{ts} (time
+  series), or \code{all} (the default).}
 }
 \description{
   Function to perform a \code{regex} search on QOG variable
@@ -38,12 +42,12 @@ qogfind("*")[is.na(qogfind("*")$ts.N), ]
   Svensson, Richard, Stefan Dahlberg, Staffan Kumlin & Bo
   Rothstein. 2012. \emph{The QoG Social Policy Dataset},
   version 4Apr12. University of Gothenburg: The Quality of
-  Government Institute, \link{http://www.qog.pol.gu.se}.
-  Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Sören
+  Government Institute, \url{http://www.qog.pol.gu.se}.
+  Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Soren
   Holmberg, Bo Rothstein, Petrus Sundin & Richard Svensson.
   2013. \emph{The Quality of Government Dataset}, version
   15May13. University of Gothenburg: The Quality of
-  Government Institute, \link{http://www.qog.pol.gu.se}.
+  Government Institute, \url{http://www.qog.pol.gu.se}.
 }
 \seealso{
   \code{\link{grep}}, \code{\link{qogdata}}

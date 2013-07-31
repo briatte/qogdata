@@ -9,7 +9,8 @@
 \arguments{
   \item{data}{the QOG data frame. The function requires the
   \code{ccodealp} variable from the QOG \code{std} and
-  \code{soc} datasets.}
+  \code{soc} datasets, as well as the \code{countrycode},
+  \code{ggplot2} and \code{maps} packages.}
 
   \item{variable}{the QOG variable name to colour the map
   with, in quotes.}
@@ -38,14 +39,15 @@
 }
 \examples{
 # Fertility rates in Africa.
-qogmap(qogdata(tempfile(), variables = "wdi_fr"),
-       variable = "wdi_fr", continent = "Africa")
+# Temporary dataset.
+QOG = qogdata(tempfile(fileext = ".dta"), warn.missing.labels = FALSE,
+              variables = c("wdi_fr", "chga_hinst", "bl_asy25mf"))
+# Fertility rates in Africa.
+qogmap(QOG, "wdi_fr", continent = "Africa")
 # Political regimes in Asia.
-qogmap(subset(QOG.cs, cname != "Russia"),
-       "chga_hinst", continent = "Asia")
+qogmap(subset(QOG, ccodealp != "RUS"), "chga_hinst", continent = "Asia")
 # Education levels in Central America.
-qogmap(qogdata(tempfile(), variables = "bl_asy25mf"),
-       variable = "bl_asy25mf", quantize = 3,
+qogmap(QOG, "bl_asy25mf", quantize = 3,
        region = c("Central America", "South America")) +
        scale_fill_brewer("", palette = "Blues")
 }

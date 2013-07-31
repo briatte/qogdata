@@ -1,16 +1,29 @@
 #' qogdata - Import Quality of Government data into R
 #'
-#' Function to download Quality of Government (QOG) data and load it as a data frame in R. Please visit the QOG Institute website at \link{http://www.qog.pol.gu.se/} for a presentation of QOG research.
+#' Function to download Quality of Government (QOG) data and load it as a data frame in R. Please visit the QOG Institute website at \url{http://www.qog.pol.gu.se/} for a presentation of QOG research.
 #'
 #' @export
-#' @param file a filename to save the dataset at. If set to \code{TRUE}, the name of the CSV dataset on the QOG server will be used. If set to \code{FALSE} (the default), the function only returns the link to the dataset. QOG datasets other than \code{std} require that \code{file} ends in \code{.dta}. QOG dataset \code{csyom} requires that \code{file} ends in \code{.csv}.
+#' @param file a filename to save the dataset at. If set to \code{TRUE}, the name of the CSV dataset on the QOG server will be used. If set to \code{FALSE} (the default), the function only returns the link to the dataset. QOG dataset versions other than \code{std} require that \code{file} ends in \code{.dta}.
 #' @param replace whether to download the dataset even if a file already exists at the download location. Defaults to \code{FALSE}.
-#' @param path a folder path to append to the filename.
+#' @param path a folder path to prepend to the filename and to the codebook if relevant.
 #' @param version the QOG version: \code{std} (Standard), \code{soc} (Social Policy), \code{bas} (Basic) or \code{exp} (Expert). Defaults to \code{std}.
-#' @param format the QOG format, usually \code{cs} for cross-sectional data or \code{ts} for time series in the \code{std} and \code{bas} versions. QOG dataset \code{soc} requires \code{cs}, \code{tsl} (time series, long) or \code{tsw} (time series, wide). QOG dataset \code{exp} requires \code{cntry} (country-level) or \code{ind} (individual survey). If format is \code{csyom}, \code{version} must be \code{std} and \code{file} must be a CSV file. Defaults to \code{cs}.
+#' @param format the QOG format, usually \code{cs} for cross-sectional data or \code{ts} for time series in the \code{std} and \code{bas} versions. See 'Details' for the full list of specifications. Defaults to \code{cs}.
 #' @param codebook whether to download the codebook. Calls \code{qogbook} by passing the \code{codebook}, \code{version} and \code{path} arguments to it, where \code{codebook} is treated as the filename for the codebook. Defaults to \code{FALSE}.
 #' @param variables a selection of variables to import. \code{ccodealp} ISO-3C country codes and \code{year} identifiers will be forced into the output if relevant.
+#' @param years a selection of years to import. Effective only with the \code{ts}, \code{tsl} or \code{ind} formats.
 #' @param ... other arguments supplied to the import method, which is `read.csv` by default, or \code{foreign::read.dta} if \code{file} is a Stata \code{dta} dataset, or \code{Hmisc::spss.get} if \code{file} is a SPSS \code{sav} dataset.
+#' @details \itemize{
+#'   \item QOG datasets \code{std} and \code{bas} 
+#'   require format \code{cs} (cross-section) 
+#'   or \code{ts} (time series).
+#'   \item QOG dataset \code{soc} 
+#'   requires format \code{cs}, \code{tsl} (time series, long) 
+#'   or \code{tsw} (time series, wide)
+#'   \item QOG dataset \code{exp} 
+#'   requires format \code{cntry} (country-level) 
+#'   or \code{ind} (individual survey)
+#' }
+#' If format is \code{csyom}, \code{version} is automatically set to \code{std}, and \code{file} must be a CSV file.
 #' @seealso \code{\link{qogbook}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
@@ -44,6 +57,11 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
   #
   # correct format
   #
+  if(format == "csyom") {
+    version = "std"
+    if(!grepl(".csv$|.txt$", file))
+      file = gsub("(\\.|\\w){4}$", ".csv", file)
+  }
   if(!format %in% unlist(versions[version])) {
     stop("Invalid format: use one of ", 
          paste0(unlist(versions[version]), collapse = ", "))
@@ -55,15 +73,11 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
     file = paste0("qog_", version, "_", format, ifelse(version == "std", paste0("_", "15May13.csv"), ".dta"))
   }
   else {
-    if(version != "std" & !grepl(".dta$", file))
-      stop("QOG datasets other than std are available only as Stata files.\n",
-           "  Please specify a .dta filename or set file = TRUE.")
-    if(format == "csyom" & version != "std")
-      stop("The csyom dataset is available only for the std version.\n",
-           "  Please use version = 'std' and a CSV filename.")
-    if(format == "csyom" & !grepl(".csv$|.txt$", file))
-      stop("The csyom dataset is available only as a CSV file\n",
-           "  Please specify a CSV filename or set file = TRUE.")
+    if(is.character(file) & version != "std" & !grepl(".dta$", file)) {
+      file = gsub("(\\.|\\w){4}$", ".dta", file)
+      warning("QOG datasets other than std are available only as Stata files.\n",
+           "  The filename that you specified was modified to ", file)      
+    }
   }
   if(is.character(path))
     if(nchar(path) > 0) file = paste(path, file, sep = "/")
@@ -74,9 +88,9 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
                 ifelse(version == "std", "QoG", "qog"),
                 "_", version, "_", format, 
                 ifelse(version == "std", paste0("_", "15May13"), ""),
-                ifelse(grepl("csv|dta|sav", file), 
+                ifelse(version == "std" & grepl("csv|dta|sav", file), 
                        substring(file, nchar(file) - 3),
-                       ".csv")
+                       ".dta")
   )
   if(is.logical(file)) {
     return(link)
@@ -142,7 +156,7 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
   return(data)
 }
 
-#' qogdata - Import Quality of Government data into R
+#' qoguse - Import Quality of Government data into R
 #'
 #' Alias for the \code{qogdata} function, for maximum resemblance with Christoph Thewes' \code{QOG} package for Stata.
 #'
@@ -157,7 +171,7 @@ qoguse <- function( ...) {
 
 #' qogbook - Download Quality of Government codebooks
 #'
-#' Function to download Quality of Government (QOG) codebooks. Please visit the QOG Institute website at \link{http://www.qog.pol.gu.se/} for a presentation of QOG research.
+#' Function to download Quality of Government (QOG) codebooks. Please visit the QOG Institute website at \url{http://www.qog.pol.gu.se/} for a presentation of QOG research.
 #'
 #' @export
 #' @param file a filename to save the codebook at. If set to \code{TRUE}, the name of the codebook on the QOG server will be used. If set to \code{FALSE} (the default), the function only returns the link to the dataset. The filename must end in \code{.pdf}.
@@ -220,17 +234,18 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' @param ... keywords or \code{regex} phrases passed to \code{grepl}.
 #' @param version the QOG version to search: either \code{std} (the default) or \code{soc}.
 #' @param shorter.labels whether to abbreviate the labels to 32 characters. Defaults to \code{TRUE} for better console output.
+#' @param show which variables to show for years of measurement: \code{cs} (cross-sectional), \code{ts} (time series), or \code{all} (the default).
 #' @value a data frame containg matching variables, described by their names, labels and years of measurement in the time series (\code{ts}) cross-sectional (\code{cs}) datasets. The information should match the ranges indicated in the \emph{QOG Standard Codebook} and \emph{QOG Social Policy Codebook}.
 #' @references
 #' Svensson, Richard, Stefan Dahlberg, Staffan Kumlin & Bo Rothstein. 
 #' 2012. \emph{The QoG Social Policy Dataset}, version 4Apr12. 
 #' University of Gothenburg: The Quality of Government Institute, 
-#' \link{http://www.qog.pol.gu.se}.
-#' Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Sören Holmberg, 
+#' \url{http://www.qog.pol.gu.se}.
+#' Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Soren Holmberg, 
 #' Bo Rothstein, Petrus Sundin & Richard Svensson. 2013. 
 #' \emph{The Quality of Government Dataset}, version 15May13. 
 #' University of Gothenburg: The Quality of Government Institute, 
-#' \link{http://www.qog.pol.gu.se}.
+#' \url{http://www.qog.pol.gu.se}.
 #' @seealso \code{\link{grep}}, \code{\link{qogdata}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
@@ -244,8 +259,6 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' qogfind("*")[is.na(qogfind("*")$ts.N), ]
 
 qogfind <- function(..., version = "std", shorter.labels = TRUE, show = "all") {
-  data = paste("data/qog", version, "index.Rda", sep = ".")
-  load(data)
   x = paste0(c(...), collapse = "|")
   if (version == "std") {
     message("QOG Standard results:")

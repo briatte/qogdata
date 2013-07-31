@@ -11,15 +11,15 @@
   \code{TRUE}, the name of the CSV dataset on the QOG
   server will be used. If set to \code{FALSE} (the
   default), the function only returns the link to the
-  dataset. QOG datasets other than \code{std} require that
-  \code{file} ends in \code{.dta}. QOG dataset \code{csyom}
-  requires that \code{file} ends in \code{.csv}.}
+  dataset. QOG dataset versions other than \code{std}
+  require that \code{file} ends in \code{.dta}.}
 
   \item{replace}{whether to download the dataset even if a
   file already exists at the download location. Defaults to
   \code{FALSE}.}
 
-  \item{path}{a folder path to append to the filename.}
+  \item{path}{a folder path to prepend to the filename and
+  to the codebook if relevant.}
 
   \item{version}{the QOG version: \code{std} (Standard),
   \code{soc} (Social Policy), \code{bas} (Basic) or
@@ -27,13 +27,8 @@
 
   \item{format}{the QOG format, usually \code{cs} for
   cross-sectional data or \code{ts} for time series in the
-  \code{std} and \code{bas} versions. QOG dataset
-  \code{soc} requires \code{cs}, \code{tsl} (time series,
-  long) or \code{tsw} (time series, wide). QOG dataset
-  \code{exp} requires \code{cntry} (country-level) or
-  \code{ind} (individual survey). If format is
-  \code{csyom}, \code{version} must be \code{std} and
-  \code{file} must be a CSV file. Defaults to \code{cs}.}
+  \code{std} and \code{bas} versions. See 'Details' for the
+  full list of specifications. Defaults to \code{cs}.}
 
   \item{codebook}{whether to download the codebook. Calls
   \code{qogbook} by passing the \code{codebook},
@@ -45,6 +40,10 @@
   \code{ccodealp} ISO-3C country codes and \code{year}
   identifiers will be forced into the output if relevant.}
 
+  \item{years}{a selection of years to import. Effective
+  only with the \code{ts}, \code{tsl} or \code{ind}
+  formats.}
+
   \item{...}{other arguments supplied to the import method,
   which is `read.csv` by default, or
   \code{foreign::read.dta} if \code{file} is a Stata
@@ -54,8 +53,19 @@
 \description{
   Function to download Quality of Government (QOG) data and
   load it as a data frame in R. Please visit the QOG
-  Institute website at \link{http://www.qog.pol.gu.se/} for
+  Institute website at \url{http://www.qog.pol.gu.se/} for
   a presentation of QOG research.
+}
+\details{
+  \itemize{ \item QOG datasets \code{std} and \code{bas}
+  require format \code{cs} (cross-section) or \code{ts}
+  (time series).  \item QOG dataset \code{soc} requires
+  format \code{cs}, \code{tsl} (time series, long) or
+  \code{tsw} (time series, wide) \item QOG dataset
+  \code{exp} requires format \code{cntry} (country-level)
+  or \code{ind} (individual survey) } If format is
+  \code{csyom}, \code{version} is automatically set to
+  \code{std}, and \code{file} must be a CSV file.
 }
 \examples{
 # Show the URL to the QOG Standard dataset.

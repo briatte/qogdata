@@ -1,41 +1,65 @@
 \name{qogdata-package}
 \alias{qogdata-package}
-\alias{qogdata}
 \docType{package}
 \title{
-What the package does (short line)
-~~ package title ~~
+Helper functions for Quality of Government data
 }
 \description{
-More about what it does (maybe more than one line)
-~~ A concise (1-5 lines) description of the package ~~
+Helper functions to download Quality of Government datasets
+    and codebooks. Additional methods are provided to merge data from
+    other sources. Please refer to \url{http://www.qog.pol.gu.se}
+    for details on QOG research projects.
 }
 \details{
 \tabular{ll}{
 Package: \tab qogdata\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 0.1\cr
 Date: \tab 2013-07-30\cr
-License: \tab What license is it under?\cr
+License: \tab GPL-3\cr
+URL: \tab \url{https://github.com/briatte/qogdata}\cr
 }
-~~ An overview of how to use the package, including the most important functions ~~
 }
 \author{
-Who wrote it
+Francois Briatte \email{f.briatte@ed.ac.uk}
 
-Maintainer: Who to complain to <yourfault@somewhere.net>
-~~ The author and/or maintainer of the package ~~
+Maintainer: Francois Briatte \email{f.briatte@ed.ac.uk}
 }
 \references{
-~~ Literature or other references for background information ~~
-}
-~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R ~~
-~~ documentation directory ~~
-\keyword{ package }
-\seealso{
-~~ Optional links to other man pages, e.g. ~~
-~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
+  Svensson, Richard, Stefan Dahlberg, Staffan Kumlin & Bo
+  Rothstein. 2012. \emph{The QoG Social Policy Dataset},
+  version 4Apr12. 
+  University of Gothenburg: The Quality of
+  Government Institute.
+
+  Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Soren
+  Holmberg, Bo Rothstein, Petrus Sundin & Richard Svensson.
+  2013. \emph{The Quality of Government Dataset}, version
+  15May13. 
+  University of Gothenburg: The Quality of
+  Government Institute.
+
+  Teorell, Jan. Carl Dahlstrom & Stefan Dahlberg. 2011. 
+  \emph{The QoG Expert Survey Dataset}. 
+  University of Gothenburg: The Quality of 
+  Government Institute.
 }
 \examples{
-~~ simple examples of the most important functions ~~
+# get datasets
+qogdata()
+qogdata(file = TRUE)
+# get codebooks
+qogbook()
+qogbook(file = TRUE)
+# find variables
+qogfind("democracy", version = "std")
+qogfind("income tax", version = "soc")
+# plot variables
+QOG = qogdata(tempfile(), warn.missing.labels = FALSE, convert.factors = TRUE,
+              version = "bas", variables = c("ccodealp", "undp_hdi", "ihme_nm"))
+qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
+  ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009)")
+qogmap(QOG, "undp_hdi", quantize = 3, continents = c("Africa", "Asia")) +
+  scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
+  ggtitle("Human Development Index (UNDP, 2009-2010)")
 }

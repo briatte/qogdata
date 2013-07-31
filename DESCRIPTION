@@ -1,6 +1,6 @@
 Package: qogdata
 Type: Package
-Title: Helper functions to manipulate Quality of Government data
+Title: Helper functions for Quality of Government data
 Version: 0.1
 Date: 2013-07-30
 Author: François Briatte <f.briatte@ed.ac.uk>
