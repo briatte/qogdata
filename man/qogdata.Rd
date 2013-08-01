@@ -37,7 +37,7 @@
   codebook. Defaults to \code{FALSE}.}
 
   \item{variables}{a selection of variables to import.
-  \code{ccodealp} ISO-3C country codes and \code{year}
+  \code{ccode} ISO-3N country codes and \code{year}
   identifiers will be forced into the output if relevant.}
 
   \item{years}{a selection of years to import. Effective

@@ -13,10 +13,13 @@ Suggests:
     foreign,
     ggplot2,
     Hmisc,
-    maps
+    maps,
+    WDI
 License: GPL-3
 URL: https://github.com/briatte/qogdata
 LazyData: true
 Collate:
     'qogdata.R'
     'qogmap.R'
+    'qogjoin.R'
+    'merge_wdi.R'

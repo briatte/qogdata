@@ -1,6 +1,4 @@
 Version 0.1 (2013-08-01)
 ------------------------
 
-* qogdata and qogbook functions to access all QOG material
-* qogfind function for QOG Standard, Social Policy and Basic
-* basic qogmap function to plot QOG variables
+* initial release

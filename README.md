@@ -38,7 +38,7 @@ The examples use `tempfile()` to save temporary copies of a QOG dataset before p
       labs(y = "Fertility rate", x = "Average years of schooling, pop. aged 25+") +
       theme_grey(16)
 
-![](example1.png)
+![](https://github.com/briatte/qogdata/raw/master/example1.png)
 
 The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. `qogdata` will call `foreign` to import the Stata format and `Hmisc` to import the SPSS format. The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format and are downloaded by the `qogbook` function.
 
@@ -67,7 +67,7 @@ The function searches through variable names and labels, as the `lookfor` comman
         labs(y = NULL, x = NULL, title = "Data availability") + 
         theme(legend.position = "bottom")
 
-![](example2.png)
+![](https://github.com/briatte/qogdata/raw/master/example2.png)
 
 ## `qogmap`
 
@@ -78,7 +78,7 @@ The function searches through variable names and labels, as the `lookfor` comman
     qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
       ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
 
-![](example3.png)
+![](https://github.com/briatte/qogdata/raw/master/example3.png)
 
 The function works with `ggplot2` to detect the scale of the map (continuous or discrete). The `quantize` option can also create quantiles of a variable on the fly:
 
@@ -86,9 +86,23 @@ The function works with `ggplot2` to detect the scale of the map (continuous or 
       scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
       ggtitle("Human Development Index (UNDP, 2009-2010)")
 
-![](example4.png)
+![](https://github.com/briatte/qogdata/raw/master/example4.png)
 
 The function matches QOG countries to geographic information from the `world` map provided in the `maps` package. It also adds continents and regions with the `countrycode` package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.
+
+## `qogjoin`
+
+`qogjoin` joins historical state information to recent state information in the QOG Standard time series dataset. This will make the dataset backward compatible with older versions of the data where this separation did not exist. Complex cases like Sudan or Yemen are left intact.
+
+## `merge_wdi`
+
+`merge_wdi` calls the WDI package to merge QOG Standard time series data with the World Development Indicators provided through the World Bank API. This function makes it easy to update a WDI variable to the latest measurements, and to compare measurement differences between the QOG and WDI series:
+
+![](https://github.com/briatte/qogdata/raw/master/example5.png)
+
+The additional information in this plot is obtained in a single call to `merge_wdi`:
+
+    QOG = merge_wdi(QOG, x = "SH.XPD.PCAP.PP.KD", add = "income", out = "data")
 
 # CREDITS
 
