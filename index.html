@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>qogdata by briatte</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>qogdata</h1>
+        <h2>Quality of Government data, at your fingertips, in R.</h2>
+        <a href="https://github.com/briatte/qogdata" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <p>The <strong>qogdata</strong> package is a collection of functions to manipulate <a href="http://www.qog.pol.gu.se/">Quality of Government</a> datasets and codebooks in R. It provides a few additional services to map QOG variables and to merge QOG datasets with other country-level data sources.</p>
+
+<p>Version 0.1 of the <code>qogdata</code> package is installable with the <code>devtools</code> package:</p>
+
+<pre><code>library(devtools)
+devtools::install_github("qogdata", "briatte", dependencies = TRUE)
+</code></pre>
+
+<p>Please post comments, issues and suggestions in the <a href="https://github.com/briatte/qogdata/issues">Issues</a> section. The package might be submitted to CRAN if I manage to add as many functionalities as I would like to.</p>
+
+<p>The rest of this document describes currently available functions.</p>
+
+<h2>
+<a name="qogdata" class="anchor" href="#qogdata"><span class="octicon octicon-link"></span></a><code>qogdata</code>
+</h2>
+
+<p><code>qogdata</code> simply points to a <a href="http://www.qogdata.pol.gu.se/">QOG server</a> to download available versions of the QOG datasets. By default, it simply returns the path to the QOG Standard cross-section dataset:</p>
+
+<pre><code>&gt; qogdata()
+[1] "http://www.qogdata.pol.gu.se/data/QoG_std_cs_15May13.csv"
+</code></pre>
+
+<p>Set <code>file</code> to <code>TRUE</code> or to a specific filename to download the dataset:</p>
+
+<pre><code>&gt; QOG = qogdata(file = TRUE, format = "ts", codebook = TRUE)
+Downloading http://www.qogdata.pol.gu.se/data/QoG_std_ts_15May13.csv...
+Loaded qog_std_ts_15May13.csv (N = 14137, 1946-2012, T = 67).
+</code></pre>
+
+<p>Set <code>codebook</code> to <code>TRUE</code> or to a specific filename to also download the codebook with the <code>qogbook</code> function:</p>
+
+<pre><code>&gt; QOG = qogdata(file = TRUE, format = "ts", codebook = TRUE)
+Downloading http://www.qogdata.pol.gu.se/data/QoG_std_ts_15May13.csv...
+Loaded qog_std_ts_15May13.csv (N = 14137, 1946-2012, T = 67).
+Downloading codebook to Codebook_QoG_Std15May13.pdf...
+Codebook: Codebook_QoG_Std15May13.pdf
+</code></pre>
+
+<p>The examples use <code>tempfile()</code> to save temporary copies of a QOG dataset before plotting:</p>
+
+<pre><code>qplot(data = qogdata(tempfile(), version = "bas"), 
+      x = bl_asyt25, y = wdi_fr, size = mad_pop / 10^3) + 
+  scale_size_area("Population (mill.)", max_size = 12) +
+  labs(y = "Fertility rate", x = "Average years of schooling, pop. aged 25+") +
+  theme_grey(16)
+</code></pre>
+
+<p><img src="https://raw.github.com/briatte/qogdata/master/example1.png" alt=""></p>
+
+<p>The QOG Standard dataset is <a href="http://www.qogdata.pol.gu.se/data/">currently</a> available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. <code>qogdata</code> will call <code>foreign</code> to import the Stata format and <code>Hmisc</code> to import the SPSS format. The <a href="http://www.qogdata.pol.gu.se/codebook/">codebooks</a> are in PDF format and are downloaded by the <code>qogbook</code> function.</p>
+
+<h2>
+<a name="qogfind" class="anchor" href="#qogfind"><span class="octicon octicon-link"></span></a><code>qogfind</code>
+</h2>
+
+<p><code>qogfind</code> uses the two indexes bundled with the package to make finding variables a bit quicker for the end-user:</p>
+
+<pre><code>&gt; qogfind("public|administration")
+QOG Standard results:
+     variable                            label ts.min ts.max ts.N ts.T cs.N cs.min cs.max
+217   gir_acs Administration and Civil Service   2004   2011  251    8   91   2006   2011
+291 irai_epru    Equity of Public Resource Use   2005   2011  532    7   80   2006   2011
+301  irai_qpa Quality of Public Administration   2005   2011  532    7   80   2006   2011
+304  irai_tac Transparency, Accountability and   2005   2011  532    7   80   2006   2011
+460  wdi_puhe Public Health Expenditure (% of    1995   2010 2960   16  187   2009   2009
+710  wvs_f115 Justifiable: avoiding a fare on    1981   2008  157   28   NA     NA     NA
+716   wvs_pet           Public self-expression   1981   2008  161   28   NA     NA     NA
+</code></pre>
+
+<p>The function searches through variable names and labels, as the <code>lookfor</code> command would in Stata. The <code>ts</code> columns provides years of measurement for the time-series dataset, the <code>cs</code> columns for the cross-sectional dataset. The information matches the figures reported in the <em>QOG Standard Codebook</em> and <em>QOG Social Policy Codebook</em>. It can be easily plotted:</p>
+
+<pre><code>qplot(data = qogfind("ihme_|undp_"), 
+      y = label, yend = label, x = ts.min, xend = ts.max, 
+      geom = "segment", size = I(6), alpha = ts.T) +
+    scale_alpha("Year range") +
+    theme_minimal(16) +
+    labs(y = NULL, x = NULL, title = "Data availability") + 
+    theme(legend.position = "bottom")
+</code></pre>
+
+<p><img src="https://raw.github.com/briatte/qogdata/master/example2.png" alt=""></p>
+
+<h2>
+<a name="qogmap" class="anchor" href="#qogmap"><span class="octicon octicon-link"></span></a><code>qogmap</code>
+</h2>
+
+<p><code>qogmap</code> calls the <code>countrycode</code>, <code>maps</code> and <code>ggplot2</code> packages to draw choropleth maps of QOG cross-sectional data:</p>
+
+<pre><code>QOG = qogdata(tempfile(), warn.missing.labels = FALSE, convert.factors = TRUE,
+              version = "bas", variables = c("ccodealp", "undp_hdi", "ihme_nm"))
+qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
+  ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
+</code></pre>
+
+<p><img src="https://raw.github.com/briatte/qogdata/master/example3.png" alt=""></p>
+
+<p>The function works with <code>ggplot2</code> to detect the scale of the map (continuous or discrete). The <code>quantize</code> option can also create quantiles of a variable on the fly:</p>
+
+<pre><code>qogmap(QOG, "undp_hdi", quantize = 3, continents = c("Africa", "Asia")) +
+  scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
+  ggtitle("Human Development Index (UNDP, 2009-2010)")
+</code></pre>
+
+<p><img src="https://raw.github.com/briatte/qogdata/master/example4.png" alt=""></p>
+
+<p>The function matches QOG countries to geographic information from the <code>world</code> map provided in the <code>maps</code> package. It also adds continents and regions with the <code>countrycode</code> package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.</p>
+
+<h1>
+<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>CREDITS</h1>
+
+<p><code>qogdata</code> takes inspiration from two <a href="http://www.qog.pol.gu.se/data/dataextras/forstatausers/">QOG packages for Stata users</a>, <a href="http://ideas.repec.org/c/boc/bocode/s457283.html"><code>qog</code></a> by Christoph Thewes and <a href="http://ideas.repec.org/c/boc/bocode/s457599.html"><code>qogbook</code></a> by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references).</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/briatte/qogdata/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/briatte/qogdata/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/briatte/qogdata"></a> is maintained by <a href="https://github.com/briatte">briatte</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
