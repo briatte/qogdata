@@ -62,9 +62,10 @@ The function searches through variable names and labels, as the `lookfor` comman
     qplot(data = qogfind("ihme_|undp_"), 
           y = label, yend = label, x = ts.min, xend = ts.max, 
           geom = "segment", size = I(6), alpha = ts.T) +
-      scale_alpha("Range") +
-      theme_minimal(16) +
-      labs(y = NULL, x = NULL, title = "Data availability")
+        scale_alpha("Year range") +
+        theme_minimal(16) +
+        labs(y = NULL, x = NULL, title = "Data availability") + 
+        theme(legend.position = "bottom")
 
 ![](example2.png)
 
