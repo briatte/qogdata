@@ -1,4 +1,4 @@
-#' qogdata - Import Quality of Government data into R
+#' Import Quality of Government data into R
 #'
 #' Function to download Quality of Government (QOG) data and load it as a data frame in R. Please visit the QOG Institute website at \url{http://www.qog.pol.gu.se/} for a presentation of QOG research.
 #'
@@ -110,6 +110,8 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
   if(grepl(".dta$", file)) {
     library(foreign)
     read = "read.dta"
+    if(is.null(unlist(args["warn.missing.labels"])))
+      args["warn.missing.labels"] = FALSE
   }
   if(grepl(".sav$", file)) {
     library(Hmisc)
@@ -156,7 +158,7 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
   return(data)
 }
 
-#' qoguse - Import Quality of Government data into R
+#' Import Quality of Government data into R
 #'
 #' Alias for the \code{qogdata} function, for maximum resemblance with Christoph Thewes' \code{QOG} package for Stata.
 #'
@@ -169,7 +171,7 @@ qoguse <- function( ...) {
   qogdata(...)
 }
 
-#' qogbook - Download Quality of Government codebooks
+#' Download Quality of Government codebooks
 #'
 #' Function to download Quality of Government (QOG) codebooks. Please visit the QOG Institute website at \url{http://www.qog.pol.gu.se/} for a presentation of QOG research.
 #'
@@ -225,7 +227,7 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
   }
 }
 
-#' qogfind -- find Quality of Government variables
+#' Find Quality of Government variables
 #'
 #' Function to perform a \code{regex} search on QOG variable names and labels. 
 #' A few labels are missing for strictly cross-sectional variables.
@@ -233,7 +235,7 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' @export
 #' @param ... keywords or \code{regex} phrases passed to \code{grepl}.
 #' @param version the QOG version to search: either \code{std} (the default) or \code{soc}.
-#' @param shorter.labels whether to abbreviate the labels to 32 characters. Defaults to \code{TRUE} for better console output.
+#' @param compact whether to limit the labels returned to 32 characters. Defaults to \code{TRUE} for better console output.
 #' @param show which variables to show for years of measurement: \code{cs} (cross-sectional), \code{ts} (time series), or \code{all} (the default).
 #' @value a data frame containg matching variables, described by their names, labels and years of measurement in the time series (\code{ts}) cross-sectional (\code{cs}) datasets. The information should match the ranges indicated in the \emph{QOG Standard Codebook} and \emph{QOG Social Policy Codebook}.
 #' @references
@@ -258,20 +260,28 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' # QOG Standard variables featured only in the cross-sectional version.
 #' qogfind("*")[is.na(qogfind("*")$ts.N), ]
 
-qogfind <- function(..., version = "std", shorter.labels = TRUE, show = "all") {
+qogfind <- function(..., version = "std", compact = TRUE, show = "all") {
   x = paste0(c(...), collapse = "|")
   if (version == "std") {
-    message("QOG Standard results:")
+    data(qog.std.index)
+    message("QOG Standard results")
     r = qog.std.index[grepl(x, qog.std.index$variable, ignore.case = TRUE) | 
                         grepl(x, qog.std.index$label, ignore.case = TRUE), ]
   }
   if (version == "soc") {
-    message("QOG Social Policy results:")
+    data(qog.soc.index)
+    message("QOG Social Policy results")
     r = qog.soc.index[grepl(x, qog.soc.index$variable, ignore.case = TRUE) | 
                         grepl(x, qog.soc.index$label, ignore.case = TRUE), ]
   }
+  if (version == "bas") {
+    data(qog.bas.index)
+    message("QOG Basic results")
+    r = qog.bas.index[grepl(x, qog.bas.index$variable, ignore.case = TRUE) | 
+                        grepl(x, qog.bas.index$label, ignore.case = TRUE), ]
+  }
   r$variable = as.character(r$variable)
-  if(shorter.labels) r$label = substr(r$label, 1, 32)
+  if(compact) r$label = substr(r$label, 1, 32)
   if(show == "cs") r = r[, !grepl("ts.", names(r))]
   if(show == "ts") r = r[, !grepl("cs.", names(r))]
   return(r)

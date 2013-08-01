@@ -1,8 +1,8 @@
 \name{qogfind}
 \alias{qogfind}
-\title{qogfind -- find Quality of Government variables}
+\title{Find Quality of Government variables}
 \usage{
-  qogfind(..., version = "std", shorter.labels = TRUE,
+  qogfind(..., version = "std", compact = TRUE,
     show = "all")
 }
 \arguments{
@@ -12,8 +12,8 @@
   \item{version}{the QOG version to search: either
   \code{std} (the default) or \code{soc}.}
 
-  \item{shorter.labels}{whether to abbreviate the labels to
-  32 characters. Defaults to \code{TRUE} for better console
+  \item{compact}{whether to limit the labels returned to 32
+  characters. Defaults to \code{TRUE} for better console
   output.}
 
   \item{show}{which variables to show for years of

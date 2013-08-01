@@ -1,6 +1,6 @@
 \name{qogmap}
 \alias{qogmap}
-\title{qogmap - Map Quality of Government data}
+\title{Map Quality of Government data}
 \usage{
   qogmap(data, variable, continents = NULL, regions = NULL,
     name = "", title = NULL, quantize = FALSE,

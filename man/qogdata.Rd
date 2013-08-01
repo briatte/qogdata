@@ -1,6 +1,6 @@
 \name{qogdata}
 \alias{qogdata}
-\title{qogdata - Import Quality of Government data into R}
+\title{Import Quality of Government data into R}
 \usage{
   qogdata(file = FALSE, replace = FALSE, path = "",
     version = "std", format = "cs", codebook = FALSE,

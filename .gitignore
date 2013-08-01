@@ -10,9 +10,7 @@
 *.tsv
 *.txt
 *.pdf
-*.Rda
 
 draft
-data
 
 # done

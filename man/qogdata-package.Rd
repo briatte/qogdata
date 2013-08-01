@@ -5,7 +5,7 @@
 Helper functions for Quality of Government data
 }
 \description{
-Helper functions to download Quality of Government datasets
+Helper functions to download Quality of Government (QOG) datasets
     and codebooks. Additional methods are provided to merge data from
     other sources. Please refer to \url{http://www.qog.pol.gu.se}
     for details on QOG research projects.
@@ -18,6 +18,14 @@ Version: \tab 0.1\cr
 Date: \tab 2013-07-30\cr
 License: \tab GPL-3\cr
 URL: \tab \url{https://github.com/briatte/qogdata}\cr
+}
+This version works with all four QOG datasets:
+\tabular{ll}{
+QOG Standard (\code{std}): \tab 15 May 2013\cr
+QOG Social Policy (\code{soc}): \tab 4 April 2012\cr
+QOG Basic (\code{bas}): \tab 28 March 2011\cr
+QOG Expert Survey (\code{exp}): \tab 3-6 September 2012\cr
+URL: \tab \url{http://www.qog.pol.gu.se}\cr
 }
 }
 \author{

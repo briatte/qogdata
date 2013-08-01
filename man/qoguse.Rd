@@ -1,6 +1,6 @@
 \name{qoguse}
 \alias{qoguse}
-\title{qoguse - Import Quality of Government data into R}
+\title{Import Quality of Government data into R}
 \usage{
   qoguse(...)
 }

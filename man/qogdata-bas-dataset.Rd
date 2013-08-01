@@ -1,11 +1,11 @@
 
 \docType{data}
-\name{qog.soc.index}
-\alias{qog.soc.index}
-\title{Data related to Quality of Government variables, Social Policy version (1946-2011).}
-\format{A data frame with 1,076 rows and 7 variables}
+\name{qog.bas.index}
+\alias{qog.bas.index}
+\title{Data related to Quality of Government variables, Basic version (1946-2010).}
+\format{A data frame with 148 rows and 7 variables}
 \description{
-  This dataset lists some information on the variables included in the Quality of Government Social Policy dataset:
+  This dataset lists some information on the variables included in the Quality of Government Basic dataset:
 }
 \details{
   \itemize{
@@ -22,8 +22,9 @@
   \code{\link{qogfind}} to search the index of a QOG dataset
 }
 \references{
-	Svensson, Richard, Stefan Dahlberg, Staffan Kumlin & Bo Rothstein. 
-	2012. \emph{The QoG Social Policy Dataset}, version 4Apr12. 
+	Teorell, Jan, Marcus Samanni, Soren Holmberg and Bo Rothstein. 
+	2012. \emph{The Quality of Government Basic Dataset made from 
+		The QoG Standard Dataset version 6Apr11.} 
 	University of Gothenburg: The Quality of Government Institute, 
 	\url{http://www.qog.pol.gu.se}.
 }

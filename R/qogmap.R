@@ -1,5 +1,5 @@
 
-#' qogmap - Map Quality of Government data
+#' Map Quality of Government data
 #'
 #' Function to plot maps of Quality of Government (QOG) data. Requires the \code{ggplot2} and \code{maps} packages.
 #'
