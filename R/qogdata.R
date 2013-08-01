@@ -9,7 +9,7 @@
 #' @param version the QOG version: \code{std} (Standard), \code{soc} (Social Policy), \code{bas} (Basic) or \code{exp} (Expert). Defaults to \code{std}.
 #' @param format the QOG format, usually \code{cs} for cross-sectional data or \code{ts} for time series in the \code{std} and \code{bas} versions. See 'Details' for the full list of specifications. Defaults to \code{cs}.
 #' @param codebook whether to download the codebook. Calls \code{qogbook} by passing the \code{codebook}, \code{version} and \code{path} arguments to it, where \code{codebook} is treated as the filename for the codebook. Defaults to \code{FALSE}.
-#' @param variables a selection of variables to import. \code{ccodealp} ISO-3C country codes and \code{year} identifiers will be forced into the output if relevant.
+#' @param variables a selection of variables to import. \code{ccode} ISO-3N country codes and \code{year} identifiers will be forced into the output if relevant.
 #' @param years a selection of years to import. Effective only with the \code{ts}, \code{tsl} or \code{ind} formats.
 #' @param ... other arguments supplied to the import method, which is `read.csv` by default, or \code{foreign::read.dta} if \code{file} is a Stata \code{dta} dataset, or \code{Hmisc::spss.get} if \code{file} is a SPSS \code{sav} dataset.
 #' @details \itemize{
@@ -126,9 +126,9 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
       warning("Forcing year identifier into the dataset.")
       variables = c("year", variables)
     }
-    if(grepl("std|bas|soc", version) & !"ccodealp" %in% variables) {
+    if(grepl("std|bas|soc", version) & !"ccode" %in% variables) {
       warning("Forcing country code identifier into the dataset.")
-      variables = c("ccodealp", variables)
+      variables = c("ccode", variables)
     }
     data = data[, names(data) %in% variables]
   }
