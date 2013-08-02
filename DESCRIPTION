@@ -21,7 +21,5 @@ LazyData: true
 Collate:
     'qogdata.R'
     'qogmap.R'
-    'qogjoin.R'
-    'merge_wdi.R'
-    'merge_uds.R'
     'utils.R'
+    'merge.R'

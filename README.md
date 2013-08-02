@@ -108,6 +108,21 @@ The additional information in this plot is obtained in a single call to `merge_w
 
 `merge_uds` merges QOG Standard time series data with the [Unified Democracy Scores](http://www.unified-democracy-scores.org/) (UDS).
 
+# TODO
+
+In the works, panel data functions:
+
+* `panel_subset` to subset panel data: preserves full time series for a variable.
+* `panel_series` to plot panel data, showing only nonmissing country-year observations.
+
+In the works, more merge methods:
+
+* `merge_eurostat` to merge QOG Standard time series data with Eurostat data.
+* `merge_fao` to merge QOG Standard time series data with FAO data.
+* `merge_pt` to merge QOG Standard time series data with Powell & Thyne data on coups d'État.
+
+Also, make the `merge` functions work with cross-sectional data if that means anything.
+
 # CREDITS
 
 `qogdata` takes inspiration from two [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references).
