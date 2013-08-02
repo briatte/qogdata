@@ -96,13 +96,17 @@ The function matches QOG countries to geographic information from the `world` ma
 
 ## `merge_wdi`
 
-`merge_wdi` calls the WDI package to merge QOG Standard time series data with the World Development Indicators provided through the World Bank API. This function makes it easy to update a WDI variable to the latest measurements, and to compare measurement differences between the QOG and WDI series:
+`merge_wdi` calls the [WDI](http://cran.r-project.org/web/packages/WDI/) package to merge QOG Standard time series data with the [World Development Indicators](http://data.worldbank.org/data-catalog/world-development-indicators) provided through the World Bank API. This function makes it easy to update a WDI variable to the latest measurements, and to compare measurement differences between the QOG and WDI series:
 
 ![](https://github.com/briatte/qogdata/raw/master/example5.png)
 
 The additional information in this plot is obtained in a single call to `merge_wdi`:
 
     QOG = merge_wdi(QOG, x = "SH.XPD.PCAP.PP.KD", add = "income", out = "data")
+
+## `merge_uds`
+
+`merge_uds` merges QOG Standard time series data with the [Unified Democracy Scores](http://www.unified-democracy-scores.org/) (UDS).
 
 # CREDITS
 

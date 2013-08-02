@@ -23,3 +23,5 @@ Collate:
     'qogmap.R'
     'qogjoin.R'
     'merge_wdi.R'
+    'merge_uds.R'
+    'utils.R'

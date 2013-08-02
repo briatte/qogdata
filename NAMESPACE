@@ -1,3 +1,4 @@
+export(merge_uds)
 export(merge_wdi)
 export(qogbook)
 export(qogdata)

@@ -1,6 +1,6 @@
 \name{merge_wdi}
 \alias{merge_wdi}
-\title{Join historical and recent states in QOG Standard time series data}
+\title{Add and merge WDI data to QOG Standard time series data}
 \usage{
   merge_wdi(data, id = "ccode", year = "year", x,
     country = "all", start = "auto", end = "auto",
@@ -37,23 +37,29 @@
 
   \item{add}{a vector of variable names from the WDI query
   that should be returned with the indicators. See the
-  documentation of the \code{\link[WDI]{WDI}} function. #'}
+  documentation of the \code{\link[WDI]{WDI}} function.}
 
   \item{out}{what to return. If set to \code{"data"}, the
-  entire dataset is returned, merged to the WDI data.
-  Defaults to \code{"wdi"}, which only returns the result
-  of the WDI query.}
+  joined QOG/WDI dataset is returned. Defaults to
+  \code{"wdi"}, which only returns the result of the WDI
+  query.}
+
+  \item{...}{other parameters passed to \code{merge}. Set
+  \code{out} to \code{"data"} for the function to return
+  the joined QOG/WDI dataset.}
 }
 \description{
   Function to perform a World Development Indicators (WDI)
   query through the World Bank API, using the
-  \code{\link[WDI]{WDI}} package. The result might be
-  simultaneously merged to QOG Standard time series data.
+  \code{\link[WDI]{WDI}} and
+  \code{\link[countrycode]{countrycode}} packages. The
+  result might be simultaneously merged to QOG Standard
+  time series data.
 }
 \examples{
 # Download QOG Standard time series data for WDI healthcare expenditure.
 QOG = qogdata(tempfile(fileext = ".dta"), format = "ts",
-              years = 1950:2010, variables = c("ccodealp", "wdi_hec"))
+              years = 1995:2010, variables = c("ccodealp", "wdi_hec"))
 # Merge QOG data to corresponding WDI series; add income classification.
 QOG = merge_wdi(QOG, x = "SH.XPD.PCAP.PP.KD", add = "income", out = "data")
 # Plot results: dots are QOG measurements, lines are WDI measurements.
@@ -67,6 +73,14 @@ if(require(ggplot2))
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}
+}
+\references{
+  Arel-Bundock, Vincent. 2012. \emph{WDI: World Development
+  Indicators (World Bank).} R package version 2.2.
+  \url{http://CRAN.R-project.org/package=WDI} World Bank.
+  2013. \emph{World Development Indicators}. Washington DC:
+  The World Bank Group. Online publication, January 24,
+  2013.
 }
 \seealso{
   \code{\link[WDI]{WDI}}
