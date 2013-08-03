@@ -100,6 +100,9 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
       message("Downloading ", link, "...")
       download.file(link, file, mode = "wb", quiet = TRUE)
     }
+    else {
+      message("Loading from disk...")
+    }
   }
   #
   # reader call
@@ -243,6 +246,7 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' 2012. \emph{The QoG Social Policy Dataset}, version 4Apr12. 
 #' University of Gothenburg: The Quality of Government Institute, 
 #' \url{http://www.qog.pol.gu.se}.
+#' 
 #' Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Soren Holmberg, 
 #' Bo Rothstein, Petrus Sundin & Richard Svensson. 2013. 
 #' \emph{The Quality of Government Dataset}, version 15May13. 

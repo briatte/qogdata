@@ -106,22 +106,23 @@ The additional information in this plot is obtained in a single call to `merge_w
 
 ## `merge_uds`
 
-`merge_uds` merges QOG Standard time series data with the [Unified Democracy Scores](http://www.unified-democracy-scores.org/) (UDS).
+`merge_uds` merges QOG Standard time series data with the [Unified Democracy Scores](http://www.unified-democracy-scores.org/) (UDS) from Pemstein _et al._.
+
+## `merge_state`
+
+`merge_state` merges QOG Standard time series data with the [state independence][statei] data from Gleditsch and Ward and [state coups][statec] data from Powell and Thyne.
+
+[statei]: http://privatewww.essex.ac.uk/~ksg/statelist.html
+[statec]: http://www.uky.edu/~clthyn2/coup_data/home.htm
+
+## `panel`
+
+`panel` visualizes nonmissing country-year observations as a ggplot2 time graph. Included, but buggy.
 
 # TODO
 
-In the works, panel data functions:
-
-* `panel_subset` to subset panel data: preserves full time series for a variable.
-* `panel_series` to plot panel data, showing only nonmissing country-year observations.
-
-In the works, more merge methods:
-
+* `panel_subset` to subset panel data while preserving full time series.
 * `merge_eurostat` to merge QOG Standard time series data with Eurostat data.
-* `merge_fao` to merge QOG Standard time series data with FAO data.
-* `merge_pt` to merge QOG Standard time series data with Powell & Thyne data on coups d'État.
-
-Also, make the `merge` functions work with cross-sectional data if that means anything.
 
 # CREDITS
 

@@ -43,6 +43,7 @@ qogfind("*")[is.na(qogfind("*")$ts.N), ]
   Rothstein. 2012. \emph{The QoG Social Policy Dataset},
   version 4Apr12. University of Gothenburg: The Quality of
   Government Institute, \url{http://www.qog.pol.gu.se}.
+
   Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Soren
   Holmberg, Bo Rothstein, Petrus Sundin & Richard Svensson.
   2013. \emph{The Quality of Government Dataset}, version

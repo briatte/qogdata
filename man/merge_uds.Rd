@@ -45,6 +45,9 @@ if(require(countrycode)) {
          "uds_mean", quantize = 5, continent = c("Africa", "Asia")) +
     scale_fill_brewer("Mean UDS since 2000", palette = "RdYlGn")
 }
+## Left outer merge to QOG (not run).
+# QOG <- qogdata(file = TRUE, format = "ts")
+# QOG <- merge_uds(QOG, all.x = TRUE, out = "data")
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

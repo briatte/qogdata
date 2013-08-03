@@ -1,5 +1,7 @@
+export(merge_state)
 export(merge_uds)
 export(merge_wdi)
+export(panel)
 export(qogbook)
 export(qogdata)
 export(qogfind)

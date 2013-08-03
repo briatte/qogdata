@@ -81,6 +81,9 @@ merge_wdi <- function(data, id = "ccode", year = "year", x,
 #'          "uds_mean", quantize = 5, continent = c("Africa", "Asia")) + 
 #'     scale_fill_brewer("Mean UDS since 2000", palette = "RdYlGn")
 #' }
+#' ## Left outer merge to QOG (not run).
+#' # QOG <- qogdata(file = TRUE, format = "ts")
+#' # QOG <- merge_uds(QOG, all.x = TRUE, out = "data")
 
 merge_uds <- function(data = NULL, id = "ccodecow", year = "year", 
                       out = "uds", ...) {
@@ -95,4 +98,146 @@ merge_uds <- function(data = NULL, id = "ccodecow", year = "year",
   if(out == "data")
     y = merge(data, y, by = c(id, year), ...)
   return(y)
+}
+
+#' Add and merge state-level historical events to QOG Standard time series data
+#'
+#' Function to download state-level historical events from Gleditsch and Ward (1999, updated 3 May 2013) and Powell and Thyne (2011, updated c. 2013). The result might be simultaneously merged to QOG Standard time series data.
+#'
+#' @export
+#' @param data a QOG Standard time series dataset, or any data frame with \code{cname} (country) and \code{year} information coded as in the QOG Standard time series dataset.
+#' @param id the country variable to join data over. Defaults to \code{ccode}, the ISO3-N numeric country code used in the Quality of Government dataset. See 'Details'.
+#' @param year the year variable to join data over. Defaults to \code{"year"}.
+#' @param independence name under which to create the state independence variable.
+#' Defaults to \code{"gw_indep"}. See 'Details'.
+#' @param coups name under which to create the state coups variable. 
+#' Defaults to \code{"pt_coup"}. See 'Details'.
+#' @param out what to return. If set to \code{"data"}, the joined 
+#' QOG/Gleditsch and Ward/Powell and Thyne dataset is returned. 
+#' Defaults to \code{"state"}, which only returns the 
+#' Gleditsch and Ward/Powell and Thyne dataset/
+#' @param ... other parameters passed to \code{merge}. Set \code{out} to \code{"data"} for the function to return the joined QOG/Gleditsch and Ward/Powell and Thyne dataset.
+#' @details If \code{out} is set to anything but \code{"data"}, the returned country codes are named \code{ccodegw} and respect the original country codes of the Gleditsch and Ward dataset, which are also used in the Powell and Thyne dataset.
+#' The variables produced by this function are \bold{gw_indep} (years of independence, coded 0/1), from Gleditsch and Ward, and \bold{pt_coup} (attempted and successful \emph{coups d'\'{E}tat}), from Powell and Thyne.
+#' @value a data frame with country-year observations
+#' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
+#' @references Gleditsch, Kristian S. & Michael D. Ward. 1999. "Interstate 
+#' System Membership: A Revised List of the Independent States since 1816.". 
+#' \emph{International Interactions} 25:393-413, 
+#' \url{http://privatewww.essex.ac.uk/~ksg/statelist.html}.
+#' 
+#' Powell, Jonathan M. & Clayton L. Thyne. 2011.
+#' "Global Instances of Coups from 1950 to 2010: A New Dataset.". 
+#' \emph{Journal of Peace Research} 48(2): 249-259, 
+#' \url{http://www.uky.edu/~clthyn2/coup_data/home.htm}.
+#' @examples
+#' # By default, the function downloads the gw_indep and pt_coups variables.
+#' head(GIC <- merge_state())
+#' # Show country-years.
+#' if(require(plyr)) {
+#'   ddply(GIC, .(country.name), summarize, n = length(year), min = min(year), max = max(year))
+#' }
+#' # Plot the full data.
+#' if(require(countrycode) & require(ggplot2)) {
+#'   GIC$iso3c = countrycode(GIC$country.name, "country.name", "iso3c")
+#'   GIC$continent = countrycode(GIC$country.name, "country.name", "continent")
+#'   qplot(data = subset(GIC, !is.na(continent)),
+#'             x = year, y = reorder(iso3c, as.numeric(pt_coup), mean),
+#'             fill = continent, alpha = pt_coup, geom = "tile") + 
+#'     scale_fill_brewer("Continent", palette = "Set1") +
+#'     scale_alpha_manual("Event", values = c(0, .5, 1)) +
+#'     scale_x_continuous(breaks = seq(1953, 2013, 10)) +
+#'     labs(y = NULL)
+#' }
+#' if(require(ggplot2)) {
+#' qplot(data = subset(GIC, pt_coup != "No verified coup attempt"), 
+#'       x = year, fill = pt_coup, binwidth = 3, alpha = I(2/3),
+#'       position = "stack", stat = "bin", geom = "bar") +
+#'   theme(legend.position = "bottom") +
+#'   scale_fill_brewer("", palette = "Set1") +
+#'   labs(x = NULL)  
+#' }
+#' ## Left outer merge to QOG (not run).
+#' # QOG <- qogdata(file = TRUE, format = "ts")
+#' # QOG <- merge_state(QOG, all.x = TRUE, out = "data")
+
+merge_state <- function(data = NULL, id = "ccode", year = "year", 
+                        independence = "gw_indep", coups = "pt_coup",
+                        out = "state", ...) {
+  
+  if(is.null(data)) {
+    tmin = 1945
+    tmax = 2013
+  }
+  else {
+    tmin = min(data[, year], na.rm = TRUE)
+    tmax = max(data[, year], na.rm = TRUE)
+  }
+  message("Downloading data for years ", tmin, "-", tmax, "...")
+  
+  # Gleditsch and Ward independence data
+  url = "http://privatewww.essex.ac.uk/~ksg/data/iisystem.dat"
+  x = read.table(url, quote = "", sep = "\t")[, -2:-3]
+  names(x) = c(id, "start", "end")
+  
+  x$start = as.numeric(substring(x$start, 7))
+  x$end = as.numeric(substring(x$end, 7))
+  x = subset(x, end >= tmin)
+  
+  # Powell and Thyne coup attempts data
+  url = "http://www.uky.edu/~clthyn2/coup_data/powell_thyne_coups_final.txt"
+  y = read.csv(url, sep = "\t")[, -4:-5]
+  # rename variables
+  names(y) = c("country.name", id, year, coups)
+  
+  y$country.name[y$country.name == "Guinea Bissau"] = "Guinea-Bissau"
+  
+  d = expand.grid(unique(y[, id]), seq(tmin, tmax))
+  names(d) = c(id, year)
+  d = d[order(d[, id]), ]
+  
+  for(i in 1:nrow(d)) {
+    m = which(x[, id] == d[i, id])
+    if(length(m))
+      d[i, independence] = d[i, year] %in% seq(x$start[m], x$end[m])
+  }
+  d[, independence] = as.numeric(d[, independence])
+  
+  # add coups d'Etat
+  d[, coups] = 0
+  for(i in 1:nrow(y)) {
+    m = which(d[, id] == y[i, id] & d[, year] == y[i, year])
+    if(length(m))
+      d[m, coups] = y[i, coups]
+    else
+      message("Excluding ", y[i, "country.name"], " ", y[i, year], " (out of time period)")
+  }
+  d[, coups] = factor(d[, coups], labels = c(
+    "No verified coup attempt", 
+    "Unsuccessful coup attempt", 
+    "Successful coup attempt"))
+  
+  if(require(countrycode) & out == "data") {
+    d = merge(unique(y[, 1:2]), d, by = id, all.y = TRUE)
+    d[, id] = countrycode(d[, "country.name"], "country.name", "iso3n")
+    # historical states
+    m = which(d[, "country.name"] == "Yemen Arab Republic; N. Yemen")
+    d[m, id] = 886
+    m = which(d[, "country.name"] == "Yemen People's Republic; S. Yemen")
+    d[m, id] = 720
+    d[, "country.name"] = NULL
+  }
+  else if(out == "data") {
+    stop("The countrycode package is required to merge the data.")
+  }
+  else {
+    d = merge(unique(y[, 1:2]), d, by = id, all.y = TRUE)
+    warning("Caution: Gelditsch and Ward country codes look like ISO-3 but aren't.")
+    names(d)[names(d) == id] = "ccodegw"
+  }
+  
+  # merge
+  if(out == "data")
+    d = merge(data, d, by = c(id, year), ...)
+  return(d)
 }

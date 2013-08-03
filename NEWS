@@ -2,3 +2,8 @@ Version 0.1 (2013-08-01)
 ------------------------
 
 * initial release
+* qog functions: download, search, merge, map (QOG data server)
+* merge method for World Bank indicators (WDI)
+* merge method for Pemstein et al. (democracy scores)
+* merge method for Gleditsch and Ward (state independence)
+* merge method for Powell and Thyne (state coups)
