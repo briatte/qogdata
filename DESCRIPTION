@@ -23,5 +23,5 @@ Collate:
     'qogdata.R'
     'qogmap.R'
     'utils.R'
-    'merge.R'
-    'panel.R'
+    'get.R'
+    'xt.R'

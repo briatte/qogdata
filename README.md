@@ -115,14 +115,21 @@ The additional information in this plot is obtained in a single call to `merge_w
 [statei]: http://privatewww.essex.ac.uk/~ksg/statelist.html
 [statec]: http://www.uky.edu/~clthyn2/coup_data/home.htm
 
-## `panel`
+## `xtset`
 
-`panel` visualizes nonmissing country-year observations as a ggplot2 time graph. Included, but buggy.
+`xtset` is a simple way to specify panel data properties into a data frame attribute.
+
+## `xtmissing`
+
+`xtmissing` visualizes nonmissing country-year observations as a ggplot2 time graph.
 
 # TODO
 
-* `panel_subset` to subset panel data while preserving full time series.
+* `xtset` data frame attribute to work with any panel dataset
+  * `xtdes`, `xtsum`, `xttab`, `xtline` Stata equivalents
+  * `xtsubset` to subset panel data while preserving full time series.
 * `merge_eurostat` to merge QOG Standard time series data with Eurostat data.
+* `merge_parlgov`
 
 # CREDITS
 

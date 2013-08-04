@@ -156,6 +156,17 @@ qogdata <- function(file = FALSE, replace = FALSE, path = "", version = "std", f
   if(isTRUE(codebook) || grepl(".pdf", codebook))
     qogbook(codebook, version, path, replace)
   #
+  # xtdata spec
+  #
+  if(format == "ts" | format == "tsl") {
+    data = xtset(data, 
+                 data = c("ccode", "year", "ccodealp", "cname"), 
+                 spec = c("iso3n", "year"), 
+                 type = "country", 
+                 name = "Quality of Government, time series data"
+    )
+  }
+  #
   # finish line
   #
   return(data)
