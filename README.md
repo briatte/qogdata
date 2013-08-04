@@ -1,5 +1,7 @@
 The __qogdata__ package is a collection of functions to manipulate [Quality of Government](http://www.qog.pol.gu.se/) datasets and codebooks in R. It provides a few additional services to map QOG variables and to merge QOG datasets with other country-level data sources.
 
+__Version 0.2 contains a method to declare and merge panel data, plus additional specifications for country-year data. The `README` is not up to date with the last commit and there is no guarante that it checks out so far. Sorry.__
+
 Version 0.1 of the `qogdata` package is installable with the `devtools` package:
 
     library(devtools)
