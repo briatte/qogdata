@@ -28,7 +28,7 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <p>The <strong>qogdata</strong> package is a collection of functions to manipulate <a href="http://www.qog.pol.gu.se/">Quality of Government</a> datasets and codebooks in R. It provides a few additional services to map QOG variables and to merge QOG datasets with other country-level data sources.</p>
+          <p>The <strong>qogdata</strong> package is a collection of functions to manipulate <a href="http://www.qog.pol.gu.se/">Quality of Government</a> data and related material.</p>
 
 <p>Version 0.1 of the <code>qogdata</code> package is installable with the <code>devtools</code> package:</p>
 
@@ -40,9 +40,13 @@ devtools::install_github("qogdata", "briatte", dependencies = TRUE)
 
 <p>The rest of this document describes currently available functions.</p>
 
-<h2>
-<a name="qogdata" class="anchor" href="#qogdata"><span class="octicon octicon-link"></span></a><code>qogdata</code>
-</h2>
+<h2 id="qogdata"><code>qogdata</code></h2>
+
+<ol>
+<li>Install and load the <code>xtdata</code> package.</li>
+<li>Type <code>qogdata(TRUE)</code> to download the QOG Standard dataset.</li>
+<li>Type <code>qogbook(TRUE)</code> to download the QOG Standard codebook.</li>
+</ol>
 
 <p><code>qogdata</code> simply points to a <a href="http://www.qogdata.pol.gu.se/">QOG server</a> to download available versions of the QOG datasets. By default, it simply returns the path to the QOG Standard cross-section dataset:</p>
 
@@ -66,24 +70,11 @@ Downloading codebook to Codebook_QoG_Std15May13.pdf...
 Codebook: Codebook_QoG_Std15May13.pdf
 </code></pre>
 
-<p>The examples use <code>tempfile()</code> to save temporary copies of a QOG dataset before plotting:</p>
+<p>The QOG Standard dataset is <a href="http://www.qogdata.pol.gu.se/data/">currently</a> available in CSV, SPSS and Stata formats. Other QOG datasets are available only in Stata format. <code>qogdata</code> will call <code>foreign</code> to import the Stata format and <code>Hmisc</code> to import the SPSS format. The <a href="http://www.qogdata.pol.gu.se/codebook/">codebooks</a> are in PDF format.</p>
 
-<pre><code>qplot(data = qogdata(tempfile(), version = "bas"), 
-      x = bl_asyt25, y = wdi_fr, size = mad_pop / 10^3) + 
-  scale_size_area("Population (mill.)", max_size = 12) +
-  labs(y = "Fertility rate", x = "Average years of schooling, pop. aged 25+") +
-  theme_grey(16)
-</code></pre>
+<h2 id="qogfind"><code>qogfind</code></h2>
 
-<p><img src="https://raw.github.com/briatte/qogdata/master/example1.png" alt=""></p>
-
-<p>The QOG Standard dataset is <a href="http://www.qogdata.pol.gu.se/data/">currently</a> available in CSV, SPSS and Stata formats, and other versions of the dataset are available only in Stata format. <code>qogdata</code> will call <code>foreign</code> to import the Stata format and <code>Hmisc</code> to import the SPSS format. The <a href="http://www.qogdata.pol.gu.se/codebook/">codebooks</a> are in PDF format and are downloaded by the <code>qogbook</code> function.</p>
-
-<h2>
-<a name="qogfind" class="anchor" href="#qogfind"><span class="octicon octicon-link"></span></a><code>qogfind</code>
-</h2>
-
-<p><code>qogfind</code> uses the two indexes bundled with the package to make finding variables a bit quicker for the end-user:</p>
+<p><code>qogfind</code> uses two indexes bundled with the package to help the user find variables in QOG datasets:</p>
 
 <pre><code>&gt; qogfind("public|administration")
 QOG Standard results:
@@ -99,46 +90,87 @@ QOG Standard results:
 
 <p>The function searches through variable names and labels, as the <code>lookfor</code> command would in Stata. The <code>ts</code> columns provides years of measurement for the time-series dataset, the <code>cs</code> columns for the cross-sectional dataset. The information matches the figures reported in the <em>QOG Standard Codebook</em> and <em>QOG Social Policy Codebook</em>. It can be easily plotted:</p>
 
-<pre><code>qplot(data = qogfind("ihme_|undp_"), 
-      y = label, yend = label, x = ts.min, xend = ts.max, 
+<pre><code>qplot(data = na.omit(qogfind("ims_", version = "soc")), 
+      y = label, yend = label, x = as.numeric(ts.min), xend = as.numeric(ts.max), 
       geom = "segment", size = I(6), alpha = ts.T) +
-    scale_alpha("Year range") +
-    theme_minimal(16) +
-    labs(y = NULL, x = NULL, title = "Data availability") + 
-    theme(legend.position = "bottom")
+  scale_alpha("Year range") +
+  theme_minimal(16) +
+  labs(y = NULL, x = NULL, title = "Data availability") + 
+  theme(legend.position = "bottom")
 </code></pre>
 
-<p><img src="https://raw.github.com/briatte/qogdata/master/example2.png" alt=""></p>
+<p><img src="https://github.com/briatte/qogdata/raw/master/example1.png" alt="" title="" /></p>
 
-<h2>
-<a name="qogmap" class="anchor" href="#qogmap"><span class="octicon octicon-link"></span></a><code>qogmap</code>
-</h2>
+<h2 id="qogjoin"><code>qogjoin</code></h2>
 
-<p><code>qogmap</code> calls the <code>countrycode</code>, <code>maps</code> and <code>ggplot2</code> packages to draw choropleth maps of QOG cross-sectional data:</p>
+<p><code>qogjoin</code> joins historical state information to recent state information in the QOG Standard time series dataset. Use on Ethiopia, France, Malaysia and Pakistan. This will make the dataset backward compatible with older versions of the data where this separation did not exist. Complex cases like (North/South) Sudan or (North/South) Yemen are left intact.</p>
 
-<pre><code>QOG = qogdata(tempfile(), warn.missing.labels = FALSE, convert.factors = TRUE,
-              version = "bas", variables = c("ccodealp", "undp_hdi", "ihme_nm"))
-qogmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia") +
+<h2 id="xtdata"><code>xtdata</code></h2>
+
+<p><code>xtdata</code> is a simple way to specify panel data properties into a data frame attribute. All data downloaded with the <code>xtdata</code> package are provided an <code>xdata</code> attribute, which makes it possible to safely merge the data with <code>xtmerge</code>, a merge command that first checks whether the unit type and time period match.</p>
+
+<ul>
+<li><code>xt</code>, <code>xtdata</code>, <code>xtcountry</code> and <code>xtset</code> are internal functions</li>
+<li><code>xtmissing</code> and <code>xtmap</code> are companion plot functions</li>
+</ul>
+
+<h2 id="xtmap"><code>xtmap</code></h2>
+
+<p><code>xtmap</code> calls the <code>countrycode</code>, <code>maps</code> and <code>ggplot2</code> packages to draw choropleth maps:</p>
+
+<pre><code># The data.
+QOG = qogdata(tempfile(), version = "bas", variables = c("ccodealp", "undp_hdi", "ihme_nm"))
+# The map.
+xtmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia", iso3n = "ccode") +
   ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
 </code></pre>
 
-<p><img src="https://raw.github.com/briatte/qogdata/master/example3.png" alt=""></p>
+<p><img src="https://github.com/briatte/qogdata/raw/master/example2.png" alt="" title="" /></p>
 
-<p>The function works with <code>ggplot2</code> to detect the scale of the map (continuous or discrete). The <code>quantize</code> option can also create quantiles of a variable on the fly:</p>
+<p>The function will detect the (continuous or discrete) scale of the map and will use the most recent year of data if the dataset has the <code>xtdata</code> attribute. The <code>quantize</code> option can also create quantiles of a variable on the fly:</p>
 
-<pre><code>qogmap(QOG, "undp_hdi", quantize = 3, continents = c("Africa", "Asia")) +
+<pre><code># Options.
+xtmap(QOG, "undp_hdi", quantize = 3, continents = c("Africa", "Asia"), iso3n = "ccode") +
   scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
   ggtitle("Human Development Index (UNDP, 2009-2010)")
 </code></pre>
 
-<p><img src="https://raw.github.com/briatte/qogdata/master/example4.png" alt=""></p>
+<p><img src="https://github.com/briatte/qogdata/raw/master/example3.png" alt="" title="" /></p>
 
-<p>The function matches QOG countries to geographic information from the <code>world</code> map provided in the <code>maps</code> package. It also adds continents and regions with the <code>countrycode</code> package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.</p>
+<p>The function matches countries to geographic information from the <code>world</code> map provided in the <code>maps</code> package. It also adds continents and regions with the <code>countrycode</code> package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.</p>
 
-<h1>
-<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>CREDITS</h1>
+<h2 id="get_wdi"><code>get_wdi</code></h2>
 
-<p><code>qogdata</code> takes inspiration from two <a href="http://www.qog.pol.gu.se/data/dataextras/forstatausers/">QOG packages for Stata users</a>, <a href="http://ideas.repec.org/c/boc/bocode/s457283.html"><code>qog</code></a> by Christoph Thewes and <a href="http://ideas.repec.org/c/boc/bocode/s457599.html"><code>qogbook</code></a> by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references).</p>
+<p><code>get_wdi</code> calls the <a href="http://cran.r-project.org/web/packages/WDI/">WDI</a> package to download one or more <a href="http://data.worldbank.org/data-catalog/world-development-indicators">World Development Indicators</a> provided through the World Bank API. This function makes it easy to update a WDI within a QOG dataset to the latest measurements, and to compare measurement differences between the latest QOG and WDI series:</p>
+
+<p><img src="https://github.com/briatte/qogdata/raw/master/example4.png" alt="" title="" /></p>
+
+<p>The WDI data for this plot was retrieved with <code>get_wdi</code> as follows:</p>
+
+<pre><code>W = get_wdi(x = "SH.XPD.PCAP.PP.KD", add = "income")
+</code></pre>
+
+<p>The code for the plot is in the documentation.</p>
+
+<h2 id="get_uds"><code>get_uds</code></h2>
+
+<p><code>get_uds</code> downloads the <a href="http://www.unified-democracy-scores.org/">Unified Democracy Scores</a> (UDS) from Pemstein <em>et al.</em>.</p>
+
+<h2 id="get_gwpt"><code>get_gwpt</code></h2>
+
+<p><code>get_gwpt</code> downloads <a href="http://privatewww.essex.ac.uk/~ksg/statelist.html">state independence</a> data from Gleditsch and Ward and <a href="http://www.uky.edu/~clthyn2/coup_data/home.htm">state coups</a> data from Powell and Thyne.</p>
+
+<h1 id="todo">TODO</h1>
+
+<ul>
+<li><code>xtdes</code>, <code>xtsum</code>, <code>xttab</code>, <code>xtline</code> Stata equivalents</li>
+<li><code>xtsubset</code> to subset panel data while preserving full time series.</li>
+<li><code>get_eurostat</code> to merge QOG Standard time series data with Eurostat data.</li>
+</ul>
+
+<h1 id="credits">CREDITS</h1>
+
+<p><code>qogdata</code> takes inspiration from two <a href="http://www.qog.pol.gu.se/data/dataextras/forstatausers/">QOG packages for Stata users</a>, <a href="http://ideas.repec.org/c/boc/bocode/s457283.html"><code>qog</code></a> by Christoph Thewes and <a href="http://ideas.repec.org/c/boc/bocode/s457599.html"><code>qogbook</code></a> by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references), and a list of similar packages appears on the <a href="https://github.com/briatte/qogdata/wiki">wiki</a>.</p>
         </section>
 
         <aside id="sidebar">
