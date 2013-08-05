@@ -19,7 +19,7 @@ Suggests:
     plyr,
     WDI
 License: GPL-3
-URL: https://github.com/briatte/xtdata
+URL: https://github.com/briatte/qogdata
 LazyData: true
 Collate:
     'utils.R'

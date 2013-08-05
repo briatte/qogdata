@@ -61,7 +61,7 @@ The function searches through variable names and labels, as the `lookfor` comman
       labs(y = NULL, x = NULL, title = "Data availability") + 
       theme(legend.position = "bottom")
 
-![](https://github.com/briatte/xtdata/raw/master/example1.png)
+![](https://github.com/briatte/qogdata/raw/master/example1.png)
 
 ## `qogjoin`
 
@@ -84,7 +84,7 @@ The function searches through variable names and labels, as the `lookfor` comman
     xtmap(subset(QOG, ccodealp != "RUS"), "ihme_nm", continent = "Asia", iso3n = "ccode") +
       ggtitle("Neonatal Mortality Rate per 1,000 births (IHME, 2009))")
 
-![](https://github.com/briatte/xtdata/raw/master/example2.png)
+![](https://github.com/briatte/qogdata/raw/master/example2.png)
 
 The function will detect the (continuous or discrete) scale of the map and will use the most recent year of data if the dataset has the `xtdata` attribute. The `quantize` option can also create quantiles of a variable on the fly:
 
@@ -93,7 +93,7 @@ The function will detect the (continuous or discrete) scale of the map and will 
       scale_fill_brewer("", palette = "RdYlBu", labels = c("Low", "Med", "High")) +
       ggtitle("Human Development Index (UNDP, 2009-2010)")
 
-![](https://github.com/briatte/xtdata/raw/master/example3.png)
+![](https://github.com/briatte/qogdata/raw/master/example3.png)
 
 The function matches countries to geographic information from the `world` map provided in the `maps` package. It also adds continents and regions with the `countrycode` package to allow plots of specific areas. The map projection currently suffers from a little bug as soon as you include Russia.
 
@@ -101,7 +101,7 @@ The function matches countries to geographic information from the `world` map pr
 
 `get_wdi` calls the [WDI](http://cran.r-project.org/web/packages/WDI/) package to download one or more [World Development Indicators](http://data.worldbank.org/data-catalog/world-development-indicators) provided through the World Bank API. This function makes it easy to update a WDI within a QOG dataset to the latest measurements, and to compare measurement differences between the latest QOG and WDI series:
 
-![](https://github.com/briatte/xtdata/raw/master/example4.png)
+![](https://github.com/briatte/qogdata/raw/master/example4.png)
 
 The WDI data for this plot was retrieved with `get_wdi` as follows:
 
@@ -128,4 +128,4 @@ The code for the plot is in the documentation.
 
 # CREDITS
 
-`qogdata` takes inspiration from two [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references), and a list of similar packages appears on the [wiki](https://github.com/briatte/xtdata/wiki).
+`qogdata` takes inspiration from two [QOG packages for Stata users](http://www.qog.pol.gu.se/data/dataextras/forstatausers/), [`qog`](http://ideas.repec.org/c/boc/bocode/s457283.html) by Christoph Thewes and [`qogbook`](http://ideas.repec.org/c/boc/bocode/s457599.html) by Richard Svensson. Further credits due to the authors of the QOG datasets (see the package documentation for references), and a list of similar packages appears on the [wiki](https://github.com/briatte/qogdata/wiki).
