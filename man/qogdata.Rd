@@ -1,9 +1,10 @@
 \name{qogdata}
+\alias{get_qog}
 \alias{qogdata}
 \title{Import Quality of Government data into R}
 \usage{
-  qogdata(file = FALSE, replace = FALSE, path = "",
-    version = "std", format = "cs", codebook = FALSE,
+  qogdata(file = FALSE, replace = FALSE, codebook = FALSE,
+    path = "", version = "std", format = "cs",
     variables = NULL, years = NULL, ...)
 }
 \arguments{
@@ -52,32 +53,46 @@
 }
 \description{
   Function to download Quality of Government (QOG) data and
-  load it as a data frame in R. Please visit the QOG
-  Institute website at \url{http://www.qog.pol.gu.se/} for
-  a presentation of QOG research.
+  load it as a data frame in R. The result carries an
+  \code{\link{xtdata}} attribute that can be passed to the
+  \code{\link{xtmerge}} panel data method.
 }
 \details{
+  This version of the package handles all four QOG
+  datasets: \tabular{lcl}{ QOG Standard \tab \code{std}
+  \tab 15 May 2013\cr QOG Social Policy \tab \code{soc}
+  \tab 4 April 2012\cr QOG Basic \tab \code{bas}): \tab 28
+  March 2011\cr QOG Expert Survey \tab \code{exp} \tab 3-6
+  September 2012\cr URL: \tab \tab
+  \url{http://www.qog.pol.gu.se}\cr }
+
   \itemize{ \item QOG datasets \code{std} and \code{bas}
   require format \code{cs} (cross-section) or \code{ts}
   (time series).  \item QOG dataset \code{soc} requires
   format \code{cs}, \code{tsl} (time series, long) or
   \code{tsw} (time series, wide) \item QOG dataset
   \code{exp} requires format \code{cntry} (country-level)
-  or \code{ind} (individual survey) } If format is
-  \code{csyom}, \code{version} is automatically set to
-  \code{std}, and \code{file} must be a CSV file.
+  or \code{ind} (individual survey) }
+
+  If format is \code{csyom}, \code{version} is
+  automatically set to \code{std}, and \code{file} must be
+  a CSV file.
+
+  The function mimics Christoph Thewes' \code{qoguse} Stata
+  command.
 }
 \examples{
-# Show the URL to the QOG Standard dataset.
+# Show URL to QOG Standard time series.
 qogdata()
-# Download QOG Standard time series dataset and codebook.
-qogdata(format = "ts", file = "qog.ts.csv", codebook = TRUE)
-# Download selected years from the QOG Social Policy dataset.
-QOG = qogdata(file = "qog-soc.dta", version = "soc", format = "tsl", years = 2002:2012)
-# Download QOG Standard cross-section years of measurement.
-QOG = qogdata(tempfile(fileext = ".csv"), format = "csyom")
-# Display the years of measurements for the WDI Gini coefficient.
-barplot(table(QOG$wdi_gini))
+# Show URL to QOG Social Policy time series, long format.
+QOG = qogdata(file = "qog-soc.dta", version = "soc", format = "tsl")
+## Download codebook and recent years from QOG Basic cross-section (not run).
+# QOG = qogdata(file = "qog.cs.txt", version = "bas", format = "cs",
+#         years = 2002:2012, codebook = TRUE)
+## Download QOG Standard cross-section years of measurement (not run).
+# QOG = qogdata(tempfile(fileext = ".csv"), format = "csyom")
+## Show QOG years of measurement for Gini coefficient (not run).
+# table(QOG$wdi_gini)
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

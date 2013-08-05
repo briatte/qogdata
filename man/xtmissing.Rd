@@ -2,35 +2,24 @@
 \alias{xtmissing}
 \title{Plot availablity of panel data}
 \usage{
-  xtmissing(data = NULL, variable = NULL, id = "ccodealp",
-    time = "year")
+  xtmissing(data = NULL, variable = NULL)
 }
 \arguments{
-  \item{data}{a TSCS dataset.}
+  \item{data}{a dataset with the \code{xtdata} attribute.}
 
   \item{variable}{the variable to plot.}
-
-  \item{id}{the variable to label the groups. Defaults to
-  \code{ccodealp}, the ISO-3C country code provided in QOG
-  datasets.}
-
-  \item{time}{the variable that codes for the time period.
-  Defaults to \code{year}, the time variable provided in
-  QOG datasets.}
 }
 \description{
-  Function to plot data availability in time series
-  cross-sectional (TSCS) data. Requires the \code{ggplot2}
-  package.
+  Function to plot data availability in \code{xtdata}
+  datasets. Requires the \code{ggplot2} package.
 }
 \examples{
-# Load QOG Basic time series data.
-QOG = qogdata(tempfile(fileext = ".dta"), version = "bas", format = "ts",
-              variables = c("ccodealp", "year", "wdi_gdpc", "ihme_nm"))
-xtmissing(QOG, "wdi_gdpc") +
-  ggtitle("Country-year availability of gross domestic product per capita")
-xtmissing(QOG, "ihme_nm") +
-  ggtitle("Country-year availability of neonatal mortality rate")
+# Load QOG demo datasets.
+data(qog.demo)
+xtmissing(qog.ts.demo, "chga_hinst") +
+  ggtitle("Country-year availability of regime type")
+xtmissing(qog.ts.demo, "bl_asy15f") +
+  ggtitle("Country-year availability of female education")
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

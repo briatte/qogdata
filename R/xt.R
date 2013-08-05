@@ -11,15 +11,17 @@
 #' to the syntax of \code{\link{xtset}}.
 #' @seealso \code{\link{xtset}}
 #' @examples
-#' ## Set and check the QOG Basic time series data (not run).
-#' # QOG = qogdata(file = TRUE, version = "bas", format = "ts")
-#' # QOG = xtset(QOG)
-#' # xtdata(QOG)
+#' # Load QOG demo datasets.
+#' data(qog.demo)
+#' # Check xtdata attribute of QOG time series demo dataset.
+#' xtdata(qog.ts.demo)
+#' ## Unsuccessful checks send back an error (not run).
+#' # xtdata(qog.cs.demo)
 
 xtdata <- function(dataset) {
   if(is.null(attr(dataset, "xtdata")))
     stop("data frame has no xtdata attribute")
-  all(sapply(xt(QOG), is.character)) &
+  all(sapply(xt(dataset), is.character)) &
     all(sapply(attr(dataset, "xtdata")$data[1:2], nchar) > 0) &
     all(sapply(attr(dataset, "xtdata")$spec[1:2], nchar) > 0)
 }
@@ -32,13 +34,13 @@ xtdata <- function(dataset) {
 #'
 #' @export
 #' @param dataset the dataset from which to return the \code{xtdata} attributes.
-#' @value a list of \code{xtdata} attributes.
+#' @value a list of \code{xtdata} attributes, if it exists.
 #' @seealso \code{\link{xtset}}
 #' @examples
-#' ## Identify the QOG Basic time series data (not run).
-#' # QOG = qogdata(file = TRUE, version = "bas", format = "ts")
-#' # QOG = xtset(QOG)
-#' # xt(QOG)
+#' # Load QOG demo datasets.
+#' data(qog.demo)
+#' # Identify the QOG Basic time series data properties.
+#' xt(qog.ts.demo)
 
 xt <- function(dataset) {
   x = attr(dataset, "xtdata")
@@ -63,8 +65,9 @@ xt <- function(dataset) {
 #' Defaults to QOG country-year data settings. See 'Details'.
 #' @param type the type of observations in the panel data. 
 #' Defaults to \code{"country"}, which will read the \code{spec} parameters as
-#' \code{countrycode} formats.
+#' \code{\link{countrycode}} formats.
 #' @param name a description of the dataset.
+#' @param url a URI locator for the dataset (the website address).
 #' @param quiet whether to return some details. Defaults to \code{FALSE} (verbose).
 #' @details an \code{xtdata} attribute is a list of 5 to 11 panel data 
 #' paramaters stored in the following named vectors: 
@@ -89,19 +92,20 @@ xt <- function(dataset) {
 #' @value a data frame with the \code{xtdata} attribute.
 #' @seealso \code{\link[countrycode]{countrycode}}
 #' @examples
-#' ## Identify the QOG Basic time series data (not run).
-#' # QOG = qogdata(file = TRUE, version = "bas", format = "ts")
-#' # QOG = xtset(QOG)
-#' ## Identify the subset of most recent years (not run).
-#' # QOG.200x = xtset(subset(QOG, year > 1999))
-#' # Identify the UDS dataset.
-#' UDS = merge_uds()
+#' # Load QOG demo datasets.
+#' data(qog.demo)
+#' # Set xtdata attribute on QOG time series.
+#' Q = xtset(qog.ts.demo)
+#' # Set xtdata attribute on recent years.
+#' Q.200x = xtset(subset(qog.ts.demo, year > 1999))
+#' # Manually set xtdata attribute for UDS dataset.
+#' UDS = get_uds()
 #' UDS = xtset(UDS, 
 #'             data = c("ccodecow", "year"), 
 #'             spec = c("cown", "year"), 
 #'             type = "country", 
 #'             name = "Unified Democracy Scores"
-#'       )
+#'     )
 
 xtset <- function(dataset = NULL, 
                   data = c("ccode", "year", "ccodealp", "cname"), 
@@ -172,62 +176,15 @@ xtset <- function(dataset = NULL,
   return(dataset)
 }
 
-#' Plot availablity of panel data
-#'
-#' Function to plot data availability in time series cross-sectional (TSCS) data. 
-#' Requires the \code{ggplot2} package.
-#'
-#' @export
-#' @param data a TSCS dataset.
-#' @param variable the variable to plot.
-#' @param id the variable to label the groups. 
-#' Defaults to \code{ccodealp}, the ISO-3C country code provided in 
-#' QOG datasets.
-#' @param time the variable that codes for the time period. 
-#' Defaults to \code{year}, the time variable provided in QOG datasets.
-#' @value a \code{ggplot2} object
-#' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
-#' @examples
-#' # Load QOG Basic time series data.
-#' QOG = qogdata(tempfile(fileext = ".dta"), version = "bas", format = "ts", 
-#'               variables = c("ccodealp", "year", "wdi_gdpc", "ihme_nm"))
-#' xtmissing(QOG, "wdi_gdpc") +
-#'   ggtitle("Country-year availability of gross domestic product per capita")
-#' xtmissing(QOG, "ihme_nm") +
-#'   ggtitle("Country-year availability of neonatal mortality rate")
-
-xtmissing <- function(data = NULL, variable = NULL, 
-                      id = "ccodealp", time = "year") {
-  stopifnot(!is.null(variable))
-  stopifnot(variable %in% names(data))
-  stopifnot(id %in% names(data))
-  stopifnot(time %in% names(data))
-  if(require(ggplot2)) {
-    x = !is.na(data[, variable])
-    t = data[, time]
-    r = aggregate(as.numeric(x) ~ t, mean, data = NULL)
-    r = r[r[, 2] > 0, 1]
-    r = range(r)
-    message("Plotting years ", paste0(r, collapse = "-"),
-            " (T = ", r[2] - r[1] + 1, ")")
-    y = reorder(data[, id], as.numeric(x), mean)
-    g = qplot(x = t, y = y, fill = x, geom = "tile", size = I(6)) + 
-      scale_fill_discrete("", labels = c("missing", "nonmissing")) + 
-      labs(y = "Country", x = NULL) + 
-      theme(legend.position = "bottom") + 
-      xlim(r)    
-    return(g)
-  }
-}
-
-
 #' Try ISO-3N country code conversion on \code{xtdata} data frames
-#'
+#' 
 #' This function tests conversions to ISO3-N country codes on the country 
 #' codes, acronyms and names identified in a data frame that carries the
 #' \code{\link{xtdata}} attribute with the \code{country} type. Used by
 #' \code{\link{xtmerge}}.
-#' @param dataset a data frame with the \code{\link{xdata}} attribute. The 
+#' 
+#' @export
+#' @param dataset a data frame with the \code{\link{xtdata}} attribute. The 
 #' \code{type} parameter must be set to \code{"country"}.
 #' @value a vector of how many observations were successfully matched on their
 #' country code, short country name and long country name, based on the 
@@ -235,14 +192,15 @@ xtmissing <- function(data = NULL, variable = NULL,
 #' @seealso \code{\link{xtdata}}, \code{\link{xtmerge}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
-#' ## Test the country identifiers of the UDS dataset (not run).
-#' # UDS = merge_uds()
-#' # xtcountrytest(UDS)
-xtcountrytest <- function(dataset) {
-  stopifnot(xtdata(x))
-  stopifnot(xtdata(y))
-  stopifnot(xt(x)$type == "country")
-  stopifnot(xt(y)$type == "country")
+#' ## Test the country identifiers in the QOG dataset (not run).
+#' # data(qog.demo)
+#' # xtcountry(qog.ts.demo)
+#' ## Test the country identifiers in the UDS dataset (not run).
+#' # UDS = get_uds()
+#' # xtcountry(UDS)
+xtcountry <- function(dataset) {
+  stopifnot(xtdata(dataset))
+  stopifnot(xt(dataset)$type == "country")
   data = xt(dataset)$data
   spec = xt(dataset)$spec
   countrytest <- function(x, y = NULL, data = NULL, spec = NULL) {
@@ -263,7 +221,8 @@ xtcountrytest <- function(dataset) {
 #'
 #' This function merges panel data based on their \code{"xtdata"} attributes.
 #' 
-#' @param x, y data frames with the \code{\link{xdata}} attribute. IF the 
+#' @export
+#' @param x, y data frames with the \code{\link{xtdata}} attribute. IF the 
 #' \code{type} parameter must be set to \code{"country"}, the function will
 #' try to resolve data frames with different country codes by matching them
 #' to \code{iso3n} codes with the \code{\link{countrycode}} package.
@@ -274,29 +233,33 @@ xtcountrytest <- function(dataset) {
 #' @seealso \code{\link{xtdata}}, \code{\link{merge}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
-#' ## Merge QOG and UDS time series.
-#' # xtdata(QOG <- qogdata(file = TRUE, version = "bas", format = "ts"))
-#' # xtdata(UDS <- get_uds())
-#' # df = xtmerge(QOG, UDS)
+#' # Load QOG demo datasets.
+#' data(qog.demo)
+#' # Load UDS democracy scores.
+#' UDS = get_uds()
+#' # Merge QOG and UDS time series.
+#' xt(xtmerge(qog.ts.demo, UDS))
+#' names(xtmerge(qog.ts.demo, UDS))
+
 xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
   stopifnot(xtdata(x))
   stopifnot(xtdata(y))
   if(is.null(t.x)) t.x = t
   if(is.null(t.y)) t.y = t
   if(xt(x)$data[2] != t.x)
-    stop("t.x different from xdata time period of x")
+    stop("t.x different from xtdata time period of x")
   if(xt(y)$data[2] != t.y)
-    stop("t.y different from xdata time period of y")
+    stop("t.y different from xtdata time period of y")
   if(xt(x)$type != xt(y)$type)
-    stop("different xdata types")
+    stop("different xtdata types")
   if(xt(x)$spec[2] != xt(y)$spec[2])
-    stop("different xdata time period formats")
+    stop("different xtdata time period formats")
   if(xt(x)$spec[1] != xt(y)$spec[1] & 
        xt(x)$type == "country" & 
        require(countrycode)) {
     warning("Different country code formats, merged on iso3n best matches.")
-    mx = xtcountrytest(x)
-    my = xtcountrytest(y)
+    mx = xtcountry(x)
+    my = xtcountry(y)
     p = rbind(round(100 * mx / nrow(x)),
               round(100 * my / nrow(y)))
     rownames(p) = c("x", "y")
@@ -322,5 +285,10 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
   d = merge(x, y, 
             by.x = c(xt(x)$data[1], xt(x)$data[2]),
             by.y = c(xt(y)$data[1], xt(y)$data[2]), ...)
+  d = xtset(d, 
+            data = xt(x)$data, 
+            spec = xt(x)$spec,
+            type = xt(x)$type,
+            name = paste(xt(x)$name, xt(y)$name, sep = "/"))
   return(d)
 }

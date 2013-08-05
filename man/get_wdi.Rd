@@ -15,12 +15,10 @@
   downloads all available data.}
 
   \item{start}{first year of data to download. Defaults to
-  \code{"auto"}, which sets the year to the minimum year of
-  the original dataset.}
+  \code{1945}.}
 
   \item{end}{last year of data to download. Defaults to
-  \code{"auto"}, which sets the year to the maximum year of
-  the original dataset.}
+  \code{2012}.}
 
   \item{add}{a vector of variable names from the WDI query
   that should be returned with the indicators. See the
@@ -32,19 +30,18 @@
   \code{\link[WDI]{WDI}} package. If the
   \code{\link[countrycode]{countrycode}} package is
   available, it is used to add ISO-3N country codes to the
-  data frame. The result carries an \code{xdata} attribute
-  that can be passed to the \code{\link{xtmerge}} panel
-  data method.
+  data frame. #' The result carries an \code{\link{xtdata}}
+  attribute that can be passed to the \code{\link{xtmerge}}
+  panel data method.
 }
 \examples{
-# Download QOG Standard time series data for WDI healthcare expenditure.
-QOG = qogdata(tempfile(fileext = ".dta"), format = "ts",
-              years = 1995:2010, variables = c("ccodealp", "wdi_hec"))
-# Merge QOG data to corresponding WDI series; add income classification.
-WDI = get_wdi(x = "SH.XPD.PCAP.PP.KD", add = "income")
-# Plot results: dots are QOG measurements, lines are WDI measurements.
+# Download WDI series with income classification.
+W = get_wdi(x = "SH.XPD.PCAP.PP.KD", add = "income")
+# Merge to QOG time series demo data that contains identical indicator.
+Q = xtmerge(qog.ts.demo, W)
+# Compare measurements: dots are QOG data points, lines are WDI data points.
 if(require(ggplot2))
-  qplot(data = subset(QOG, !is.na(wdi_hec)),
+  qplot(data = subset(Q, !is.na(wdi_hec)),
         x = year, y = wdi_hec, color = income, alpha = I(.5)) +
   geom_smooth(aes(y = SH.XPD.PCAP.PP.KD, group = ccode), se = FALSE) +
   scale_colour_brewer("", palette = "RdYlBu") +
@@ -57,10 +54,11 @@ if(require(ggplot2))
 \references{
   Arel-Bundock, Vincent. 2012. \emph{WDI: World Development
   Indicators (World Bank).} R package version 2.2.
-  \url{http://CRAN.R-project.org/package=WDI} World Bank.
-  2013. \emph{World Development Indicators}. Washington DC:
-  The World Bank Group. Online publication, January 24,
-  2013.
+  \url{http://CRAN.R-project.org/package=WDI}
+
+  World Bank. 2013. \emph{World Development Indicators}.
+  Washington DC: The World Bank Group. Online publication,
+  January 24, 2013.
 }
 \seealso{
   \code{\link[WDI]{WDI}}, \code{\link{xtdata}}

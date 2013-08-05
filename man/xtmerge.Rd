@@ -5,7 +5,7 @@
   xtmerge(x, y, t = "year", t.x = NULL, t.y = NULL, ...)
 }
 \arguments{
-  \item{x,}{y data frames with the \code{\link{xdata}}
+  \item{x,}{y data frames with the \code{\link{xtdata}}
   attribute. IF the \code{type} parameter must be set to
   \code{"country"}, the function will try to resolve data
   frames with different country codes by matching them to
@@ -23,10 +23,13 @@
   \code{"xtdata"} attributes.
 }
 \examples{
-## Merge QOG and UDS time series.
-# xtdata(QOG <- qogdata(file = TRUE, version = "bas", format = "ts"))
-# xtdata(UDS <- get_uds())
-# df = xtmerge(QOG, UDS)
+# Load QOG demo datasets.
+data(qog.demo)
+# Load UDS democracy scores.
+UDS = get_uds()
+# Merge QOG and UDS time series.
+xt(xtmerge(qog.ts.demo, UDS))
+names(xtmerge(qog.ts.demo, UDS))
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

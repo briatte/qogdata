@@ -26,9 +26,13 @@
 
   \item{type}{the type of observations in the panel data.
   Defaults to \code{"country"}, which will read the
-  \code{spec} parameters as \code{countrycode} formats.}
+  \code{spec} parameters as \code{\link{countrycode}}
+  formats.}
 
   \item{name}{a description of the dataset.}
+
+  \item{url}{a URI locator for the dataset (the website
+  address).}
 
   \item{quiet}{whether to return some details. Defaults to
   \code{FALSE} (verbose).}
@@ -64,19 +68,20 @@
   commands in Stata.
 }
 \examples{
-## Identify the QOG Basic time series data (not run).
-# QOG = qogdata(file = TRUE, version = "bas", format = "ts")
-# QOG = xtset(QOG)
-## Identify the subset of most recent years (not run).
-# QOG.200x = xtset(subset(QOG, year > 1999))
-# Identify the UDS dataset.
-UDS = merge_uds()
+# Load QOG demo datasets.
+data(qog.demo)
+# Set xtdata attribute on QOG time series.
+Q = xtset(qog.ts.demo)
+# Set xtdata attribute on recent years.
+Q.200x = xtset(subset(qog.ts.demo, year > 1999))
+# Manually set xtdata attribute for UDS dataset.
+UDS = get_uds()
 UDS = xtset(UDS,
             data = c("ccodecow", "year"),
             spec = c("cown", "year"),
             type = "country",
             name = "Unified Democracy Scores"
-      )
+    )
 }
 \seealso{
   \code{\link[countrycode]{countrycode}}

@@ -28,13 +28,17 @@
   \url{http://www.qog.pol.gu.se/} for a presentation of QOG
   research.
 }
+\details{
+  The function mimics Richard Svensson's \code{qogbook}
+  Stata command.
+}
 \examples{
 # Show the URL to the QOG Standard dataset codebook.
 qogbook()
-# Download with default filename.
-qogbook(file = TRUE)
-# Download the QOG Basic dataset codebook to a specific filename.
-qogbook(file = "qog.basic.codebook.pdf", version = "bas")
+## Download QOG Standard codebook with default filename (not run).
+# qogbook(file = TRUE)
+## Download QOG Basic dataset codebook to specific filename (not run).
+# qogbook(file = "qog.basic.codebook.pdf", version = "bas")
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

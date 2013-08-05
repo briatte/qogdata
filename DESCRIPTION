@@ -1,13 +1,15 @@
-Package: qogdata
+Package: xtdata
 Type: Package
-Title: Helper functions for Quality of Government data
+Title: Functions to manipulate Quality of Government data and related material
 Version: 0.1
-Date: 2013-07-30
+Date: 2013-08-05
 Author: Francois Briatte <f.briatte@ed.ac.uk>
 Maintainer: Francois Briatte <f.briatte@ed.ac.uk>
-Description: Helper functions to download Quality of Government datasets
-    and codebooks. Additional methods are provided to merge data from
-    other sources.
+Description: This package contains a set of functions to download and manipulate
+    Quality of Government (QOG) datasets and codebooks. It uses a specification
+    for panel data that makes it easy to merge QOG datasets with other series,
+    of which a few examples are provided.
+    Please turn to http://www.qog.pol.gu.se for details on QOG datasets.
 Suggests:
     countrycode,
     foreign,
@@ -17,11 +19,11 @@ Suggests:
     plyr,
     WDI
 License: GPL-3
-URL: https://github.com/briatte/qogdata
+URL: https://github.com/briatte/xtdata
 LazyData: true
 Collate:
-    'qogdata.R'
-    'qogmap.R'
     'utils.R'
+    'qog.R'
+    'xtplot.R'
     'get.R'
     'xt.R'

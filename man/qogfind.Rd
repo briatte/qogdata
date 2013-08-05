@@ -31,7 +31,7 @@ qogfind("regime", "institutions")
 # QOG Standard search, with regex syntax.
 qogfind("public|administration")
 # QOG Social Policy search, showing cross-sectional information only.
-head(qogfind("^socx", version = "soc", show = "cs", shorter.labels = FALSE))
+head(qogfind("^socx", version = "soc", show = "cs", compact = FALSE))
 # QOG Standard variables featured only in the cross-sectional version.
 qogfind("*")[is.na(qogfind("*")$ts.N), ]
 }

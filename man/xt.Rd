@@ -14,10 +14,10 @@
   \code{\link{xtset}}. Intended for programming purposes.
 }
 \examples{
-## Identify the QOG Basic time series data (not run).
-# QOG = qogdata(file = TRUE, version = "bas", format = "ts")
-# QOG = xtset(QOG)
-# xt(QOG)
+# Load QOG demo datasets.
+data(qog.demo)
+# Identify the QOG Basic time series data properties.
+xt(qog.ts.demo)
 }
 \seealso{
   \code{\link{xtset}}

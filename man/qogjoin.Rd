@@ -2,7 +2,7 @@
 \alias{qogjoin}
 \title{Join historical and recent states in QOG Standard time series data}
 \usage{
-  qogjoin(data, country = NULL, out = "variable")
+  qogjoin(data, country = NULL)
 }
 \arguments{
   \item{data}{a QOG Standard time series dataset, or any
@@ -12,11 +12,6 @@
 
   \item{country}{the country name to join data over.
   Requires the \code{cname} variable.}
-
-  \item{out}{what to return. If set to \code{"data"}, the
-  entire dataset is returned, stripped of the older
-  observations and update to the new series. See
-  'Details'.}
 }
 \description{
   Function to plot maps of Quality of Government (QOG)
@@ -36,15 +31,13 @@
   the QOG Standard time series dataset.
 }
 \examples{
-# Load QOG Standard time series data.
-QOG = qogdata(tempfile(fileext = ".dta"), format = "ts",
-              variables = c("cname", "wdi_gdp", "wdi_pop"))
-# By default, the function returns the joined data.
-head(qogjoin(QOG, "France"))
-# Set out to "data" to get the modified dataset.
-QOG <- qogjoin(QOG, "Pakistan", out = "data")
-QOG <- qogjoin(QOG, "Ethiopia", out = "data")
-QOG <- qogjoin(QOG, "Malaysia", out = "data")
+# Load QOG demo datasets.
+data(qog.demo)
+QOG = qog.ts.demo
+QOG = qogjoin(QOG, "Ethiopia")
+QOG = qogjoin(QOG, "France")
+QOG = qogjoin(QOG, "Malaysia")
+QOG = qogjoin(QOG, "Pakistan")
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

@@ -1,9 +1,24 @@
-Version 0.1 (2013-08-01)
+Version 0.1 (2013-08-05)
 ------------------------
 
-* initial release
-* qog functions: download, search, merge, map (QOG data server)
-* merge method for World Bank indicators (WDI)
-* merge method for Pemstein et al. (democracy scores)
-* merge method for Gleditsch and Ward (state independence)
-* merge method for Powell and Thyne (state coups)
+initial release
+
+qog functions: 
+
+* qogdata: download datasets
+* qogbook: download codebooks
+* qogfind: search variables
+* qogjoin: merge historical states
+
+xt functions:
+
+* xtdata specification
+* xtmerge method
+* xtmissing values plot
+* xtmap
+
+get functions:
+
+* WDI (World Bank indicators)
+* UDS (Pemstein et al. democracy scores)
+* GWPT (Gleditsch and Ward/Powell and Thyne state variables)
