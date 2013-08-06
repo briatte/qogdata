@@ -19,11 +19,37 @@
 #' # xtdata(qog.cs.demo)
 
 xtdata <- function(dataset) {
-  if(is.null(attr(dataset, "xtdata")))
+  if(is.null(xt(dataset)))
     stop("data frame has no xtdata attribute")
+    
+  if(!all(sapply(xt(dataset), is.character))) {
+    stop("invalid xtdata specification (all parameters must be character strings)")
+  }
+
+  xtcheck <- function(dataset, x, y = 0) {
+    a = xt(dataset)[[x]]
+    if(y > 0) a = a[y]
+    if(is.null(a) | is.na(a) | !nchar(a))
+      stop("invalid xtdata specification (", 
+           ifelse(y > 0, 
+                  paste(ifelse(y == 1, "unique identifier", "time period"),
+                        ifelse(x == "data", "variable", "format")),
+                  x),
+           " is missing, null or null-length)")
+    # find variables
+    if(x == "data" & !a %in% names(dataset))
+      stop("invalid xdata specification (variable ", a, " is not in the dataset)")
+  }
+  xtcheck(dataset, "type")
+  xtcheck(dataset, "data", 1)
+  xtcheck(dataset, "data", 2)
+  xtcheck(dataset, "spec", 1)
+  xtcheck(dataset, "spec", 2)
+  
+  # should now only return TRUE
   all(sapply(xt(dataset), is.character)) &
-    all(sapply(attr(dataset, "xtdata")$data[1:2], nchar) > 0) &
-    all(sapply(attr(dataset, "xtdata")$spec[1:2], nchar) > 0)
+    all(sapply(xt(dataset)$data[1:2], nchar) > 0) &
+    all(sapply(xt(dataset)$spec[1:2], nchar) > 0)
 }
 
 #' Get panel data properties
@@ -125,27 +151,9 @@ xtset <- function(dataset = NULL,
     name = name,
     url = url)
   
-  if(!all(sapply(xt(dataset), is.character))) {
-    stop("Invalid xtdata specification: all parameters must be character strings.")
-  }
-  xtcheck <- function(dataset, x, y = 0) {
-    a = xt(dataset)[[x]]
-    if(y > 0) a = a[y]
-    if(is.null(a) | is.na(a) | !nchar(a))
-      stop("Invalid xtdata specification: ", 
-           ifelse(y > 0, 
-                  paste0(ifelse(y == 1, "unit group", "time period"),
-                         ifelse(x == "data", " variable", " format")),
-                  x),
-           " is missing, null or null-length.")
-  }
-  xtcheck(dataset, "type")
-  xtcheck(dataset, "data", 1)
-  xtcheck(dataset, "data", 2)
-  xtcheck(dataset, "spec", 1)
-  xtcheck(dataset, "spec", 2)
+  # check syntax
   if(!xtdata(dataset))
-    stop("Invalid xtdata specification (please report this bug).")
+    stop("invalid xtdata specification (please report this bug)")
   
   # print name
   if(!is.null(xt(dataset)$name) & !quiet)
