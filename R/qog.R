@@ -1,4 +1,3 @@
-
 #' Import Quality of Government data into R
 #'
 #' Function to download Quality of Government (QOG) data and load it as a data 
@@ -7,15 +6,33 @@
 #'
 #' @export
 #' @aliases get_qog
-#' @param file a filename to save the dataset at. If set to \code{TRUE}, the name of the CSV dataset on the QOG server will be used. If set to \code{FALSE} (the default), the function only returns the link to the dataset. QOG dataset versions other than \code{std} require that \code{file} ends in \code{.dta}.
-#' @param replace whether to download the dataset even if a file already exists at the download location. Defaults to \code{FALSE}.
-#' @param path a folder path to prepend to the filename and to the codebook if relevant.
-#' @param version the QOG version: \code{std} (Standard), \code{soc} (Social Policy), \code{bas} (Basic) or \code{exp} (Expert). Defaults to \code{std}.
-#' @param format the QOG format, usually \code{cs} for cross-sectional data or \code{ts} for time series in the \code{std} and \code{bas} versions. See 'Details' for the full list of specifications. Defaults to \code{cs}.
-#' @param codebook whether to download the codebook. Calls \code{qogbook} by passing the \code{codebook}, \code{version} and \code{path} arguments to it, where \code{codebook} is treated as the filename for the codebook. Defaults to \code{FALSE}.
-#' @param variables a selection of variables to import. \code{ccode} ISO-3N country codes and \code{year} identifiers will be forced into the output if relevant.
-#' @param years a selection of years to import. Effective only with the \code{ts}, \code{tsl} or \code{ind} formats.
-#' @param ... other arguments supplied to the import method, which is `read.csv` by default, or \code{foreign::read.dta} if \code{file} is a Stata \code{dta} dataset, or \code{Hmisc::spss.get} if \code{file} is a SPSS \code{sav} dataset.
+#' @param file a filename to save the dataset at. 
+#' If set to \code{FALSE} (the default), the function just returns the link to the dataset. 
+#' If set to \code{TRUE}, the server filename of the dataset is used, which 
+#' returns either a CSV file if \code{version} is set to \code{std}, or
+#' a Stata \code{dta} file otherwise. See 'Details'.
+#' @param replace whether to overwrite the dataset even if a file already exists at the download location. Defaults to \code{FALSE}.
+#' @param path a folder path to prepend to the filename and to the codebook
+#' if \code{codebook} is not \{code{FALSE}}.
+#' @param version the QOG version:
+#' \code{std} (Standard), \code{soc} (Social Policy), \code{bas} (Basic)
+#' or \code{exp} (Expert). Defaults to \code{std}. See 'Details'.
+#' @param format the QOG format, usually \code{cs} for cross-sectional data
+#' or \code{ts} for time series in the \code{std} and \code{bas} versions. 
+#' See 'Details' for the full list of specifications. Defaults to \code{cs}.
+#' @param codebook whether to download the codebook. Calls \code{qogbook} by 
+#' passing the \code{codebook}, \code{version} and \code{path} arguments to it, 
+#' where \code{codebook} is treated as the filename for the codebook. 
+#' Defaults to \code{FALSE}.
+#' @param variables a selection of variables to import. \code{ccode} ISO-3N 
+#' country codes \code{ccode} and \code{year} identifiers will be forced into
+#' the output if relevant.
+#' @param years a selection of years to import. Effective only with
+#' the \code{ts}, \code{tsl} or \code{ind} formats.
+#' @param ... other arguments supplied to the import method, which is 
+#' \code{read.csv} by default, 
+#' or \code{\link[foreign]{read.dta} if \code{file} is a Stata \code{dta} dataset,
+#' or \code{\link[foreign]{read.spss} if \code{file} is a SPSS \code{sav} dataset.
 #' @details This version of the package handles all four QOG datasets:
 #' \tabular{lcl}{
 #'  QOG Standard \tab \code{std} \tab 15 May 2013\cr
@@ -24,6 +41,8 @@
 #'  QOG Expert Survey \tab \code{exp} \tab 3-6 September 2012\cr
 #'  URL: \tab \tab \url{http://www.qog.pol.gu.se}\cr
 #' }
+#'
+#' Each QOG dataset is available in a variety of data formats:
 #' 
 #' \itemize{
 #'   \item QOG datasets \code{std} and \code{bas} 
@@ -37,17 +56,23 @@
 #'   or \code{ind} (individual survey)
 #' }
 #' 
-#' If format is \code{csyom}, \code{version} is automatically set to \code{std}, 
-#' and \code{file} must be a CSV file.
-#' 
-#' The function mimics Christoph Thewes' \code{qoguse} Stata command.
-#' @seealso \code{\link{qogbook}}
+#' The QOG Standard series comes in CSV, SPSS and Stata file formats, CVS being
+#' the only format that contains numeric codes instead of QOG value labels. 
+#' Datasets outside of the QOG Standard series are available only as Stata items 
+#' and require that \code{file} ends in \code{.dta} when \code{version} is not 
+#' \code{std}. The only exception is dataset \code{csyom}, which automatically
+#' sets \code{version} to \code{std} and requires \code{file} to end
+#' in \code{.csv}. Filenames with inadequate extensions will be modified to 
+#' conform to these expectations if they do not.
+#' @seealso \code{\link{qogbook}}, 
+#' \code{\link[foreign]{read.dta}}, 
+#' \code{\link[foreign]{read.spss}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
-#' # Show URL to QOG Standard time series.
+#' # Show URL to QOG Standard cross-section.
 #' qogdata()
 #' # Show URL to QOG Social Policy time series, long format.
-#' QOG = qogdata(file = "qog-soc.dta", version = "soc", format = "tsl")
+#' qogdata(version = "soc", format = "tsl")
 #' ## Download codebook and recent years from QOG Basic cross-section (not run).
 #' # QOG = qogdata(file = "qog.cs.txt", version = "bas", format = "cs", 
 #' #         years = 2002:2012, codebook = TRUE)
@@ -136,16 +161,22 @@ qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
   #
   read = "read.csv"
   args = list(file = file, ...)
-  if(!grepl(".dta$|.sav$", file)) args["sep"] = ";"
-  if(grepl(".dta$", file)) {
+  # foreign or not
+  if(grepl(".dta$|.sav$", file)) 
     library(foreign)
+  else
+                  args["sep"] = ";"
+  # stata args
+  if(grepl(".dta$", file)) {
     read = "read.dta"
     if(is.null(unlist(args["warn.missing.labels"])))
       args["warn.missing.labels"] = FALSE
   }
+  # spss args
   if(grepl(".sav$", file)) {
-    library(Hmisc)
-    read = "Hmisc::spss.get"
+    read = "read.spss"
+    if(is.null(unlist(args["to.data.frame"])))
+      args["to.data.frame"] = TRUE
   }
   data = do.call(read, args)
   #

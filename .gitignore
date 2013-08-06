@@ -1,16 +1,21 @@
+# OS X
+
 .DS_Store
+
+# R
 
 .Rproj.user
 .Rhistory
 .RData
+
 *.Rproj
+
+# data
 
 *.csv
 *.gz
 *.tsv
 *.txt
 *.pdf
-
-draft
 
 # done

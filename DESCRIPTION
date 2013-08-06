@@ -1,7 +1,7 @@
-Package: xtdata
+Package: qogdata
 Type: Package
 Title: Functions to manipulate Quality of Government data and related material
-Version: 0.1
+Version: 0.1.1
 Date: 2013-08-05
 Author: Francois Briatte <f.briatte@ed.ac.uk>
 Maintainer: Francois Briatte <f.briatte@ed.ac.uk>
@@ -14,9 +14,7 @@ Suggests:
     countrycode,
     foreign,
     ggplot2,
-    Hmisc,
     maps,
-    plyr,
     WDI
 License: GPL-3
 URL: https://github.com/briatte/qogdata
