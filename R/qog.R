@@ -182,13 +182,24 @@ qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
   #
   # selected variables
   #
+  uids = c("ccode", "ccodealp", "cname", "ccodecow", "ccodewb")
+  pids = uids %in% names(data)
+
+  # avoid ts bug
+  if(grepl("ts|tsl", format) & !any(pids))
+    stop("You are trying to load a QOG dataset as time series, but it has no identifier variable.")
+
+  # avoid ts bug
+  if(grepl("ts|tsl", format) & !"year" %in% names(data))
+    stop("You are trying to load a QOG dataset as time series, but it has no year variable.")
+ 
   if(!is.null(variables)) {
     if(grepl("ts|tsl", format) & !"year" %in% variables) {
       warning("Forcing year identifier into the dataset.")
       variables = c("year", variables)
     }
     if(grepl("std|bas|soc", version) & !"ccode" %in% variables) {
-      warning("Forcing country code identifier into the dataset.")
+      warning("Forcing ccode identifier into the dataset.")
       variables = c("ccode", variables)
     }
     data = data[, names(data) %in% variables]
@@ -216,9 +227,10 @@ qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
   #
   # xtdata spec
   #
+  pids = uids[pids] 
   if(format == "ts" | format == "tsl") {
     data = xtset(data, 
-                 data = c("ccode", "year", "ccodealp", "cname"), 
+                 data = c(pids[1], "year", pids[-1]), 
                  spec = c("iso3n", "year"), 
                  type = "country", 
                  name = "Quality of Government, time series data"
