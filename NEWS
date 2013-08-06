@@ -1,3 +1,12 @@
+Version 0.1.1 (2013-08-06)
+--------------------------
+
+minor bugs (untested, sorry)
+
+* removed plyr dependency
+* removed Hmisc dependency
+* documentation edits
+
 Version 0.1 (2013-08-05)
 ------------------------
 
@@ -13,12 +22,13 @@ qog functions:
 xt functions:
 
 * xtdata specification
+* xt and xtset internals
 * xtmerge method
 * xtmissing values plot
 * xtmap
 
 get functions:
 
-* WDI (World Bank indicators)
-* UDS (Pemstein et al. democracy scores)
-* GWPT (Gleditsch and Ward/Powell and Thyne state variables)
+* get_wdi (World Bank indicators, using WDI package)
+* get_uds (Pemstein et al. democracy scores)
+* get_gwpt (Gleditsch and Ward/Powell and Thyne state variables)
