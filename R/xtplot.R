@@ -16,9 +16,8 @@
 #' xtmissing(qog.ts.demo, "bl_asy15f") +
 #'   ggtitle("Country-year availability of female education")
 
-xtmissing <- function(data = NULL, variable = NULL) {
+xtmissing <- function(data = NULL, variable) {
   stopifnot(xtdata(data))
-  stopifnot(!is.null(variable))
   stopifnot(variable %in% names(data))
   # try short names
   id = xt(data)$data[3]

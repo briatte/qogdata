@@ -7,7 +7,13 @@ The __qogdata__ package is a collection of functions to manipulate [Quality of G
 Version 0.1 of the `qogdata` package is installable with the `devtools` package:
 
     library(devtools)
-    devtools::install_github("qogdata", "briatte", dependencies = TRUE)
+    install_github("qogdata", "briatte", dependencies = TRUE)
+    require(qogdata)
+
+Installing dependencies is particularly recommended to work with country-level data. If loading fails after running `devtools`, install dependencies manually:
+
+    deps = c("countrycode", "foreign", "ggplot2", "maps", "WDI")
+	lapply(deps, install.packages)
 
 # HOWTO
 
@@ -44,7 +50,7 @@ Set `codebook` to `TRUE` or to a specific filename to also download the codebook
 
 __Notes:__
 
-* The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other QOG datasets are available only in Stata format. `qogdata` will call `foreign` to import Stata files and `Hmisc` to import SPSS files. _Tip:_ use the Stata format to get the data with all variable labels in place.
+* The QOG Standard dataset is [currently](http://www.qogdata.pol.gu.se/data/) available in CSV, SPSS and Stata formats, and other QOG datasets are available only in Stata format. `qogdata` will call `foreign` to import SPSS and Stata files, which contain variable and value labels.
 * The `qogdata` package does not currently deal with the [QOG EU Regions datasets][qog-reg], which comes in Excel format and has not been updated throughout the years. However, the `xtdata` specification (explained below) is flexible enough to accommodate for regional data, so that [might happen][wiki] in the future.
 * The [codebooks](http://www.qogdata.pol.gu.se/codebook/) are in PDF format. It should be easy to build an additional `qoglabel` function to call value labels extracted from Stata and stored as index files, as shown for variable labels and years of measurement in `qogfind` (below).
 
@@ -136,6 +142,8 @@ When provided with a data frame carrying the `xtdata` attribute, the function cu
 ## `get_eurostat`
 
 `get_eurostat` is a soon-to-be-added downloader for Eurostat data. See the [repository wiki][wiki] for development notes, or see the [`eurostat_r`][eurostat_r] script to bulk import Eurostat data in R.
+
+[eurostat_r]: https://github.com/toprach/eurostat_r
 
 ## `get_wdi`
 
