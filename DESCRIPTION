@@ -16,7 +16,6 @@ Suggests:
     ggplot2,
     Hmisc,
     maps,
-    plyr,
     WDI
 License: GPL-3
 URL: https://github.com/briatte/qogdata
