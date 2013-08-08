@@ -3,7 +3,7 @@
 \title{Get World Development Indicators in \code{xtdata} format}
 \usage{
   get_wdi(x, country = "all", start = 1945, end = 2013,
-    add = NULL)
+    extra = NULL, aggregates = FALSE, ccode = "iso3c")
 }
 \arguments{
   \item{x}{the name(s) of the indicator(s) to download from
@@ -20,33 +20,49 @@
   \item{end}{last year of data to download. Defaults to
   \code{2012}.}
 
-  \item{add}{a vector of variable names from the WDI query
-  that should be returned with the indicators. See the
-  documentation of the \code{\link[WDI]{WDI}} function.}
+  \item{extra}{a vector of additional variables from the
+  WDI query that should be returned with the indicators.
+  See the documentation of the \code{\link[WDI]{WDI}}
+  function, or set to \code{TRUE} to save all additional
+  variables.}
+
+  \item{aggregates}{whether to keep World Bank aggregates
+  in the results, which causes the \code{xtdata} attribute
+  to carry two data types, \code{"country"} and
+  \code{"aggregate"}. Defaults to \code{FALSE}.}
+
+  \item{ccode}{the variable from which to create ISO-3N
+  country codes. Defaults to \code{iso3c}, but might be set
+  to any of the country variables returned by
+  \code{\link[WDI]{WDI}}. Intended for testing purposes.}
+}
+\value{
+  a data frame with country-year observations and an
+  \code{\link{xtdata}} attribute
 }
 \description{
   Function to download World Development Indicators (WDI)
   through the World Bank API, using the
-  \code{\link[WDI]{WDI}} package. If the
-  \code{\link[countrycode]{countrycode}} package is
-  available, it is used to add ISO-3N country codes to the
-  data frame. #' The result carries an \code{\link{xtdata}}
-  attribute that can be passed to the \code{\link{xtmerge}}
-  panel data method.
+  \code{\link[WDI]{WDI}} package. The
+  \code{\link[countrycode]{countrycode}} package is also
+  used to add ISO-3N country codes to the data frame. The
+  result carries an \code{\link{xtdata}} attribute that can
+  be passed to the \code{\link{xtmerge}} panel data method.
 }
 \examples{
-# Download WDI series with income classification.
-W = get_wdi(x = "SH.XPD.PCAP.PP.KD", add = "income")
-# Merge to QOG time series demo data that contains identical indicator.
-Q = xtmerge(qog.ts.demo, W)
-# Compare measurements: dots are QOG data points, lines are WDI data points.
-if(require(ggplot2))
-  qplot(data = subset(Q, !is.na(wdi_hec)),
+if(require(WDI) & require(ggplot2)) {
+  # Download WDI series with income classification.
+  WDI = get_wdi(x = "SH.XPD.PCAP.PP.KD", extra = "income")
+  # Merge to QOG time series demo data that contains identical indicator.
+  QOG = xtmerge(qog.ts.demo, WDI)
+  # Compare measurements: dots are QOG data points, lines are WDI data points.
+  qplot(data = subset(QOG, !is.na(wdi_hec)),
         x = year, y = wdi_hec, color = income, alpha = I(.5)) +
   geom_smooth(aes(y = SH.XPD.PCAP.PP.KD, group = ccode), se = FALSE) +
   scale_colour_brewer("", palette = "RdYlBu") +
   labs(y = NULL, x = NULL) +
   theme_minimal(16)
+}
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

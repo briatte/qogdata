@@ -20,6 +20,14 @@
   measurement: \code{cs} (cross-sectional), \code{ts} (time
   series), or \code{all} (the default).}
 }
+\value{
+  a data frame containg matching variables, described by
+  their names, labels and years of measurement in the time
+  series (\code{ts}) cross-sectional (\code{cs}) datasets.
+  The information should match the ranges indicated in the
+  \emph{QOG Standard Codebook} and \emph{QOG Social Policy
+  Codebook}.
+}
 \description{
   Function to perform a \code{regex} search on QOG variable
   names and labels. A few labels are missing for strictly

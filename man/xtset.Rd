@@ -26,8 +26,8 @@
 
   \item{type}{the type of observations in the panel data.
   Defaults to \code{"country"}, which will read the
-  \code{spec} parameters as \code{\link{countrycode}}
-  formats.}
+  \code{spec} parameters as
+  \code{\link[countrycode]{countrycode}} formats.}
 
   \item{name}{a description of the dataset.}
 
@@ -37,6 +37,9 @@
   \item{quiet}{whether to return some details. Defaults to
   \code{FALSE} (verbose).}
 }
+\value{
+  a data frame with the \code{xtdata} attribute.
+}
 \description{
   Function to specify the panel data properties of a data
   frame. The syntax is provided in the 'Details'. Intended
@@ -45,27 +48,32 @@
 }
 \details{
   an \code{xtdata} attribute is a list of 5 to 11 panel
-  data paramaters stored in the following named vectors:
-  \itemize{ \item \bold{data}, a vector of variable names
-  coding for the unique identifier and time period,
-  optionally followed by the variable names for the short
-  and long observation names, as with alphabetical country
-  codes and country names.  \item \bold{spec}, a vector of
-  variable formats that match the \code{data} variables;
-  this allows to store \code{countrycode} formats in the
+  data paramaters stored as character strings in the
+  following named vectors: \itemize{ \item \bold{data}, a
+  vector of variable names coding for the unique identifier
+  and time period, optionally followed by the variable
+  names for the short and long observation names, as with
+  alphabetical country codes and country names.  \item
+  \bold{spec}, a vector of variable formats that match the
+  \code{data} variables; this allows to store
+  \code{\link[countrycode]{countrycode}} formats in the
   dataset and can theoretically work with any other format,
-  like FIPS or households.  \item \bold{type}, a
-  single-element vector that defines the type of
-  observations contained in the data; \code{"country"} is
-  the only type that currently produces any specific
-  behaviour from \code{xtdata}.  \item \bold{name}, an
-  optional single-element vector that defines the dataset
-  name, which is printed on top of the function results.
-  \item \bold{url}, an optional URI locator for the data
-  source (typically, where to find codebooks and
-  publications). } These characteristics mimic the
-  behaviour of the \code{xtset} and \code{label data}
-  commands in Stata.
+  like FIPS or households.  \item \bold{type}, a vector
+  that defines the type of observations contained in the
+  data; \code{"country"} is the only type that currently
+  produces any specific behaviour from \code{xtdata}
+  through the \code{\link[countrycode]{countrycode}}
+  package, but \code{"region"} is on the way for working
+  with NUTS codes, and it should be feasable to implement
+  FIPS codes.  \item \bold{name}, an optional
+  single-element vector that defines the dataset name,
+  which is printed on top of the function results.  \item
+  \bold{url}, an optional single-element vector that
+  defines the URI locator for the data source (typically,
+  the website address where to find codebooks, technical
+  documentation and related publications). } These
+  characteristics mimic some of the behaviour of the
+  \code{xtset} and \code{label data} commands in Stata.
 }
 \examples{
 # Load QOG demo datasets.

@@ -9,6 +9,12 @@
   attribute. The \code{type} parameter must be set to
   \code{"country"}.}
 }
+\value{
+  a vector of how many observations were successfully
+  matched on their country code, short country name and
+  long country name, based on the variable names specified
+  as \code{\link{xtdata}} properties.
+}
 \description{
   This function tests conversions to ISO3-N country codes
   on the country codes, acronyms and names identified in a
@@ -17,12 +23,11 @@
   \code{\link{xtmerge}}.
 }
 \examples{
-## Test the country identifiers in the QOG dataset (not run).
-# data(qog.demo)
-# xtcountry(qog.ts.demo)
-## Test the country identifiers in the UDS dataset (not run).
-# UDS = get_uds()
-# xtcountry(UDS)
+if(require(countrycode)) {
+  # Test the country identifiers in the QOG dataset.
+  data(qog.demo)
+  xtcountry(qog.ts.demo)
+}
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

@@ -13,6 +13,9 @@
   \item{country}{the country name to join data over.
   Requires the \code{cname} variable.}
 }
+\value{
+  a data frame with country-year observations
+}
 \description{
   Function to plot maps of Quality of Government (QOG)
   data. Requires the \code{ggplot2} and \code{maps}

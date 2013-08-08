@@ -8,6 +8,9 @@
   \item{dataset}{the dataset from which to return the
   \code{xtdata} attributes.}
 }
+\value{
+  a list of \code{xtdata} attributes, if it exists.
+}
 \description{
   Function to extract the panel data properties of a data
   frame. The syntax is provided in the 'Details' of

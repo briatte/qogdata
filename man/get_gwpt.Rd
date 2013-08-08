@@ -19,6 +19,9 @@
   \item{coups}{name under which to create the state coups
   variable. Defaults to \code{"pt_coup"}. See 'Details'.}
 }
+\value{
+  a data frame with country-year observations
+}
 \description{
   Function to download state-level historical events from
   Gleditsch and Ward (1999, updated 3 May 2013) and Powell
@@ -39,10 +42,11 @@
 \examples{
 # Download data up to 2012.
 head(G <- get_gwpt(end = 2012))
-# Plot the full data.
 if(require(countrycode) & require(ggplot2)) {
+  # Get geographic markers.
   G$iso3c = countrycode(G$ccode, "iso3n", "iso3c")
   G$continent = countrycode(G$ccode, "iso3n", "continent")
+  # Plot the full data.
   qplot(data = subset(G, !is.na(continent)),
             x = year, y = reorder(iso3c, as.numeric(pt_coup), mean),
             fill = continent, alpha = pt_coup, geom = "tile") +
@@ -51,14 +55,14 @@ if(require(countrycode) & require(ggplot2)) {
     scale_x_continuous(breaks = seq(1953, 2013, 10)) +
     labs(y = NULL)
 }
-# Time distribution.
 if(require(ggplot2)) {
-qplot(data = subset(G, pt_coup != "No verified coup attempt"),
-      x = year, fill = pt_coup, binwidth = 3, alpha = I(2/3),
-      position = "stack", stat = "bin", geom = "bar") +
-  theme(legend.position = "bottom") +
-  scale_fill_brewer("", palette = "Set1") +
-  labs(x = NULL)
+  # Time distribution.
+  qplot(data = subset(G, pt_coup != "No verified coup attempt"),
+        x = year, fill = pt_coup, binwidth = 3, alpha = I(2/3),
+        position = "stack", stat = "bin", geom = "bar") +
+    theme(legend.position = "bottom") +
+    scale_fill_brewer("", palette = "Set1") +
+    labs(x = NULL)
 }
 }
 \author{

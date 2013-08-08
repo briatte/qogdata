@@ -1,11 +1,17 @@
-Version 0.1.1 (2013-08-06)
+Version 0.1.1 (2013-08-08)
 --------------------------
 
-minor bugs (untested, sorry)
+minor fixes and draft additions
+
+qog functions:
 
 * removed plyr dependency
 * removed Hmisc dependency
-* documentation edits
+
+xt functions (lifted from Zachary M. Jones' website):
+
+* xtdecay: linear decay
+* xttse: time since event
 
 Version 0.1 (2013-08-05)
 ------------------------

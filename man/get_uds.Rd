@@ -4,6 +4,9 @@
 \usage{
   get_uds()
 }
+\value{
+  a data frame with country-year observations
+}
 \description{
   Function to download the Unified Democracy Scores (UDS)
   by Pemstein, Meserve and Melton (2010). The result
@@ -14,7 +17,7 @@
 # By default, the function downloads the UDS dataset.
 head(UDS <- get_uds())
 # Basic visualization of average scores in the 2000s.
-if(require(countrycode)) {
+if(require(countrycode) & require(ggplot2)) {
   UDS$ccode = countrycode(UDS$ccodecow, "cown", "iso3n")
   xtmap(aggregate(uds_mean ~ ccode, mean, data = subset(UDS, year > 2000)),
         "uds_mean", quantize = 5, continent = c("Africa", "Asia"),

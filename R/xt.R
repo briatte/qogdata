@@ -6,7 +6,7 @@
 #'
 #' @export
 #' @param dataset the dataset in which to check for \code{xtdata} attributes.
-#' @value an error if the data frame has no \code{xtdata} attributes, or 
+#' @return an error if the data frame has no \code{xtdata} attributes, or 
 #' \code{TRUE} if the data frame has an \code{xtdata} attribute that conforms 
 #' to the syntax of \code{\link{xtset}}.
 #' @seealso \code{\link{xtset}}
@@ -31,16 +31,16 @@ xtdata <- function(dataset) {
     if(y > 0) a = a[y]
     if(is.null(a) | is.na(a) | !nchar(a))
       stop("invalid xtdata specification (", 
-           ifelse(y > 0, 
+           ifelse(x != "type", 
                   paste(ifelse(y == 1, "unique identifier", "time period"),
                         ifelse(x == "data", "variable", "format")),
-                  x),
+                  "type"),
            " is missing, null or null-length)")
     # find variables
     if(x == "data" & !a %in% names(dataset))
       stop("invalid xdata specification (variable ", a, " is not in the dataset)")
   }
-  xtcheck(dataset, "type")
+  xtcheck(dataset, "type", 1)
   xtcheck(dataset, "data", 1)
   xtcheck(dataset, "data", 2)
   xtcheck(dataset, "spec", 1)
@@ -60,7 +60,7 @@ xtdata <- function(dataset) {
 #'
 #' @export
 #' @param dataset the dataset from which to return the \code{xtdata} attributes.
-#' @value a list of \code{xtdata} attributes, if it exists.
+#' @return a list of \code{xtdata} attributes, if it exists.
 #' @seealso \code{\link{xtset}}
 #' @examples
 #' # Load QOG demo datasets.
@@ -91,31 +91,36 @@ xt <- function(dataset) {
 #' Defaults to QOG country-year data settings. See 'Details'.
 #' @param type the type of observations in the panel data. 
 #' Defaults to \code{"country"}, which will read the \code{spec} parameters as
-#' \code{\link{countrycode}} formats.
+#' \code{\link[countrycode]{countrycode}} formats.
 #' @param name a description of the dataset.
 #' @param url a URI locator for the dataset (the website address).
 #' @param quiet whether to return some details. Defaults to \code{FALSE} (verbose).
 #' @details an \code{xtdata} attribute is a list of 5 to 11 panel data 
-#' paramaters stored in the following named vectors: 
+#' paramaters stored as character strings in the following named vectors: 
 #' \itemize{
 #'   \item \bold{data}, a vector of variable names coding for the unique 
 #'   identifier and time period, optionally followed by the variable names for
 #'   the short and long observation names, as with alphabetical country codes
 #'   and country names.
 #'   \item \bold{spec}, a vector of variable formats that match the \code{data} 
-#'   variables; this allows to store \code{countrycode} formats in the dataset 
-#'   and can theoretically work with any other format, like FIPS or households. 
-#'   \item \bold{type}, a single-element vector that defines the type of 
+#'   variables; this allows to store \code{\link[countrycode]{countrycode}} 
+#'   formats in the dataset and can theoretically work with any other format, 
+#'   like FIPS or households.
+#'   \item \bold{type}, a vector that defines the type of 
 #'   observations contained in the data; \code{"country"} is the only type that
-#'   currently produces any specific behaviour from \code{xtdata}.
+#'   currently produces any specific behaviour from \code{xtdata} through the 
+#'   \code{\link[countrycode]{countrycode}} package, but
+#'   \code{"region"} is on the way for working with NUTS codes, and it should 
+#'   be feasable to implement FIPS codes.
 #'   \item \bold{name}, an optional single-element vector that defines the 
 #'   dataset name, which is printed on top of the function results.
-#'   \item \bold{url}, an optional URI locator for the data source (typically,
-#'   where to find codebooks and publications).
+#'   \item \bold{url}, an optional single-element vector that defines the 
+#'   URI locator for the data source (typically, the website address where to 
+#'   find codebooks, technical documentation and related publications).
 #' }
-#' These characteristics mimic the behaviour of the \code{xtset} and 
+#' These characteristics mimic some of the behaviour of the \code{xtset} and 
 #' \code{label data} commands in Stata.
-#' @value a data frame with the \code{xtdata} attribute.
+#' @return a data frame with the \code{xtdata} attribute.
 #' @seealso \code{\link[countrycode]{countrycode}}
 #' @examples
 #' # Load QOG demo datasets.
@@ -151,6 +156,10 @@ xtset <- function(dataset = NULL,
     name = name,
     url = url)
   
+  # set class
+  if(!"xtdata" %in% class(dataset))
+    class(dataset) = c(class(dataset), "xtdata")
+  
   # check syntax
   if(!xtdata(dataset))
     stop("invalid xtdata specification (please report this bug)")
@@ -163,9 +172,9 @@ xtset <- function(dataset = NULL,
   id = xt(dataset)$data[1]
   
   # enforce iso3n recommendation
-  if(xt(dataset)$type == "country" & xt(dataset)$spec[1] == "iso3n")
+  if("country" %in% xt(dataset)$type & xt(dataset)$spec[1] == "iso3n")
     msg = "ISO-3166-1 numeric standard"
-  else if (xt(dataset)$type == "country")
+  else if ("country" %in% xt(dataset)$type)
     msg = "possibly non-unique"
   else
     msg = "undefined coding scheme"
@@ -194,21 +203,21 @@ xtset <- function(dataset = NULL,
 #' @export
 #' @param dataset a data frame with the \code{\link{xtdata}} attribute. The 
 #' \code{type} parameter must be set to \code{"country"}.
-#' @value a vector of how many observations were successfully matched on their
+#' @return a vector of how many observations were successfully matched on their
 #' country code, short country name and long country name, based on the 
 #' variable names specified as \code{\link{xtdata}} properties.
 #' @seealso \code{\link{xtdata}}, \code{\link{xtmerge}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
-#' ## Test the country identifiers in the QOG dataset (not run).
-#' # data(qog.demo)
-#' # xtcountry(qog.ts.demo)
-#' ## Test the country identifiers in the UDS dataset (not run).
-#' # UDS = get_uds()
-#' # xtcountry(UDS)
+#' if(require(countrycode)) {
+#'   # Test the country identifiers in the QOG dataset.
+#'   data(qog.demo)
+#'   xtcountry(qog.ts.demo) 
+#' }
+
 xtcountry <- function(dataset) {
   stopifnot(xtdata(dataset))
-  stopifnot(xt(dataset)$type == "country")
+  stopifnot("country" %in% xt(dataset)$type)
   data = xt(dataset)$data
   spec = xt(dataset)$spec
   countrytest <- function(x, y = NULL, data = NULL, spec = NULL) {
@@ -220,7 +229,7 @@ xtcountry <- function(dataset) {
     }
     y
   }
-  data = sapply(c(1, 3, 4), countrytest, y = dataset, data = data, spec = spec)
+  data = sapply(seq_along(data)[-2], countrytest, y = dataset, data = data, spec = spec)
   names(data) = xt(dataset)$data[-2]
   return(data)
 }
@@ -230,42 +239,54 @@ xtcountry <- function(dataset) {
 #' This function merges panel data based on their \code{"xtdata"} attributes.
 #' 
 #' @export
-#' @param x, y data frames with the \code{\link{xtdata}} attribute. IF the 
-#' \code{type} parameter must be set to \code{"country"}, the function will
-#' try to resolve data frames with different country codes by matching them
-#' to \code{iso3n} codes with the \code{\link{countrycode}} package.
-#' @param t, t.x, t.y the time variable(s) by their names in the data frames.
-#' Defaults to \code{"year"}, which propagates to \code{t.x} and \code{t.y}.
-#' @param ... other methods passed to \code{\link{merge}}
-#' @value a data frame
-#' @seealso \code{\link{xtdata}}, \code{\link{merge}}
+#' @param x a data frame with the \code{\link{xtdata}} attribute. See 'Details'.
+#' @param y a data frame with the \code{\link{xtdata}} attribute. See 'Details'.
+#' @param t the name of the time period variable in the data frames, which 
+#' propagates to \code{t.x} and \code{t.y}. Defaults to \code{"year"}.
+#' @param t.x the name of the time period variable in the first dataset.
+#' @param t.y the name of the time period variable in the second dataset.
+#' @param ... other methods passed to \code{\link{merge}}, typically 
+#' instructions on whether to perform an inner or outer merge; \code{xtmerge} 
+#' defaults, like \code{merge}, to an inner merge.
+#' @details The function is intended to work as \code{merge} with a safety 
+#' check: it will refuse to merge data that do not carry identical formats 
+#' for their unique identifiers and time periods, as it will refuse to merge 
+#' data of different primary \code{type}.
+#' 
+#' If the \code{type} parameter is set to \code{"country"}, the function will 
+#' also try to resolve data frames with different country code formats 
+#' by matching them to \code{iso3n} codes with \code{\link{xtcountry}}.
+#' @return a data frame
+#' @seealso \code{\link{xtcountry}}, \code{\link{xtdata}}, \code{\link{merge}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
-#' # Load QOG demo datasets.
-#' data(qog.demo)
-#' # Load UDS democracy scores.
-#' UDS = get_uds()
-#' # Merge QOG and UDS time series.
-#' xt(xtmerge(qog.ts.demo, UDS))
-#' names(xtmerge(qog.ts.demo, UDS))
+#' if(require(countrycode)) {
+#'   # Load QOG demo datasets.
+#'   data(qog.demo)
+#'   # Load UDS democracy scores.
+#'   UDS = get_uds()
+#'   # Merge QOG and UDS time series.
+#'   xt(xtmerge(qog.ts.demo, UDS))
+#'   names(xtmerge(qog.ts.demo, UDS))
+#' }
 
 xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
+  try_require("countrycode")
   stopifnot(xtdata(x))
   stopifnot(xtdata(y))
   if(is.null(t.x)) t.x = t
   if(is.null(t.y)) t.y = t
   if(xt(x)$data[2] != t.x)
-    stop("t.x different from xtdata time period of x")
+    stop("t.x different from xtdata time period of x: ", xt(x)$data[2])
   if(xt(y)$data[2] != t.y)
-    stop("t.y different from xtdata time period of y")
-  if(xt(x)$type != xt(y)$type)
-    stop("different xtdata types")
+    stop("t.y different from xtdata time period of y: ", xt(y)$data[2])
+  if(xt(x)$type[1] != xt(y)$type[1])
+    stop("different xtdata primary types: ", xt(x)$type[1], xt(y)$type[1])
   if(xt(x)$spec[2] != xt(y)$spec[2])
-    stop("different xtdata time period formats")
+    stop("different xtdata time period formats: ", xt(x)$spec[2], xt(y)$spec[2])  
   if(xt(x)$spec[1] != xt(y)$spec[1] & 
-       xt(x)$type == "country" & 
-       require(countrycode)) {
-    warning("Different country code formats, merged on iso3n best matches.")
+       "country" %in% xt(x)$type) {
+    warning("merged different country code formats on iso3n best matches.")
     mx = xtcountry(x)
     my = xtcountry(y)
     p = rbind(round(100 * mx / nrow(x)),
@@ -299,4 +320,39 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
             type = xt(x)$type,
             name = paste(xt(x)$name, xt(y)$name, sep = "/"))
   return(d)
+}
+
+#' Subset a data frame while preserving its \code{\link{xtdata}} attribute
+#'
+#' A wrapper of the \code{\link{subset}} function that preserves 
+#' the \code{\link{xtdata}} attribute. Not yet usable, sorry.
+#' 
+#' @export
+#' @param data a data frame with the \code{\link{xtdata}} attribute
+#' @param formula a logical formula to subset to
+#' @param ... other methods passed to \code{\link{subset}}
+#' @return a data frame
+#' @seealso \code{\link{xtdata}}, \code{\link{subset}}
+#' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
+#' @examples
+#' # Load QOG demo datasets.
+#' data(qog.demo)
+#' QOG = xtsubset(qog.ts.demo, cname %in% c("Bangladesh", "Pakistan", "India"))
+
+xtsubset <- function(data, formula, ...) {
+  stopifnot(xtdata(data))
+  warning("nothing going on here, sorry")
+#   data = xt(data)$data
+#   spec = xt(data)$spec
+#   type = xt(data)$type
+#   name = xt(data)$name
+#   url = xt(data)$url
+#   data = eval(substitute(formula), envir = data)
+#   data = xtset(d, 
+#             data = data, 
+#             spec = spec,
+#             type = type,
+#             name = name,
+#             url = url)
+  return(data)
 }

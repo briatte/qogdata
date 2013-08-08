@@ -1,21 +1,25 @@
-#' Import Quality of Government data into R
+#' Import Quality of Government datasets into R
 #'
 #' Function to download Quality of Government (QOG) data and load it as a data 
 #' frame in R. The result carries an \code{\link{xtdata}} attribute that can be 
-#' passed to the \code{\link{xtmerge}} panel data method.
+#' passed to the \code{\link{xtmerge}} panel data method. Please visit the 
+#' QOG Institute website at \url{http://www.qog.pol.gu.se/} for a presentation 
+#' of QOG research.
 #'
 #' @export
 #' @aliases get_qog
 #' @param file a filename to save the dataset at. 
-#' If set to \code{FALSE} (the default), the function just returns the link to the dataset. 
+#' If set to \code{FALSE} (the default), the function just returns the link 
+#' to the dataset. 
 #' If set to \code{TRUE}, the server filename of the dataset is used, which 
 #' returns either a CSV file if \code{version} is set to \code{std}, or
 #' a Stata \code{dta} file otherwise. See 'Details'.
-#' @param replace whether to overwrite the dataset even if a file already exists at the download location. Defaults to \code{FALSE}.
+#' @param replace whether to overwrite the dataset even if a file already 
+#' exists at the download location. Defaults to \code{FALSE}.
 #' @param path a folder path to prepend to the filename and to the codebook
-#' if \code{codebook} is not \{code{FALSE}}.
-#' @param version the QOG version:
-#' \code{std} (Standard), \code{soc} (Social Policy), \code{bas} (Basic)
+#' if \code{codebook} is not \code{FALSE}.
+#' @param version the QOG version: 
+#' \code{std} (Standard), \code{soc} (Social Policy), \code{bas} (Basic) 
 #' or \code{exp} (Expert). Defaults to \code{std}. See 'Details'.
 #' @param format the QOG format, usually \code{cs} for cross-sectional data
 #' or \code{ts} for time series in the \code{std} and \code{bas} versions. 
@@ -31,8 +35,8 @@
 #' the \code{ts}, \code{tsl} or \code{ind} formats.
 #' @param ... other arguments supplied to the import method, which is 
 #' \code{read.csv} by default, 
-#' or \code{\link[foreign]{read.dta} if \code{file} is a Stata \code{dta} dataset,
-#' or \code{\link[foreign]{read.spss} if \code{file} is a SPSS \code{sav} dataset.
+#' or \code{\link[foreign]{read.dta}} if \code{file} is a Stata \code{dta} dataset,
+#' or \code{\link[foreign]{read.spss}} if \code{file} is a SPSS \code{sav} dataset.
 #' @details This version of the package handles all four QOG datasets:
 #' \tabular{lcl}{
 #'  QOG Standard \tab \code{std} \tab 15 May 2013\cr
@@ -55,7 +59,7 @@
 #'   requires format \code{cntry} (country-level) 
 #'   or \code{ind} (individual survey)
 #' }
-#' 
+#'
 #' The QOG Standard series comes in CSV, SPSS and Stata file formats, CVS being
 #' the only format that contains numeric codes instead of QOG value labels. 
 #' Datasets outside of the QOG Standard series are available only as Stata items 
@@ -64,9 +68,7 @@
 #' sets \code{version} to \code{std} and requires \code{file} to end
 #' in \code{.csv}. Filenames with inadequate extensions will be modified to 
 #' conform to these expectations if they do not.
-#' @seealso \code{\link{qogbook}}, 
-#' \code{\link[foreign]{read.dta}}, 
-#' \code{\link[foreign]{read.spss}}
+#' @seealso \code{\link{qogbook}}, \code{\link[foreign]{read.dta}}, \code{\link[foreign]{read.spss}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
 #' # Show URL to QOG Standard cross-section.
@@ -84,6 +86,7 @@
 qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
                 version = "std", format = "cs", 
                 variables = NULL, years = NULL, ...) {
+  try_require("foreign")
   #
   # currently available
   #
@@ -162,10 +165,8 @@ qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
   read = "read.csv"
   args = list(file = file, ...)
   # foreign or not
-  if(grepl(".dta$|.sav$", file)) 
-    library(foreign)
-  else
-                  args["sep"] = ";"
+  if(!grepl(".dta$|.sav$", file)) 
+    args["sep"] = ";"
   # stata args
   if(grepl(".dta$", file)) {
     read = "read.dta"
@@ -244,7 +245,9 @@ qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
 
 #' Download Quality of Government codebooks
 #'
-#' Function to download Quality of Government (QOG) codebooks. Please visit the QOG Institute website at \url{http://www.qog.pol.gu.se/} for a presentation of QOG research.
+#' Function to download Quality of Government (QOG) codebooks. Please visit 
+#' the QOG Institute website at \url{http://www.qog.pol.gu.se/} for a 
+#' presentation of QOG research.
 #'
 #' @export
 #' @param file a filename to save the codebook at. 
@@ -315,7 +318,7 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' @param version the QOG version to search: either \code{std} (the default) or \code{soc}.
 #' @param compact whether to limit the labels returned to 32 characters. Defaults to \code{TRUE} for better console output.
 #' @param show which variables to show for years of measurement: \code{cs} (cross-sectional), \code{ts} (time series), or \code{all} (the default).
-#' @value a data frame containg matching variables, described by their names, labels and years of measurement in the time series (\code{ts}) cross-sectional (\code{cs}) datasets. The information should match the ranges indicated in the \emph{QOG Standard Codebook} and \emph{QOG Social Policy Codebook}.
+#' @return a data frame containg matching variables, described by their names, labels and years of measurement in the time series (\code{ts}) cross-sectional (\code{cs}) datasets. The information should match the ranges indicated in the \emph{QOG Standard Codebook} and \emph{QOG Social Policy Codebook}.
 #' @references
 #' Svensson, Richard, Stefan Dahlberg, Staffan Kumlin & Bo Rothstein. 
 #' 2012. \emph{The QoG Social Policy Dataset}, version 4Apr12. 
@@ -372,7 +375,7 @@ qogfind <- function(..., version = "std", compact = TRUE, show = "all") {
 #' @param data a QOG Standard time series dataset, or any data frame with \code{cname} (country) and \code{year} information coded as in the QOG Standard time series dataset.
 #' @param country the country name to join data over. Requires the \code{cname} variable.
 #' @details The function will try to find two series of country-year observations that both match the \code{country} argument. Within the QOG Standard time series dataset, this will match historical states like "France (-1962)" to modern states like "France (1963-)". The function will then create a new variable out of both series, joined at their separation years, and set its country code attributes to the most recent ones. See Appendix A of the \emph{QOG Standard Codebook} for details on historical states in the QOG Standard time series dataset.
-#' @value a data frame with country-year observations
+#' @return a data frame with country-year observations
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @references Teorell, Jan, Nicholas Charron, Stefan Dahlberg, Soren Holmberg, 
 #' Bo Rothstein, Petrus Sundin & Richard Svensson. 2013. 
