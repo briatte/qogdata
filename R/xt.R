@@ -112,9 +112,9 @@ xt <- function(dataset) {
 #'   \code{\link[countrycode]{countrycode}} package, but
 #'   \code{"region"} is on the way for working with NUTS codes, and it should 
 #'   be feasable to implement FIPS codes.
-#'   \item \bold{name}, an optional single-element vector that defines the 
+#'   \item \bold{name}, an optional vector that defines the 
 #'   dataset name, which is printed on top of the function results.
-#'   \item \bold{url}, an optional single-element vector that defines the 
+#'   \item \bold{url}, an optional vector that defines the 
 #'   URI locator for the data source (typically, the website address where to 
 #'   find codebooks, technical documentation and related publications).
 #' }
@@ -126,9 +126,9 @@ xt <- function(dataset) {
 #' # Load QOG demo datasets.
 #' data(qog.demo)
 #' # Set xtdata attribute on QOG time series.
-#' Q = xtset(qog.ts.demo)
+#' QOG = xtset(qog.ts.demo)
 #' # Set xtdata attribute on recent years.
-#' Q.200x = xtset(subset(qog.ts.demo, year > 1999))
+#' QOG.200x = xtset(subset(qog.ts.demo, year > 1999))
 #' # Manually set xtdata attribute for UDS dataset.
 #' UDS = get_uds()
 #' UDS = xtset(UDS, 
@@ -145,7 +145,7 @@ xtset <- function(dataset = NULL,
                   name = "Quality of Government, time series data",
                   url = "http://www.qog.pol.gu.se/",
                   quiet = FALSE) {
-  if(!class(dataset) == "data.frame")
+  if(!"data.frame" %in% class(dataset))
     warning("Untested with objects of class other than data.frame.")
   
   # set attributes
@@ -189,7 +189,8 @@ xtset <- function(dataset = NULL,
   if(!quiet)
     message("Time variable: ", 
             time, 
-            " (", r[1], "-", r[2], ", T = ", r[2] - r[1] + 1, ")" )
+            " (", paste0(r, collapse = "-"), 
+            ", T = ", diff(r) + 1, ")" )
   return(dataset)
 }
 
@@ -302,23 +303,32 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
               spec = c("iso3n", xt(x)$spec[-1]), 
               type = xt(x)$type, 
               name = xt(x)$name,
+              url = xt(x)$url,
               quiet = TRUE)
     y = xtset(y, 
               data = c("iso3n", xt(y)$data[-1]), 
               spec = c("iso3n", xt(y)$spec[-1]), 
               type = xt(y)$type, 
               name = xt(y)$name,
+              url = xt(y)$url,
               quiet = TRUE)
   }
   stopifnot(xt(x)$spec[1] == xt(y)$spec[1])
   d = merge(x, y, 
             by.x = c(xt(x)$data[1], xt(x)$data[2]),
             by.y = c(xt(y)$data[1], xt(y)$data[2]), ...)
+  name = "unknown"
+  if(length(c(xt(x)$name, xt(y)$name)) > 0)
+    name = paste(xt(x)$name, xt(y)$name, sep = " / ")
+  url = "unknown"
+  if(length(c(xt(x)$url, xt(y)$url)) > 0)
+    url = c(xt(x)$url, xt(y)$url)
   d = xtset(d, 
             data = xt(x)$data, 
             spec = xt(x)$spec,
             type = xt(x)$type,
-            name = paste(xt(x)$name, xt(y)$name, sep = "/"))
+            name = name,
+            url = url)
   return(d)
 }
 
@@ -337,22 +347,25 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
 #' @examples
 #' # Load QOG demo datasets.
 #' data(qog.demo)
-#' QOG = xtsubset(qog.ts.demo, cname %in% c("Bangladesh", "Pakistan", "India"))
+#' # Subset to two countries.
+#' QOG = xtsubset(qog.ts.demo, cname %in% c("China", "India"))
+#' if(require(ggplot2)) {
+#'   # Plot log-population curves.
+#'   qplot(data = QOG, y = unna_pop, x = year, colour = cname, geom = "step") + 
+#'     scale_colour_brewer(palette = "Set1") +
+#'     scale_y_log10()
+#' }
 
 xtsubset <- function(data, formula, ...) {
   stopifnot(xtdata(data))
-  warning("nothing going on here, sorry")
-#   data = xt(data)$data
-#   spec = xt(data)$spec
-#   type = xt(data)$type
-#   name = xt(data)$name
-#   url = xt(data)$url
-#   data = eval(substitute(formula), envir = data)
-#   data = xtset(d, 
-#             data = data, 
-#             spec = spec,
-#             type = type,
-#             name = name,
-#             url = url)
+  xtdata = xt(data)
+  keep = eval(substitute(formula), data)
+  data = data[keep, ]
+  data = xtset(data, 
+            data = xtdata$data, 
+            spec = xtdata$spec,
+            type = xtdata$type,
+            name = xtdata$name,
+            url = xtdata$url)
   return(data)
 }

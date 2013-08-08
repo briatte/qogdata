@@ -23,7 +23,14 @@
 \examples{
 # Load QOG demo datasets.
 data(qog.demo)
-QOG = xtsubset(qog.ts.demo, cname \%in\% c("Bangladesh", "Pakistan", "India"))
+# Subset to two countries.
+QOG = xtsubset(qog.ts.demo, cname \%in\% c("China", "India"))
+if(require(ggplot2)) {
+  # Plot log-population curves.
+  qplot(data = QOG, y = unna_pop, x = year, colour = cname, geom = "step") +
+    scale_colour_brewer(palette = "Set1") +
+    scale_y_log10()
+}
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

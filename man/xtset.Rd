@@ -65,23 +65,22 @@
   through the \code{\link[countrycode]{countrycode}}
   package, but \code{"region"} is on the way for working
   with NUTS codes, and it should be feasable to implement
-  FIPS codes.  \item \bold{name}, an optional
-  single-element vector that defines the dataset name,
-  which is printed on top of the function results.  \item
-  \bold{url}, an optional single-element vector that
-  defines the URI locator for the data source (typically,
-  the website address where to find codebooks, technical
-  documentation and related publications). } These
-  characteristics mimic some of the behaviour of the
+  FIPS codes.  \item \bold{name}, an optional vector that
+  defines the dataset name, which is printed on top of the
+  function results.  \item \bold{url}, an optional vector
+  that defines the URI locator for the data source
+  (typically, the website address where to find codebooks,
+  technical documentation and related publications). }
+  These characteristics mimic some of the behaviour of the
   \code{xtset} and \code{label data} commands in Stata.
 }
 \examples{
 # Load QOG demo datasets.
 data(qog.demo)
 # Set xtdata attribute on QOG time series.
-Q = xtset(qog.ts.demo)
+QOG = xtset(qog.ts.demo)
 # Set xtdata attribute on recent years.
-Q.200x = xtset(subset(qog.ts.demo, year > 1999))
+QOG.200x = xtset(subset(qog.ts.demo, year > 1999))
 # Manually set xtdata attribute for UDS dataset.
 UDS = get_uds()
 UDS = xtset(UDS,
