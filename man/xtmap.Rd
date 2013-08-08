@@ -4,8 +4,9 @@
 \usage{
   xtmap(data, variable, t = NULL, continents = NULL,
     regions = NULL, name = "", title = NULL,
-    quantize = FALSE, text.size = 12, iso3n = NULL,
-    simplify = NULL, ...)
+    quantize = FALSE, quantize.t = FALSE, iso3n = NULL,
+    simplify = NULL, text.size = 12, ncol = NULL,
+    nrow = NULL, ...)
 }
 \arguments{
   \item{data}{a data frame.}
@@ -18,6 +19,12 @@
   \code{t} is left unspecified, the maximal value of the
   time period is used. See 'Details'.}
 
+  \item{ncol}{if the plot is faceted by time periods, the
+  number of facet columns}
+
+  \item{nrow}{if the plot is faceted by time periods, the
+  number of facet rows}
+
   \item{continents}{a vector of continent names to subset
   the map to.}
 
@@ -28,21 +35,31 @@
 
   \item{title}{a title to give to the map}
 
-  \item{quantize}{how many quantiles to cut the variable.
-  Defauls to \code{0}, which leaves \code{variable}
+  \item{quantize}{how many quantiles to cut the variable
+  into. Defauls to \code{0}, which leaves \code{variable}
   unaffected.}
+
+  \item{quantize.t}{how many time periods to cut the time
+  variable into. It works, but the results are very
+  strange.}
 
   \item{text.size}{the size for text elements.}
 
   \item{iso3n}{the ISO-3N variable name, if you are using
   the function on cross-sectional data (which will return a
+  warning), or if you are overriding the \code{xdata}
+  attribute of the data frame (which also returns a
   warning).}
 
   \item{simplify}{the threshold of points under which to
-  remove a geographic subregion. Set to \code{30} to remove
-  islands and overseas areas.}
+  remove a geographic subregion. Set to something like
+  \code{30} to remove islands and overseas areas. More of a
+  bug than a feature. Defaults to \code{NULL}, which leaves
+  the map intact.}
 
-  \item{...}{other arguments passed to \code{map_data}.}
+  \item{...}{other arguments passed to
+  \code{\link[ggplot2]{map_data}} or
+  \code{\link[maps]{map}}.}
 }
 \value{
   a \code{ggplot2} object
@@ -96,6 +113,9 @@ xtmap(qog.cs.demo, "bl_asy25mf", quantize = 3,
   Francois Briatte \email{f.briatte@ed.ac.uk}
 }
 \seealso{
+  \code{\link[ggplot2]{map_data}},
   \code{\link[ggplot2]{map_data}}, \code{\link[maps]{map}}
 }
+\keyword{graphics}
+\keyword{xt}
 

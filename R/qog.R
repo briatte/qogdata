@@ -82,6 +82,7 @@
 #' # QOG = qogdata(tempfile(fileext = ".csv"), format = "csyom")
 #' ## Show QOG years of measurement for Gini coefficient (not run).
 #' # table(QOG$wdi_gini)
+#' @keywords qog
 
 qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
                 version = "std", format = "cs", 
@@ -270,6 +271,7 @@ qogdata <- function(file = FALSE, replace = FALSE, codebook = FALSE, path = "",
 #' # qogbook(file = TRUE)
 #' ## Download QOG Basic dataset codebook to specific filename (not run).
 #' # qogbook(file = "qog.basic.codebook.pdf", version = "bas")
+#' @keywords qog
 
 qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
   if(!version %in% c("std", "bas"))
@@ -341,6 +343,7 @@ qogbook <- function(file = FALSE, version = "std", path = "", replace = FALSE) {
 #' head(qogfind("^socx", version = "soc", show = "cs", compact = FALSE))
 #' # QOG Standard variables featured only in the cross-sectional version.
 #' qogfind("*")[is.na(qogfind("*")$ts.N), ]
+#' @keywords qog
 
 qogfind <- function(..., version = "std", compact = TRUE, show = "all") {
   x = paste0(c(...), collapse = "|")
@@ -390,6 +393,7 @@ qogfind <- function(..., version = "std", compact = TRUE, show = "all") {
 #' QOG = qogjoin(QOG, "France")
 #' QOG = qogjoin(QOG, "Malaysia")
 #' QOG = qogjoin(QOG, "Pakistan")
+#' @keywords qog
 
 qogjoin <- function(data, country = NULL) {
   stopifnot("cname" %in% names(data))

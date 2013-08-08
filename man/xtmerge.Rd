@@ -63,4 +63,5 @@ if(require(countrycode)) {
   \code{\link{xtcountry}}, \code{\link{xtdata}},
   \code{\link{merge}}
 }
+\keyword{xt}
 

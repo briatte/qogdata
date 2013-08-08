@@ -61,4 +61,5 @@ qogfind("*")[is.na(qogfind("*")$ts.N), ]
 \seealso{
   \code{\link{grep}}, \code{\link{qogdata}}
 }
+\keyword{qog}
 

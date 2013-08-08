@@ -28,8 +28,8 @@ LazyData: true
 Collate:
     'utils.R'
     'qog.R'
-    'xtplot.R'
     'get.R'
     'xt.R'
-    'package.R'
-    'xttime.R'
+    'doc.R'
+    'xtfuncs.R'
+    'xtplots.R'

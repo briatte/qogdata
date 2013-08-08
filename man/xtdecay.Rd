@@ -30,5 +30,6 @@
 \seealso{
   \code{\link[doBy]{doBy}}
 }
+\keyword{events}
 \keyword{xt}
 

@@ -29,4 +29,6 @@ if(require(ggplot2)) {
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}
 }
+\keyword{graphics}
+\keyword{xt}
 

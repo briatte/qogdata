@@ -17,8 +17,11 @@
 }
 \description{
   A wrapper of the \code{\link{subset}} function that
-  preserves the \code{\link{xtdata}} attribute. Not yet
-  usable, sorry.
+  preserves the \code{\link{xtdata}} attribute.
+}
+\details{
+  The method is explained at
+  \url{https://github.com/hadley/devtools/wiki/Computing-on-the-language#non-standard-evaluation-in-subset}.
 }
 \examples{
 # Load QOG demo datasets.
@@ -38,4 +41,5 @@ if(require(ggplot2)) {
 \seealso{
   \code{\link{xtdata}}, \code{\link{subset}}
 }
+\keyword{xt}
 

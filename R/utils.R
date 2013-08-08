@@ -1,3 +1,29 @@
+# Lag or lead a variable
+# 
+# @param x the variable.
+# @param shift_by the negative (lag) or positive (lead) size of the shift
+# @author TszKin Julian Chan
+# @source TszKin Julian Chan, "Generating lag/lead variables", 
+# \url{http://ctszkin.com/2012/03/11/generating-a-laglead-variables/}
+# @keywords internal ts
+shift = function(x, shift_by) {
+  stopifnot(is.numeric(x))
+  stopifnot(is.numeric(shift_by))
+  
+  if(length(shift_by) > 1)
+    return(sapply(shift_by, shift, x = x))
+  
+  out = NULL
+  abs_shift_by = abs(shift_by)
+  if(shift_by > 0 )
+    out = c(tail(x, -abs_shift_by), rep(NA, abs_shift_by))
+  else if (shift_by < 0)
+    out = c(rep(NA, abs_shift_by), head(x, -abs_shift_by))
+  else
+    out = x
+  return(out)
+}
+
 # Linear decay
 #
 # @param yvar the variable for which to compute time since event.
@@ -29,10 +55,6 @@ decay <- function(yvar, d) {
 
 # Time since event
 #
-# Time since event function adapted from the \code{\link[doBy]{doBy}} package by 
-# Zachary M. Jones, and modified to understand the \code{\link{xtdata}} 
-# attribute.
-# 
 # @param yvar the variable for which to compute time since event.
 # @param tvar the time sequence.
 # @author Zachary M. Jones
@@ -97,11 +119,13 @@ std01 <- function(x) {
 
 # Quietly try to require a package
 # Quietly require a package, returning an error message if that package is not installed.
-# Code snippet lifted from \code{\link[ggplot2]{ggplot2}}.
+# Code snippet taken from \code{\link[ggplot2]{ggplot2}} 0.9.3.1.
 # 
 # @param name of package
 # @author Hadley Wickham
-# @source \url{https://github.com/hadley/ggplot2/blob/master/R/utilities.r}
+# @references Wickham, H. 2009. 
+# \emph{ggplot2: Elegant graphics for data analysis}, New York, Springer.
+# @source \url{https://github.com/hadley/ggplot2/blob/master/R/utilities.r#L46}
 # @keywords internal
 try_require <- function(package) {
   available <- suppressMessages(suppressWarnings(sapply(package, require, quietly = TRUE, character.only = TRUE, warn.conflicts=FALSE)))
@@ -109,4 +133,23 @@ try_require <- function(package) {
   
   if (length(missing) > 0) 
     stop(paste(package, collapse=", "), " package required for this functionality.  Please install and try again.", call. = FALSE)
+}
+
+# Sort data frame
+# Convenience method for sorting a data frame using the given variables..
+# Code snippet taken from \code{\link[reshape]{reshape}} 0.8.4.
+# 
+# @param data data frame to sort
+# @param variables to use for sorting
+# @author Hadley Wickham
+# @references Wickham, H. 2007. "Reshaping data with the reshape package." 
+# \emph{Journal of Statistical Software} 21(12), 2007.
+# \url{https://github.com/hadley/reshape/}
+# @source \url{https://github.com/hadley/reshape/blob/reshape0.8/R/utils.r#L82}
+# @keywords internal
+sort_df <- function (data, vars = names(data)) 
+{
+  if (length(vars) == 0 || is.null(vars)) 
+    return(data)
+  data[do.call("order", data[, vars, drop = FALSE]), , drop = FALSE]
 }

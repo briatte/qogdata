@@ -1,17 +1,25 @@
 Version 0.1.1 (2013-08-08)
 --------------------------
 
-minor fixes and draft additions
+minor fixes and additions
 
 qog functions:
 
-* removed plyr dependency
-* removed Hmisc dependency
+* removed plyr and Hmisc dependencies
+* import packages for all methods but get
 
-xt functions (lifted from Zachary M. Jones' website):
+xt functions:
 
-* xtdecay: linear decay
-* xttse: time since event
+* xtdecay: linear decay (from Zachary M. Jones' website)
+* xttse: time since event (from Zachary M. Jones' website)
+* xtshift, xtlag, xtlead: lag/lead variables (by TszKin Julian Chan)
+* xtsubset method
+* xtcountry, xtcheck internals
+* xtplot stub
+
+in other news:
+
+* added a few utils (some by Hadley Wickham)
 
 Version 0.1 (2013-08-05)
 ------------------------
@@ -28,7 +36,7 @@ qog functions:
 xt functions:
 
 * xtdata specification
-* xt and xtset internals
+* xt, xtset internals
 * xtmerge method
 * xtmissing values plot
 * xtmap
