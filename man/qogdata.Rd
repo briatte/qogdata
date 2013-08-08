@@ -113,4 +113,5 @@ qogdata(version = "soc", format = "tsl")
   \code{\link{qogbook}}, \code{\link[foreign]{read.dta}},
   \code{\link[foreign]{read.spss}}
 }
+\keyword{qog}
 

@@ -25,4 +25,6 @@ xt(qog.ts.demo)
 \seealso{
   \code{\link{xtset}}
 }
+\keyword{internal}
+\keyword{xt}
 

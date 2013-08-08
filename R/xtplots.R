@@ -17,6 +17,7 @@
 #'   xtmissing(qog.ts.demo, "bl_asy15f") +
 #'     ggtitle("Country-year availability of female education")
 #' }
+#' @keywords xt graphics
 
 xtmissing <- function(data = NULL, variable) {
   #
@@ -71,6 +72,8 @@ xtmissing <- function(data = NULL, variable) {
 #' \code{\link{xtdata}} attribute of the data. If the data carries an 
 #' \code{\link{xtdata}} attribute but \code{t} is left unspecified, the 
 #' maximal value of the time period is used. See 'Details'.
+#' @param ncol if the plot is faceted by time periods, the number of facet columns
+#' @param nrow if the plot is faceted by time periods, the number of facet rows
 #' @param continents a vector of continent names to subset the map to.
 #' @param regions a vector of region names to subset the map to.
 #' @param name a name to give to the color scale
@@ -79,10 +82,14 @@ xtmissing <- function(data = NULL, variable) {
 #' which leaves \code{variable} unaffected.
 #' @param text.size the size for text elements.
 #' @param iso3n the ISO-3N variable name, if you are using the function on 
-#' cross-sectional data (which will return a warning).
+#' cross-sectional data (which will return a warning), or if you are overriding 
+#' the \code{xdata} attribute of the data frame (which also returns a warning).
 #' @param simplify the threshold of points under which to remove a geographic 
-#' subregion. Set to \code{30} to remove islands and overseas areas.
-#' @param ... other arguments passed to \code{map_data}.
+#' subregion. Set to something like \code{30} to remove islands and overseas 
+#' areas. More of a bug than a feature. Defaults to \code{NULL}, which leaves 
+#' the map intact.
+#' @param ... other arguments passed to \code{\link[ggplot2]{map_data}} or 
+#' \code{\link[maps]{map}}.
 #' @details The function is intended as a helper to map country-year data. It
 #' falls back to mapping the data as a cross-section if the data carries no
 #' \code{\link{xtdata}} attribute or if \code{t} is left unspecified, in which 
@@ -96,7 +103,7 @@ xtmissing <- function(data = NULL, variable) {
 #' mean value of \code{variable} are plotted, in order to plot things like 
 #' average values of a variable over several decades.
 #' @return a \code{ggplot2} object
-#' @seealso \code{\link[ggplot2]{map_data}}, \code{\link[maps]{map}}
+#' @seealso \code{\link[ggplot2]{map_data}}, \code{\link[ggplot2]{map_data}}, \code{\link[maps]{map}}
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @examples
 #' # Load QOG demo datasets.
@@ -120,10 +127,12 @@ xtmissing <- function(data = NULL, variable) {
 #'       region = c("Central America", "South America"), 
 #'       iso3n = "ccode") +
 #'       scale_fill_brewer("", palette = "Blues")
+#' @keywords xt graphics
 
 xtmap <- function(data, variable, t = NULL,
                   continents = NULL, regions = NULL, name = "",
                   title = NULL, quantize = FALSE, text.size = 12, 
+                  ncol = NULL, nrow = NULL,
                   iso3n = NULL, simplify = NULL,
                   ...) {
   #
@@ -133,42 +142,55 @@ xtmap <- function(data, variable, t = NULL,
   stopifnot(variable %in% names(data))
 
   ccode = xt(data)$data[1]
+  cspec = xt(data)$spec[1]
+  time  = xt(data)$data[2]
   if(is.null(ccode)) {
     # 
-    # cross-section
+    # cross-section checks
     #
     if(is.null(iso3n))
       stop("no iso3n variable name")
     if(!iso3n %in% names(data))
       stop(iso3n, " does not exist in the data")
-    # warn
-    warning("cross-sectional map")
-    # set
     ccode = data[, iso3n]
     t = NULL
+    warning("cross-sectional map (unknown time period)")
   }
   else {
     #
     # xtdata checks
     #
+    if(!is.null(iso3n)) {
+      warning("overriding xtdata identifier with: ", iso3n)
+      ccode = iso3n
+      cspec = "iso3n"
+    }
     if(!ccode %in% names(data))
       stop(ccode, " does not exist in the data")
-    if(xt(data)$spec[1] != "iso3n") {
-      data[, "iso3n"] = countrycode(data[, xt(data)$data[1]], xt(data)$spec[1], "iso3n")
-      warning(ccode, " converted to iso3n")
+    if(cspec != "iso3n") {
+      data[, "iso3n"] = countrycode(data[, ccode], cspec, "iso3n")
       ccode = "iso3n"
+      warning(ccode, " converted to iso3n to match map data")
     }
     data$ccode <- data[, ccode]
-    # default subset is to max year
-    if(is.null(t))
-      t = max(data[, xt(data)$data[2]], na.rm = TRUE)
-    message("Subsetting to time: ", t)
-    data = data[data[, xt(data)$data[2]] %in% t, ]
+    #
+    # time period
+    #
+    if(is.null(t)) {
+      t = max(data[, time], na.rm = TRUE)
+      warning("cross-sectional map (latest time period)")
+    }
+    message("Subsetting to time: ",
+            ifelse(length(t) == 1, t, paste0(range(t), collapse = "-")))
+    data = data[data[, time] %in% t, ]
+    if(length(t) > 1) {
+      message("time facets (more soon)")
+    }
   }
   #
   # map data
   #
-  world <- map_data("world", ...)
+  world = map_data("world", ...)
   world$ccode  = countrycode(world$region, "country.name", "iso3n")
   #
   # geo data
@@ -227,7 +249,21 @@ xtmap <- function(data, variable, t = NULL,
     map = map + 
       scale_fill_discrete(name)
   }
-  if(!is.null(t))
-    map = map + ggtitle(as.character(t))
+  #
+  # t-faceting
+  #
+  if(!is.null(t)) {
+    if(length(t) > 1) {
+      map = map + 
+        facet_wrap(formula(paste("~", time)),
+                   ncol = ncol, 
+                   nrow = nrow) +
+        theme(strip.background = element_rect(fill = NA, colour = NA))
+    }
+    else {
+      map = map + 
+        ggtitle(as.character(t))
+    }
+  }
   return(map)
 }

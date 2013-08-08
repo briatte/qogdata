@@ -57,7 +57,7 @@ NULL
 #' 
 #' @seealso \code{\link{qogfind}} to search the index of a QOG dataset
 #' @docType data
-#' @keywords datasets
+#' @keywords datasets qog
 #' @name qog.demo
 #' @aliases qog.ts.demo qog.cs.demo
 #' @usage data(qog.ts.demo)
@@ -89,7 +89,7 @@ NULL
 #'   }
 #'   
 #' @docType data
-#' @keywords datasets
+#' @keywords datasets qog
 #' @name qog.index
 #' @aliases qog.std.index qog.bas.index qog.soc.index
 #' @format a data frame

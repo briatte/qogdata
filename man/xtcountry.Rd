@@ -35,4 +35,7 @@ if(require(countrycode)) {
 \seealso{
   \code{\link{xtdata}}, \code{\link{xtmerge}}
 }
+\keyword{country}
+\keyword{internal}
+\keyword{xt}
 

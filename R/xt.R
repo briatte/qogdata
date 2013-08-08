@@ -17,6 +17,7 @@
 #' xtdata(qog.ts.demo)
 #' ## Unsuccessful checks send back an error (not run).
 #' # xtdata(qog.cs.demo)
+#' @keywords internal xt
 
 xtdata <- function(dataset) {
   if(is.null(xt(dataset)))
@@ -67,6 +68,7 @@ xtdata <- function(dataset) {
 #' data(qog.demo)
 #' # Identify the QOG Basic time series data properties.
 #' xt(qog.ts.demo)
+#' @keywords internal xt
 
 xt <- function(dataset) {
   x = attr(dataset, "xtdata")
@@ -137,6 +139,7 @@ xt <- function(dataset) {
 #'             type = "country", 
 #'             name = "Unified Democracy Scores"
 #'     )
+#' @keywords internal xt
 
 xtset <- function(dataset = NULL, 
                   data = c("ccode", "year", "ccodealp", "cname"), 
@@ -215,6 +218,7 @@ xtset <- function(dataset = NULL,
 #'   data(qog.demo)
 #'   xtcountry(qog.ts.demo) 
 #' }
+#' @keywords internal xt country
 
 xtcountry <- function(dataset) {
   stopifnot(xtdata(dataset))
@@ -270,6 +274,7 @@ xtcountry <- function(dataset) {
 #'   xt(xtmerge(qog.ts.demo, UDS))
 #'   names(xtmerge(qog.ts.demo, UDS))
 #' }
+#' @keywords xt
 
 xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
   try_require("countrycode")
@@ -335,7 +340,9 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
 #' Subset a data frame while preserving its \code{\link{xtdata}} attribute
 #'
 #' A wrapper of the \code{\link{subset}} function that preserves 
-#' the \code{\link{xtdata}} attribute. Not yet usable, sorry.
+#' the \code{\link{xtdata}} attribute.
+#' 
+#' The method is explained at \url{https://github.com/hadley/devtools/wiki/Computing-on-the-language#non-standard-evaluation-in-subset}.
 #' 
 #' @export
 #' @param data a data frame with the \code{\link{xtdata}} attribute
@@ -355,6 +362,7 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
 #'     scale_colour_brewer(palette = "Set1") +
 #'     scale_y_log10()
 #' }
+#' @keywords xt
 
 xtsubset <- function(data, formula, ...) {
   stopifnot(xtdata(data))

@@ -46,4 +46,5 @@ qogbook()
 \seealso{
   \code{\link{qogdata}}
 }
+\keyword{qog}
 

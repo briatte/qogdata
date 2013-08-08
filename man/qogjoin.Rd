@@ -52,4 +52,5 @@ QOG = qogjoin(QOG, "Pakistan")
   15May13. University of Gothenburg: The Quality of
   Government Institute, \url{http://www.qog.pol.gu.se}.
 }
+\keyword{qog}
 

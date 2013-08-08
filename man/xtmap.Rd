@@ -98,4 +98,6 @@ xtmap(qog.cs.demo, "bl_asy25mf", quantize = 3,
 \seealso{
   \code{\link[ggplot2]{map_data}}, \code{\link[maps]{map}}
 }
+\keyword{graphics}
+\keyword{xt}
 
