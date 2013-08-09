@@ -1,9 +1,5 @@
 \name{xtplot}
-\alias{xtarea}
-\alias{xtline}
 \alias{xtplot}
-\alias{xtpoint}
-\alias{xtstep}
 \title{xtplot}
 \usage{
   xtplot(data, variable, name = "")

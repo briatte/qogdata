@@ -287,7 +287,6 @@ xtmap <- function(data, variable, t = NULL,
 #' Plot function for data frames with an \code{\link{xtdata}} attribute.
 #' 
 #' @name xtplot
-#' @aliases xtline xtpoint xtstep xtarea
 #' @export
 #' @param data a data frame with an \code{\link{xtdata}} attribute.
 #' @param variable the variable to plot.

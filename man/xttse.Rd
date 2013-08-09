@@ -28,6 +28,6 @@
 \seealso{
   \code{\link[doBy]{doBy}}
 }
-\keyword{events}
+\keyword{ts}
 \keyword{xt}
 

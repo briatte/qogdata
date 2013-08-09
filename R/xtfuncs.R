@@ -70,7 +70,7 @@ xtlead <- function(data, variable, k = 1) {
 #' "Some Time-Series Functions for Panels with Missingness", 
 #' \url{http://www.zmjones.com/panel-ts.html}
 #' @seealso \code{\link[doBy]{doBy}}
-#' @keywords xt events
+#' @keywords xt ts
 xtdecay <- function(data, x, cutpoint) {
   data = tapply(data[, x], data[, xt(data)$data[1]], panel.tse, d = cutpoint)
   return(data)
@@ -90,7 +90,7 @@ xtdecay <- function(data, x, cutpoint) {
 #' "Some Time-Series Functions for Panels with Missingness", 
 #' \url{http://www.zmjones.com/panel-ts.html}
 #' @seealso \code{\link[doBy]{doBy}}
-#' @keywords xt events
+#' @keywords xt ts
 xttse <- function(data, x) {
   data = tapply(data[, x], data[, xt(data)$data[1]], panel.tse)
   return(data)
