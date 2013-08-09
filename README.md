@@ -89,16 +89,20 @@ The function searches through variable names and labels, as the `lookfor` comman
 
 In the current Standard version of the dataset (15 May 2013), this will cause a merge between the split versions of Ethiopia, France, Malaysia and Pakistan. This will make the dataset more backward compatible with older versions of the data where this separation did not exist.
 
-## `xtdata`
+## `xtdata`, `xtset`, `xt`
 
-`xtdata` is a way to specify panel data properties into the `xdata` attribute of a data frame attribute, which makes it possible to:
+`xtdata` and its related functions are a way to specify panel data properties into the `xdata` attribute of a data frame attribute, which makes it possible to:
 
 * safely merge several panel datasets with `xtmerge`, a merge function that first checks whether the unit type and time period formats match, and looks for matches if they do not.
 * pass some default information to plot methods for panel data, which is minimally illustrated in `xtmap` and forthcoming as a larger series of `xtplot` methods for `ggplot2`.
 
-Please consult the [repository wiki][wiki] for details on `xt` methods in the `qogdata` package. The method is intended for use with panel data: users who want to work with full-fledged time series should use the `zoo` or `xts` packages.
+Please consult the [repository wiki][wiki] for details on `xt` methods in the `qogdata` package, and how it might turn into a proper class by version 1.0. The method is intended for use with panel data: users who want to work with full-fledged time series should use the `zoo` or `xts` packages.
 
-## `xtmerge`
+## `xtshift`, `xtlag`, `xtlead`, `xtdecay`, `xttse`
+
+`xtshift`, `xtlag` and `xtlead` are [functions to shift (lag or lead) a panel variable](http://christophergandrud.blogspot.fr/2013/05/slide-one-function-for-laglead.html). `xtdecay` and `xttse` (time since event) are additional [time series functions for panel data](http://www.zmjones.com/panel-ts.html). These functions, as well as several other little utilities used in the `qogdata` package, are based on code found online (see the package documentation for the sources).
+
+## `xtmerge`, `xtsubset`
 
 `xtmerge` performs a merge of two panel datasets based on their `xtdata` attributes, checking for identically formatted data identifiers and time periods before performing the merge, which otherwise works like [`merge`][merge] in base R.
 
@@ -106,7 +110,9 @@ Please consult the [repository wiki][wiki] for details on `xt` methods in the `q
 
 When `xtmerge` is provided datasets of type `country` with different country code formats, it runs the `xtcountry` helper function to determine the best ISO-3N conversion match and performs the merge on the new `iso3n` variable.
 
-## `xtmap`
+`xtsubset` is a wrapper for `subset` that preserves the `xtdata` attribute of a data frame.
+
+## `xtmap`, `xtplot`
 
 `xtmap` calls the `countrycode`, `maps` and `ggplot2` packages to draw choropleth maps, with helper transformations for time series. The examples provided below use QOG cross-sectional data:
 
@@ -134,6 +140,8 @@ The function matches countries to geographic information from the `world` map pr
 [bug]: https://github.com/briatte/qogdata/issues/1
 
 When provided with a data frame carrying the `xtdata` attribute, the function currently uses the maximum time period as `t`, as with 'most recent year' with `country`-level data. See the [wiki][wiki] for planned improvements.
+
+`xtplot` is a stub for a similar function that will plot time series out of data frames carrying an `xtdata` attribute.
 
 ## `xtmissing`
 

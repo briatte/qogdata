@@ -5,7 +5,11 @@
 #' \code{\link{xtdata}} attribute. Based on the \code{shift} function 
 #' by TszKin Julian Chan.
 #' 
-#' You might want to use the \code{xtlag} and \code{xtlead} convenience wrappers.
+#' You might want to use the \code{xtlag} and \code{xtlead} convenience wrappers:
+#' \itemize{
+#'   \item \code{xtlag} will perform a negative shift of \code{k} lags
+#'   \item \code{xtlag} will perform a positive shift of \code{k} leads
+#' }
 #' 
 #' @name xtshift
 #' @aliases xtlag xtlead
@@ -39,10 +43,12 @@ xtshift <- function(data, variable, k = 1) {
   return(v)
 }
 
+#' @export
 xtlag <- function(data, variable, k = 1) {
   xtshift(data, variable, - abs(k))
 }
 
+#' @export
 xtlead <- function(data, variable, k = 1) {
   xtshift(data, variable, abs(k))
 }
