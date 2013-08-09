@@ -349,7 +349,9 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
 #' 
 #' @export
 #' @param data a data frame with the \code{\link{xtdata}} attribute
-#' @param formula a logical formula to subset to
+#' @param formula a logical formula to subset to.
+#' @param select the names of the variables to keep.
+#' @param drop passed on to \code{[} indexing operator.
 #' @param ... other methods passed to \code{\link{subset}}
 #' @return a data frame
 #' @seealso \code{\link{xtdata}}, \code{\link{subset}}
@@ -367,11 +369,11 @@ xtmerge <- function(x, y, t = "year", t.x = NULL, t.y = NULL, ...) {
 #' }
 #' @keywords xt
 
-xtsubset <- function(data, formula, ...) {
+xtsubset <- function(data, formula, select = names(data), drop = FALSE) {
   stopifnot(xtdata(data))
   xtdata = xt(data)
   keep = eval(substitute(formula), data)
-  data = data[keep, ]
+  data = data[keep, select, drop = drop]
   data = xtset(data, 
             data = xtdata$data, 
             spec = xtdata$spec,

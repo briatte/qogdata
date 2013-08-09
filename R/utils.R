@@ -9,10 +9,9 @@
 shift = function(x, shift_by) {
   stopifnot(is.numeric(x))
   stopifnot(is.numeric(shift_by))
-  
-  if(length(shift_by) > 1)
-    return(sapply(shift_by, shift, x = x))
-  
+  # won't work from inside an xtshift call
+  #   if(length(shift_by) > 1)
+  #     return(sapply(shift_by, shift, x = x))  
   out = NULL
   abs_shift_by = abs(shift_by)
   if(shift_by > 0 )
@@ -21,6 +20,8 @@ shift = function(x, shift_by) {
     out = c(rep(NA, abs_shift_by), head(x, -abs_shift_by))
   else
     out = x
+  # bugfix
+  out = out[1:length(x)]
   return(out)
 }
 
@@ -87,10 +88,20 @@ panel.tse <- function(yvar, tvar = seq_along(yvar)) {
 }
 
 # Quantize a variable
-# Cut a variable to its quantiles, with error correction for the quantiles argument.
+#
+# Cut a variable to its quantiles, with error correction for the quantiles argument if it is 
+# superior to the number of unique values in the data.
+#
+# Inspired by several other similar helper functions in other packages, and by 
+# the \code{xtile} function in Stata. Used mostly in \code{\link{xtmap}}.
 # 
 # @param x variable
 # @param q quantiles
+# @param levels whether to relabel the levels to \code{"xmin-xmax"}, where 
+# \code{xmin} and \code{xmax} are the numeric bounds of the level. This will 
+# remove some display issues with scientific notation in level names.
+# @seealso \{code\link[ggplot2]{cut_number}}, 
+# \{code\link[ggplot2]{cut_interval}}, \{code\link[questionr]{quant.cut}}
 # @keywords internal
 quantize <- function(x, q, levels = FALSE) {
   stopifnot(q > 0 & length(x) > 0)
@@ -109,6 +120,7 @@ quantize <- function(x, q, levels = FALSE) {
 }
 
 # Standardize a variable
+#
 # Standardize a variable to (0,1).
 # 
 # @param x variable
@@ -118,10 +130,11 @@ std01 <- function(x) {
 }
 
 # Quietly try to require a package
+#
 # Quietly require a package, returning an error message if that package is not installed.
 # Code snippet taken from \code{\link[ggplot2]{ggplot2}} 0.9.3.1.
 # 
-# @param name of package
+# @param package name of package
 # @author Hadley Wickham
 # @references Wickham, H. 2009. 
 # \emph{ggplot2: Elegant graphics for data analysis}, New York, Springer.
@@ -136,6 +149,7 @@ try_require <- function(package) {
 }
 
 # Sort data frame
+#
 # Convenience method for sorting a data frame using the given variables..
 # Code snippet taken from \code{\link[reshape]{reshape}} 0.8.4.
 # 

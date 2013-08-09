@@ -32,11 +32,13 @@ data(qog.demo)
 # Subset to a short series.
 QOG = xtsubset(qog.ts.demo, year \%in\% 2008:2012 & cname == "United States")
 # Lag by one time period.
-QOG$L1.wdi_gdpc = xtshift(QOG, "wdi_gdpc", -1)
+QOG$L1.wdi_gdpc = xtlag(QOG, "wdi_gdpc", -1)
 # Lead by two time periods.
-QOG$F2.wdi_gdpc = xtshift(QOG, "wdi_gdpc", 2)
+QOG$F2.wdi_gdpc = xtlead(QOG, "wdi_gdpc", 2)
 # Check results.
 QOG[, c("year", "wdi_gdpc", "L1.wdi_gdpc", "F2.wdi_gdpc")]
+# Full method.
+cbind(QOG, sapply(-2:2, xtshift, data = QOG, variable = "wdi_hec"))
 }
 \references{
   Christopher Gandrud, "Slide: one function for lag/lead

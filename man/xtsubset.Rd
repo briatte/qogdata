@@ -2,13 +2,18 @@
 \alias{xtsubset}
 \title{Subset a data frame while preserving its \code{\link{xtdata}} attribute}
 \usage{
-  xtsubset(data, formula, ...)
+  xtsubset(data, formula, select = names(data),
+    drop = FALSE)
 }
 \arguments{
   \item{data}{a data frame with the \code{\link{xtdata}}
   attribute}
 
-  \item{formula}{a logical formula to subset to}
+  \item{formula}{a logical formula to subset to.}
+
+  \item{select}{the names of the variables to keep.}
+
+  \item{drop}{passed on to \code{[} indexing operator.}
 
   \item{...}{other methods passed to \code{\link{subset}}}
 }
