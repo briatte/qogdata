@@ -13,8 +13,8 @@
   details on QOG datasets.
 
   \tabular{ll}{ Package: \tab qogdata\cr Type: \tab
-  Package\cr Version: \tab 0.1.1\cr Date: \tab
-  2013-08-08\cr License: \tab GPL-3\cr URL: \tab
+  Package\cr Version: \tab 0.1.3\cr Date: \tab
+  2013-08-09\cr License: \tab GPL-3\cr URL: \tab
   \url{https://github.com/briatte/qogdata}\cr }
 
   \itemize{ \item \code{doc.R}: package and dataset
@@ -32,8 +32,7 @@
   by version 1.0 to justify turning the
   \code{\link{xtdata}} attribute into a proper S3 or S4
   class. For related packages, check e.g. the
-  \code{\link[DataCombine]{DataCombine}} package for
-  working with CSTS data.
+  \code{DataCombine} package for working with CSTS data.
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

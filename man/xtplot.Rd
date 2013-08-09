@@ -6,16 +6,13 @@
 \alias{xtstep}
 \title{xtplot}
 \usage{
-  xtplot(data, variable, t = NULL, name = "")
+  xtplot(data, variable, name = "")
 }
 \arguments{
   \item{data}{a data frame with an \code{\link{xtdata}}
   attribute.}
 
   \item{variable}{the variable to plot.}
-
-  \item{t}{the time period to plot. Defaults to
-  \code{NULL}, which plots the full data.}
 
   \item{name}{the name to give the color scale.}
 }
@@ -24,6 +21,11 @@
   \code{\link{xtdata}} attribute.
 }
 \examples{
-xtplot(xtsubset(qog.ts.demo, year > 1995 & unna_pop > 10^8), "wdi_hec")
+# Population in countries with a population over 100,000 people.
+xtplot(xtsubset(qog.ts.demo, unna_pop > 10^8), "unna_pop") + geom_area()
+# Health care expenditure per capita in a random country sample.
+xtplot(xtsample(qog.ts.demo, 12), "wdi_hec", "line") +
+  geom_smooth() + geom_point() +
+  xlim(1995, 2010)
 }
 

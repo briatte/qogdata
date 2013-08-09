@@ -288,19 +288,22 @@ xtmap <- function(data, variable, t = NULL,
 #' @export
 #' @param data a data frame with an \code{\link{xtdata}} attribute.
 #' @param variable the variable to plot.
-#' @param t the time period to plot. 
-#' Defaults to \code{NULL}, which plots the full data.
 #' @param name the name to give the color scale.
 #' @examples
-#' xtplot(xtsubset(qog.ts.demo, year > 1995 & unna_pop > 10^8), "wdi_hec")
-xtplot <- function(data, variable, t = NULL, name = "") {
+#' # Population in countries with a population over 100,000 people.
+#' xtplot(xtsubset(qog.ts.demo, unna_pop > 10^8), "unna_pop") + geom_area()
+#' # Health care expenditure per capita in a random country sample.
+#' xtplot(xtsample(qog.ts.demo, 12), "wdi_hec", "line") + 
+#'   geom_smooth() + geom_point() + 
+#'   xlim(1995, 2010)
+xtplot <- function(data, variable, name = "") {
   try_require("ggplot2")
   stopifnot(xtdata(data))
   stopifnot(variable %in% names(data))
   ggplot(data = data, 
          aes_string(fill = xt(data)$data[4], 
+                    colour = xt(data)$data[4], 
                     x = xt(data)$data[2], 
                     y = variable)) +
-           geom_area(position = "stack") +
-    scale_fill_discrete(name)
+    geom_blank()
 }

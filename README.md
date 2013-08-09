@@ -102,7 +102,7 @@ Please consult the [repository wiki][wiki] for details on `xt` methods in the `q
 
 `xtshift`, `xtlag` and `xtlead` are [functions to shift (lag or lead) a panel variable](http://christophergandrud.blogspot.fr/2013/05/slide-one-function-for-laglead.html). `xtdecay` and `xttse` (time since event) are additional [time series functions for panel data](http://www.zmjones.com/panel-ts.html). These functions, as well as several other little utilities used in the `qogdata` package, are based on code found online (see the package documentation for the sources).
 
-## `xtmerge`, `xtsubset`
+## `xtmerge`, `xtsubset`, `xtsample`
 
 `xtmerge` performs a merge of two panel datasets based on their `xtdata` attributes, checking for identically formatted data identifiers and time periods before performing the merge, which otherwise works like [`merge`][merge] in base R.
 
@@ -110,7 +110,7 @@ Please consult the [repository wiki][wiki] for details on `xt` methods in the `q
 
 When `xtmerge` is provided datasets of type `country` with different country code formats, it runs the `xtcountry` helper function to determine the best ISO-3N conversion match and performs the merge on the new `iso3n` variable.
 
-`xtsubset` is a wrapper for `subset` that preserves the `xtdata` attribute of a data frame.
+`xtsubset` is a wrapper for `subset` that preserves the `xtdata` attribute of a data frame. `xtsample` is a wrapper for `sample` that selects all observations from a random sample of unique identifiers (thereby preserving the time structure of the data).
 
 ## `xtmap`, `xtplot`
 

@@ -382,3 +382,32 @@ xtsubset <- function(data, formula, select = names(data), drop = FALSE) {
             url = xtdata$url)
   return(data)
 }
+
+#' Sample out of an \code{\link{xtdata}} data frame
+#' 
+#' Function to extract a sample of observations out of a panel dataset, 
+#' preserving all time measurements for each sampled observation.
+#' 
+#' @export
+#' @param data data frame carrying an \code{\link{xtdata}} data frame
+#' @param n how many observations to sample
+#' @seealso \code{\link{sample}}
+#' @examples
+#' # Load QOG demo datasets.
+#' data(qog.demo)
+#' # Random sample of ten QOG countries.
+#' unique(xtsample(qog.ts.demo, 10)$cname)
+#' # Random cross-section of year 2000.
+#' xtsubset(xtsample(qog.ts.demo, 10), year == 2000)[, 1:5]
+#' @keywords xt
+
+xtsample <- function(data, n = 20) {
+  stopifnot(xtdata(data))
+  stopifnot(is.numeric(n))
+  
+  uid = xt(data)$data[1]
+  sample = sample(data[, uid], n, replace = F)
+  sample = data[, uid] %in% sample
+  data = do.call("xtsubset", args = list(data = data, formula = sample))
+  return(data)
+}
