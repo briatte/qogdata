@@ -36,12 +36,12 @@
   \item{title}{a title to give to the map}
 
   \item{quantize}{how many quantiles to cut the variable
-  into. Defauls to \code{0}, which leaves \code{variable}
-  unaffected.}
+  into. Defaults to \code{FALSE}, which leaves
+  \code{variable} unaffected.}
 
   \item{quantize.t}{how many time periods to cut the time
-  variable into. It works, but the results are very
-  strange.}
+  variable into. Defaults to \code{FALSE}, which produces
+  one map per time period. See 'Details'.}
 
   \item{text.size}{the size for text elements.}
 
@@ -103,11 +103,9 @@ xtmap(subset(qog.cs.demo, ccode != 643), "chga_hinst", continent = "Asia",
       iso3n = "ccode") +
   geom_polygon(color = "white") +
   scale_fill_grey("")
-# Education levels in Central America, using cross-sectional data.
-xtmap(qog.cs.demo, "bl_asy25mf", quantize = 3,
-      region = c("Central America", "South America"),
-      iso3n = "ccode") +
-      scale_fill_brewer("", palette = "Blues")
+# Gross domestic product per capita in Asia, 1980-2009.
+xtmap(qog.ts.demo, "wdi_gdpc", t = 1980:2009, continent = "Asia",
+      quantize = 10, quantize.t = 4, text.size = 16)
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

@@ -10,8 +10,8 @@
 #'  \tabular{ll}{
 #'    Package: \tab qogdata\cr
 #'    Type: \tab Package\cr
-#'    Version: \tab 0.1.3\cr
-#'    Date: \tab 2013-08-09\cr
+#'    Version: \tab 0.1.4\cr
+#'    Date: \tab 2013-08-10\cr
 #'    License: \tab GPL-3\cr
 #'    URL: \tab \url{https://github.com/briatte/qogdata}\cr
 #'  }

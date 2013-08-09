@@ -113,7 +113,8 @@ quantize <- function(x, q, levels = FALSE) {
           quantile(x, 
                    probs = seq(0, 1, by = 1/q), 
                    na.rm = TRUE),
-          include.lowest = TRUE)
+          include.lowest = TRUE,
+          ordered_result = TRUE)
   if(levels)
     levels(y) = paste(tapply(x, y, min), tapply(x, y, max), sep = "-")
   return(y)

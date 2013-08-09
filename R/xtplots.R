@@ -79,9 +79,10 @@ xtmissing <- function(data = NULL, variable) {
 #' @param name a name to give to the color scale
 #' @param title a title to give to the map
 #' @param quantize how many quantiles to cut the variable into. 
-#' Defauls to \code{0}, which leaves \code{variable} unaffected.
-#' @param quantize.t how many time periods to cut the time variable into. It 
-#' works, but the results are very strange.
+#' Defaults to \code{FALSE}, which leaves \code{variable} unaffected.
+#' @param quantize.t how many time periods to cut the time variable into.
+#' Defaults to \code{FALSE}, which produces one map per time period. 
+#' See 'Details'.
 #' @param text.size the size for text elements.
 #' @param iso3n the ISO-3N variable name, if you are using the function on 
 #' cross-sectional data (which will return a warning), or if you are overriding 
@@ -124,11 +125,9 @@ xtmissing <- function(data = NULL, variable) {
 #'       iso3n = "ccode") + 
 #'   geom_polygon(color = "white") +
 #'   scale_fill_grey("")
-#' # Education levels in Central America, using cross-sectional data.
-#' xtmap(qog.cs.demo, "bl_asy25mf", quantize = 3, 
-#'       region = c("Central America", "South America"), 
-#'       iso3n = "ccode") +
-#'       scale_fill_brewer("", palette = "Blues")
+#' # Gross domestic product per capita in Asia, 1980-2009.
+#' xtmap(qog.ts.demo, "wdi_gdpc", t = 1980:2009, continent = "Asia",
+#'       quantize = 10, quantize.t = 4, text.size = 16)
 #' @keywords xt graphics
 
 xtmap <- function(data, variable, t = NULL,
@@ -183,7 +182,7 @@ xtmap <- function(data, variable, t = NULL,
       warning("cross-sectional map (latest time period)")
     }
     data = data[data[, time] %in% t, ]
-    if(length(t) > 1 & length(quantize.t)) {
+    if(length(t) > 1 & is.numeric(quantize.t)) {
       data[, time] = quantize(data[, time], quantize.t, TRUE)
       message("Subsetting to time periods: ", 
               paste0(levels(data[, time]), collapse = ", "))
@@ -191,7 +190,6 @@ xtmap <- function(data, variable, t = NULL,
                        by = list(data[, time], data[, "ccode"]), 
                        mean, na.rm = TRUE)
       names(data) = c(time, "ccode", variable)
-      #     print(data)
     }
     else {
       message("Subsetting to time: ",
@@ -237,8 +235,9 @@ xtmap <- function(data, variable, t = NULL,
   #
   # plot
   #
-  map = qplot(long, lat, data = choro, group = group, fill = choro[, variable],
-              geom = "polygon") +
+  map = ggplot(data = choro) +
+    aes(long, lat, group = group) +
+    geom_polygon(aes_string(fill = variable)) +
     labs(title = title, x = NULL, y = NULL) +
     theme_classic(text.size) +
     theme(axis.line = element_blank(),
@@ -248,7 +247,7 @@ xtmap <- function(data, variable, t = NULL,
   #
   # fill scale
   #
-  if(class(choro[, variable]) == "numeric") {
+  if(is.numeric(choro[, variable])) {
     map = map + 
       scale_fill_gradient2(name, 
                            low = "steelblue", 
@@ -256,7 +255,11 @@ xtmap <- function(data, variable, t = NULL,
                            high = "orangered", 
                            midpoint = median(choro[, variable], na.rm = TRUE))      
   }
-  else if(class(choro[, variable]) == "factor") {
+  else if(is.factor(choro[, variable]) & is.ordered(choro[, variable])) {
+    map = map + 
+      scale_fill_brewer(name, palette = "RdYlBu")
+  }
+  else if(is.factor(choro[, variable])) {
     map = map + 
       scale_fill_discrete(name)
   }
