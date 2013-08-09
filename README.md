@@ -139,9 +139,9 @@ The function matches countries to geographic information from the `world` map pr
 
 [bug]: https://github.com/briatte/qogdata/issues/1
 
-When provided with a data frame carrying the `xtdata` attribute, the function currently uses the maximum time period as `t`, as with 'most recent year' with `country`-level data. See the [wiki][wiki] for planned improvements.
+When provided with a data frame carrying the `xtdata` attribute, the function currently uses the maximum time period as `t`, as with 'most recent year' with `country`-level data. If `quantize.t` is used to create time intervals, the function plots facets of maps.
 
-`xtplot` is a stub for a similar function that will plot time series out of data frames carrying an `xtdata` attribute.
+`xtplot` is a stub for a similar function that plots time series out of data frames carrying an `xtdata` attribute.
 
 ## `xtmissing`
 
