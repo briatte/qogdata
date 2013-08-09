@@ -1,7 +1,7 @@
 \name{qogdata}
 \alias{get_qog}
 \alias{qogdata}
-\title{Import Quality of Government datasets into R}
+\title{Get Quality of Government datasets in \code{xtdata} format}
 \usage{
   qogdata(file = FALSE, replace = FALSE, codebook = FALSE,
     path = "", version = "std", format = "cs",

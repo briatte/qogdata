@@ -21,13 +21,13 @@
 #'    \item \code{get.R}: functions to download and format additional data
 #'    \item \code{qog.R}: functions to download and manipulate QOG datasets
 #'    \item \code{utils.R}: internal utilities coded mostly by others
-#'    \item \code{xt.R}: functions to manipulate the \code{\link{xdata}} attribute
-#'    \item \code{xtfuncs.R}: functions for data carrying an \code{\link{xdata}} attribute
-#'    \item \code{xtplots.R}: plots for data carrying an \code{\link{xdata}} attribute
+#'    \item \code{xt.R}: functions to manipulate the \code{\link{xtdata}} attribute
+#'    \item \code{xtfuncs.R}: functions for data carrying an \code{\link{xtdata}} attribute
+#'    \item \code{xtplots.R}: plots for data carrying an \code{\link{xtdata}} attribute
 #'  }
 #'  
 #'  This is a demo. There might be sufficient functionality by version 1.0 to 
-#'  justify turning the \code{\link{xdata}} attribute into a proper S3 or S4 
+#'  justify turning the \code{\link{xtdata}} attribute into a proper S3 or S4 
 #'  class. For related packages, check e.g. the 
 #'  \code{\link[DataCombine]{DataCombine}} package for working with CSTS data.
 #' 
@@ -86,7 +86,7 @@ NULL
 #' University of Gothenburg: The Quality of Government Institute.
 NULL
 
-#' Data related to Quality of Government variables, Standard version (1946-2012)
+#' Quality of Government variable indexes
 #' 
 #' This dataset lists some information on the variables included in the 
 #' Quality of Government Basic, Standard and Social Policy datasets:

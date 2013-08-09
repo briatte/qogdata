@@ -4,7 +4,7 @@
 \alias{qog.index}
 \alias{qog.soc.index}
 \alias{qog.std.index}
-\title{Data related to Quality of Government variables, Standard version (1946-2012)}
+\title{Quality of Government variable indexes}
 \format{a data frame}
 \description{
   This dataset lists some information on the variables

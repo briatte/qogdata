@@ -21,7 +21,10 @@
 }
 \details{
   You might want to use the \code{xtlag} and \code{xtlead}
-  convenience wrappers.
+  convenience wrappers: \itemize{ \item \code{xtlag} will
+  perform a negative shift of \code{k} lags \item
+  \code{xtlag} will perform a positive shift of \code{k}
+  leads }
 }
 \examples{
 # Load QOG demo datasets.

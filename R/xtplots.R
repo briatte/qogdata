@@ -85,7 +85,7 @@ xtmissing <- function(data = NULL, variable) {
 #' @param text.size the size for text elements.
 #' @param iso3n the ISO-3N variable name, if you are using the function on 
 #' cross-sectional data (which will return a warning), or if you are overriding 
-#' the \code{xdata} attribute of the data frame (which also returns a warning).
+#' the \code{\link{xtdata}} attribute of the data frame (which also returns a warning).
 #' @param simplify the threshold of points under which to remove a geographic 
 #' subregion. Set to something like \code{30} to remove islands and overseas 
 #' areas. More of a bug than a feature. Defaults to \code{NULL}, which leaves 

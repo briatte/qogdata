@@ -91,7 +91,7 @@ In the current Standard version of the dataset (15 May 2013), this will cause a 
 
 ## `xtdata`, `xtset`, `xt`
 
-`xtdata` and its related functions are a way to specify panel data properties into the `xdata` attribute of a data frame attribute, which makes it possible to:
+`xtdata` and its related functions are a way to specify panel data properties into the `xtdata` attribute of a data frame attribute, which makes it possible to:
 
 * safely merge several panel datasets with `xtmerge`, a merge function that first checks whether the unit type and time period formats match, and looks for matches if they do not.
 * pass some default information to plot methods for panel data, which is minimally illustrated in `xtmap` and forthcoming as a larger series of `xtplot` methods for `ggplot2`.

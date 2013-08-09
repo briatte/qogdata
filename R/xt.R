@@ -39,7 +39,7 @@ xtdata <- function(dataset) {
            " is missing, null or null-length)")
     # find variables
     if(x == "data" & !a %in% names(dataset))
-      stop("invalid xdata specification (variable ", a, " is not in the dataset)")
+      stop("invalid xtdata specification (variable ", a, " does not exist in the data)")
   }
   xtcheck(dataset, "type", 1)
   xtcheck(dataset, "data", 1)

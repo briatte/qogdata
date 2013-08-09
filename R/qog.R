@@ -1,4 +1,4 @@
-#' Import Quality of Government datasets into R
+#' Get Quality of Government datasets in \code{xtdata} format
 #'
 #' Function to download Quality of Government (QOG) data and load it as a data 
 #' frame in R. The result carries an \code{\link{xtdata}} attribute that can be 

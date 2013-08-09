@@ -47,9 +47,9 @@
 
   \item{iso3n}{the ISO-3N variable name, if you are using
   the function on cross-sectional data (which will return a
-  warning), or if you are overriding the \code{xdata}
-  attribute of the data frame (which also returns a
-  warning).}
+  warning), or if you are overriding the
+  \code{\link{xtdata}} attribute of the data frame (which
+  also returns a warning).}
 
   \item{simplify}{the threshold of points under which to
   remove a geographic subregion. Set to something like
