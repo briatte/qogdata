@@ -1,11 +1,7 @@
 Version 0.1.1 (2013-08-08)
 --------------------------
 
-<<<<<<< HEAD
 minor fixes and additions
-=======
-fixes and additions
->>>>>>> 70b543e2ec71c5900fd35d09a68c4074395c98ba
 
 qog functions:
 
@@ -13,7 +9,6 @@ qog functions:
 * import packages for all methods but get
 
 xt functions:
-<<<<<<< HEAD
 
 * xtdecay: linear decay (from Zachary M. Jones' website)
 * xttse: time since event (from Zachary M. Jones' website)
@@ -25,13 +20,6 @@ xt functions:
 in other news:
 
 * added a few utils (some by Hadley Wickham)
-=======
-
-* xtdecay: linear decay (from Zachary M. Jones' website)
-* xttse: time since event (from Zachary M. Jones' website)
-* xtsubset method
-* xtcountry, xtcheck internals
->>>>>>> 70b543e2ec71c5900fd35d09a68c4074395c98ba
 
 Version 0.1 (2013-08-05)
 ------------------------
