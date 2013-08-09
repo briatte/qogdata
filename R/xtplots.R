@@ -133,7 +133,12 @@ xtmissing <- function(data = NULL, variable) {
 
 xtmap <- function(data, variable, t = NULL,
                   continents = NULL, regions = NULL, name = "",
+<<<<<<< HEAD:R/xtplots.R
                   title = NULL, quantize = FALSE, quantize.t = FALSE, 
+=======
+                  title = NULL, quantize = FALSE, text.size = 12, 
+                  ncol = NULL, nrow = NULL,
+>>>>>>> 70b543e2ec71c5900fd35d09a68c4074395c98ba:R/xtplots.R
                   iso3n = NULL, simplify = NULL,
                   text.size = 12, ncol = NULL, nrow = NULL,
                   ...) {
@@ -182,6 +187,7 @@ xtmap <- function(data, variable, t = NULL,
       t = max(data[, time], na.rm = TRUE)
       warning("cross-sectional map (latest time period)")
     }
+<<<<<<< HEAD:R/xtplots.R
     data = data[data[, time] %in% t, ]
     if(length(t) > 1 & length(quantize.t)) {
       data[, time] = quantize(data[, time], quantize.t, TRUE)
@@ -196,6 +202,13 @@ xtmap <- function(data, variable, t = NULL,
     else {
       message("Subsetting to time: ",
               ifelse(length(t) == 1, t, paste0(range(t), collapse = "-")))      
+=======
+    message("Subsetting to time: ",
+            ifelse(length(t) == 1, t, paste0(range(t), collapse = "-")))
+    data = data[data[, time] %in% t, ]
+    if(length(t) > 1) {
+      message("time facets (more soon)")
+>>>>>>> 70b543e2ec71c5900fd35d09a68c4074395c98ba:R/xtplots.R
     }
   }
   #
