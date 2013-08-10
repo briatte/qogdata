@@ -63,7 +63,7 @@ xtlead <- function(data, variable, k = 1) {
 #' 
 #' @export
 #' @param data a data frame with the \code{\link{xtdata}} attribute.
-#' @param x the variable for which to compute time since event.
+#' @param x the variable for which to compute linear decay
 #' @param cutpoint the decay cut-point.
 #' @author Zachary M. Jones
 #' @source Zachary M. Jones, 
@@ -72,7 +72,7 @@ xtlead <- function(data, variable, k = 1) {
 #' @seealso \code{\link[doBy]{doBy}}
 #' @keywords xt ts
 xtdecay <- function(data, x, cutpoint) {
-  data = tapply(data[, x], data[, xt(data)$data[1]], panel.tse, d = cutpoint)
+  data = tapply(data[, x], data[, xt(data)$data[1]], decay, d = cutpoint)
   return(data)
 }
 
