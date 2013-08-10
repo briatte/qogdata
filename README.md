@@ -89,7 +89,7 @@ The function searches through variable names and labels, as the `lookfor` comman
 
 In the current Standard version of the dataset (15 May 2013), this will cause a merge between the split versions of Ethiopia, France, Malaysia and Pakistan. This will make the dataset more backward compatible with older versions of the data where this separation did not exist.
 
-## `xtdata`, `xtset`, `xt`
+## `xtdata`, `xtset`, `xt`, `xtdes`
 
 `xtdata` and its related functions are a way to specify panel data properties into the `xtdata` attribute of a data frame attribute, which makes it possible to:
 

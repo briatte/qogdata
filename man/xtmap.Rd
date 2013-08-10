@@ -114,6 +114,7 @@ xtmap(qog.ts.demo, "wdi_gdpc", t = 1980:2009, continent = "Asia",
   \code{\link[ggplot2]{map_data}},
   \code{\link[ggplot2]{map_data}}, \code{\link[maps]{map}}
 }
+\keyword{country}
 \keyword{graphics}
 \keyword{xt}
 

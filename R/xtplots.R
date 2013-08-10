@@ -128,7 +128,7 @@ xtmissing <- function(data = NULL, variable) {
 #' # Gross domestic product per capita in Asia, 1980-2009.
 #' xtmap(qog.ts.demo, "wdi_gdpc", t = 1980:2009, continent = "Asia",
 #'       quantize = 10, quantize.t = 4, text.size = 16)
-#' @keywords xt graphics
+#' @keywords xt graphics country
 
 xtmap <- function(data, variable, t = NULL,
                   continents = NULL, regions = NULL, name = "",
@@ -298,6 +298,8 @@ xtmap <- function(data, variable, t = NULL,
 #' xtplot(xtsample(qog.ts.demo, 12), "wdi_hec", "line") + 
 #'   geom_smooth() + geom_point() + 
 #'   xlim(1995, 2010)
+#' @keywords xt graphics
+
 xtplot <- function(data, variable, name = "") {
   try_require("ggplot2")
   stopifnot(xtdata(data))

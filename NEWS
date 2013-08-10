@@ -1,4 +1,4 @@
-Version 0.1.4 (2013-08-10)
+Version 0.1.5 (2013-08-10)
 --------------------------
 
 minor fixes and additions
@@ -8,7 +8,7 @@ xt functions:
 * xtdecay: linear decay
 * xttse: time since event
 * xtshift, xtlag, xtlead: lag/lead variables
-* xtsubset, xtsample methods
+* xtdes, xtsubset, xtsample methods
 * xtcountry, xtcheck internals
 * xtplot stub
 

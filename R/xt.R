@@ -17,7 +17,7 @@
 #' xtdata(qog.ts.demo)
 #' ## Unsuccessful checks send back an error (not run).
 #' # xtdata(qog.cs.demo)
-#' @keywords internal xt
+#' @keywords xt
 
 xtdata <- function(dataset) {
   if(is.null(xt(dataset)))
@@ -68,7 +68,7 @@ xtdata <- function(dataset) {
 #' data(qog.demo)
 #' # Identify the QOG Basic time series data properties.
 #' xt(qog.ts.demo)
-#' @keywords internal xt
+#' @keywords xt
 
 xt <- function(dataset) {
   x = attr(dataset, "xtdata")
@@ -139,7 +139,7 @@ xt <- function(dataset) {
 #'             type = "country", 
 #'             name = "Unified Democracy Scores"
 #'     )
-#' @keywords internal xt
+#' @keywords xt
 
 xtset <- function(dataset = NULL, 
                   data = c("ccode", "year", "ccodealp", "cname"), 
@@ -200,6 +200,38 @@ xtset <- function(dataset = NULL,
   return(dataset)
 }
 
+#' Describe panel data
+#' 
+#' Function to describe the unique identifier, time period and distribution of 
+#' $T$ for a data frame carrying an \code{xtdata} attribute. The function is 
+#' similar to the \code{xtdes} command in Stata.
+#' 
+#' @export
+#' @param data a data frame carrying an \code{xtdata} attribute
+#' @return a vector
+#' @seealso \code{\link{xtset}}
+#' @examples
+#' q = xtdes(qog.ts.demo)
+#' summary(q)
+#' @keywords xt
+
+xtdes <- function(data) {
+  stopifnot(xtdata(data))
+  
+  ccode = xt(data)$data[1]
+  x = unique(data[, ccode])
+  message(ccode, ": ", paste0(x[1:2], collapse = ", "), "..., ", rev(x)[1],
+          " (N = ", length(x), ")")
+  
+  time = xt(data)$data[2]
+  y = unique(data[, time])
+  message(time, ": ", paste0(y[1:2], collapse = ", "), "..., ", rev(y)[1],
+          " (T = ", length(y), ")")
+  
+  z = tapply(data[, time], data[, ccode], length)
+  return(z)
+}
+
 #' Try ISO-3N country code conversion on \code{xtdata} data frames
 #' 
 #' This function tests conversions to ISO3-N country codes on the country 
@@ -221,7 +253,7 @@ xtset <- function(dataset = NULL,
 #'   data(qog.demo)
 #'   xtcountry(qog.ts.demo) 
 #' }
-#' @keywords internal xt country
+#' @keywords xt country
 
 xtcountry <- function(dataset) {
   stopifnot(xtdata(dataset))

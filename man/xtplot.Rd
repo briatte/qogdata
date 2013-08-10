@@ -24,4 +24,6 @@ xtplot(xtsample(qog.ts.demo, 12), "wdi_hec", "line") +
   geom_smooth() + geom_point() +
   xlim(1995, 2010)
 }
+\keyword{graphics}
+\keyword{xt}
 

@@ -93,6 +93,5 @@ UDS = xtset(UDS,
 \seealso{
   \code{\link[countrycode]{countrycode}}
 }
-\keyword{internal}
 \keyword{xt}
 

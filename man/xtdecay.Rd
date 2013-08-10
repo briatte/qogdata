@@ -13,8 +13,7 @@
   \item{data}{a data frame with the \code{\link{xtdata}}
   attribute.}
 
-  \item{x}{the variable for which to compute time since
-  event.}
+  \item{x}{the variable for which to compute linear decay}
 
   \item{cutpoint}{the decay cut-point.}
 }

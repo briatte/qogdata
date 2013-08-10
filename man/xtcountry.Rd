@@ -36,6 +36,5 @@ if(require(countrycode)) {
   \code{\link{xtdata}}, \code{\link{xtmerge}}
 }
 \keyword{country}
-\keyword{internal}
 \keyword{xt}
 
