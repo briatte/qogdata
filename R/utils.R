@@ -139,14 +139,14 @@ std01 <- function(x) {
 # @author Hadley Wickham
 # @references Wickham, H. 2009. 
 # \emph{ggplot2: Elegant graphics for data analysis}, New York, Springer.
-# @source \url{https://github.com/hadley/ggplot2/blob/master/R/utilities.r#L46}
+# @source \url{https://github.com/seancarmody/ggplot2/commit/ae88e59138720ee2eec792ad41af650ad03e231f#L0R56}
 # @keywords internal
 try_require <- function(package) {
   available <- suppressMessages(suppressWarnings(sapply(package, require, quietly = TRUE, character.only = TRUE, warn.conflicts=FALSE)))
   missing <- package[!available]
   
   if (length(missing) > 0) 
-    stop(paste(package, collapse=", "), " package required for this functionality.  Please install and try again.", call. = FALSE)
+    stop(paste(missing, collapse=", "), " package required for this functionality.  Please install and try again.", call. = FALSE)
 }
 
 # Sort data frame
