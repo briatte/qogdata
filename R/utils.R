@@ -144,8 +144,8 @@ std01 <- function(x) {
 try_require <- function(package) {
   available <- suppressMessages(suppressWarnings(sapply(package, require, quietly = TRUE, character.only = TRUE, warn.conflicts=FALSE)))
   missing <- package[!available]
-  
-  if (length(missing) > 0) 
+
+  if (length(missing) > 0)
     stop(paste(missing, collapse=", "), " package required for this functionality.  Please install and try again.", call. = FALSE)
 }
 

@@ -4,7 +4,7 @@ The __qogdata__ package is a collection of functions to manipulate [Quality of G
 
 # INSTALL
 
-Version 0.1 of the `qogdata` package is installable with the `devtools` package:
+Version 0.1.5 of the `qogdata` package is installable with the `devtools` package:
 
     library(devtools)
     install_github("qogdata", "briatte", dependencies = TRUE)

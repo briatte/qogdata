@@ -33,3 +33,4 @@ Collate:
     'doc.R'
     'xtfuncs.R'
     'xtplots.R'
+    'xtacf.R'
