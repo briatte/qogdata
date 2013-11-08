@@ -10,14 +10,17 @@
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @keywords xt ts graphics
 xtacf <- function(data, variable, name = "acf > 0", type = "correlation") {
-  try_require(c("ggplot2"))
+  try_require(c("ggplot2", "reshape"))
   stopifnot(xtdata(data))
   stopifnot(variable %in% names(data))
 
-  p.acf = sapply(unique(data[, xt(data)$data[1]]), function(cty, type = type) { 
-    exp = qs[ == cty, variable]
+  ccode = xt(data)$data[1]
+  time  = xt(data)$data[2]
+
+  p.acf = sapply(unique(data[, ccode]), function(cty, t = type) { 
+    exp = data[data[, ccode] == cty, variable]
     if(length(na.omit(exp)) > 1)
-      acf(na.omit(exp), plot = FALSE, type = type)$acf
+      acf(na.omit(exp), plot = FALSE, type = t)$acf
     else
       NA
   })
