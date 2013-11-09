@@ -13,12 +13,17 @@
 
   \item{name}{the label for ACF > 0 [TODO: add real
   documentation here].}
+
+  \item{type}{the type of autocorrelation to plot. Defaults
+  to \code{correlation}. [TODO: add real documentation
+  here].}
 }
 \value{
   a half-baked plot
 }
 \description{
-  Plot ACF or PACF.
+  Plot ACF or PACF. Work in progress, does not work yet,
+  sorry!
 }
 \author{
   Francois Briatte \email{f.briatte@ed.ac.uk}

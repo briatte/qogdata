@@ -1,11 +1,14 @@
 #' Plot autocorrelation functions for cross-sectional time series
 #'
-#' Plot ACF or PACF.
+#' Plot ACF or PACF. Work in progress, does not work yet, sorry!
 #'
 #' @export
 #' @param data a data frame carrying an \code{\link{xtdata}} attribute.
 #' @param variable the variable to plot.
 #' @param name the label for ACF > 0 [TODO: add real documentation here].
+#' @param type the type of autocorrelation to plot. 
+#' Defaults to \code{correlation}. 
+#' [TODO: add real documentation here].
 #' @return a half-baked plot
 #' @author Francois Briatte \email{f.briatte@@ed.ac.uk}
 #' @keywords xt ts graphics
