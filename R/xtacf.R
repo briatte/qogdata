@@ -14,15 +14,15 @@ xtacf <- function(data, variable, name = "acf > 0", type = "correlation") {
   stopifnot(xtdata(data))
   stopifnot(variable %in% names(data))
 
-  p.acf = sapply(unique(data[, xt(data)$data[1]]), function(cty, type = type) { 
-    exp = qs[ == cty, variable]
-    if(length(na.omit(exp)) > 1)
-      acf(na.omit(exp), plot = FALSE, type = type)$acf
-    else
-      NA
-  })
-
   message("Not yet there, sorry.")
+
+  # p.acf = sapply(unique(data[, xt(data)$data[1]]), function(cty, type = type) { 
+  #   exp = qs[ == cty, variable]
+  #   if(length(na.omit(exp)) > 1)
+  #     acf(na.omit(exp), plot = FALSE, type = type)$acf
+  #   else
+  #     NA
+  # })
 
   # p.acf = as.data.frame(p.acf)
   # p.acf$t = as.numeric(rownames(p.acf))
